@@ -1,0 +1,17 @@
+{
+  "name": "pointing-poker",
+  "version": "1.0.0",
+  "description": "Team task Pointing Poker, RSschool React 2021q3 course.",
+  "main": "index.js",
+  "scripts": {
+    "server-start": "node server/index.js",
+    "client-start": "cd client && npm install && npm start",
+    "client-build": "cd client && npm install && npm run build"
+  },
+  "keywords": ["planning poker", "react", "rolling scopes school"],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GlukoLyoFF/pointing-poker/issues"
+  }
+}

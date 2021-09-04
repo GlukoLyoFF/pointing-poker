@@ -1,0 +1,13 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  min-width: 500px;
+  width: 100vw;
+  min-height: 100vh;
+  text-align: center;
+}
