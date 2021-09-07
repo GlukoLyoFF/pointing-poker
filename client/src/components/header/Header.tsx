@@ -6,7 +6,7 @@ export const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <img src={logo} />
-      <div className={styles.header_bottomLine} />
+      <div className={styles.header__bottomLine} />
     </header>
   );
 };
