@@ -18,7 +18,7 @@ export const AppButton: React.FC<ButtonProps> = ({
 
 interface ButtonProps {
   name: string;
-  color: 'white' | 'blue';
-  isDisabled: boolean;
+  color?: 'white' | 'blue';
+  isDisabled?: boolean;
   onClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
