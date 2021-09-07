@@ -7,8 +7,11 @@
 body {
   position: relative;
   min-width: 500px;
-  width: 100vw;
   min-height: 100vh;
   text-align: center;
   font-family: "Roboto";
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
+
