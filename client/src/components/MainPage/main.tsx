@@ -20,24 +20,28 @@ export const Main: React.FC = (): JSX.Element => {
   return (
     <main className={style.main}>
       <img src={logo} alt="Poker Plaining" />
-      <div className={style.newGame}>
+      <div className={style.gameOption}>
         <Text textLvl="subtitle" isHighlight={true} isBold={true}>
           Start your planning:
         </Text>
-        <Text textLvl="base">Create session:</Text>
-        <AppButton name="Start new game" onClickHandler={() => {}} />
+        <div className={style.newGame}>
+          <Text textLvl="base">Create session:</Text>
+          <AppButton name="Start new game" onClickHandler={() => {}} />
+        </div>
       </div>
-      <div className={style.connectGame}>
+      <div className={style.gameOption}>
         <Text textLvl="subtitle" isHighlight={true} isBold={true}>
           OR:
         </Text>
-        <InputField
-          name="connect-field"
-          value={connectUrl}
-          onChange={setConnectUrl}
-          labelText={connectLabel}
-        />
-        <AppButton name="Connect" onClickHandler={() => {}} />
+        <div className={style.connectGame}>
+          <InputField
+            name="connect-field"
+            value={connectUrl}
+            onChange={setConnectUrl}
+            labelText={connectLabel}
+          />
+          <AppButton name="Connect" onClickHandler={() => {}} />
+        </div>
       </div>
     </main>
   );

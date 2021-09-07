@@ -8,7 +8,7 @@ export const Text: React.FC<TextProps> = ({
   children,
 }): JSX.Element => {
   const generateClassName = (): string => {
-    return `${className} text-${textLvl} ${isHighlight ? 'colored' : ''} ${isBold ? 'bold' : ''}`;
+    return `${className} text ${textLvl} ${isHighlight ? 'colored' : ''} ${isBold ? 'bold' : ''}`;
   };
 
   return <span className={generateClassName()}>{children}</span>;

@@ -10,7 +10,7 @@ export const InputField: React.FC<InputProps> = ({
 }): JSX.Element => {
   return (
     <label htmlFor={name} className={style.inputContainer}>
-      <Text textLvl="label" className={style.inputLabel}>
+      <Text textLvl="base" className={style.inputLabel}>
         {labelText}
       </Text>
       <input
