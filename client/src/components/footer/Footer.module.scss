@@ -6,7 +6,7 @@
   flex-shrink: 0;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-  .footer__box {
+  .box {
     height: 95%;
     display: flex;
     justify-content: center;
@@ -17,7 +17,7 @@
       height: 60px;
       padding-top: 8px;
     }
-    .footer__listLink {
+    .listLink {
       display: flex;
       list-style-type: none;
       gap: 10px;
