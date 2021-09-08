@@ -1,0 +1,37 @@
+@import '../../variables';
+
+.modalWrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: $shadow-black;
+}
+
+.hidden {
+  display: none;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 30px 0;
+  background-color: $white;
+  min-width: $minWidth + px;
+  max-width: $maxWidthModal + px;
+  width: 70%;
+  min-height: $minWidth + px;
+  box-shadow: 0 4px 4px $shadow-black;
+
+  .buttons {
+    margin: 0 30px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
