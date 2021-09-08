@@ -1,4 +1,6 @@
-.app {
+@import './variables';
+
+app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -16,10 +18,10 @@
 
   .inputField {
     min-height: 36px;
-    background-color: #ffffff;
-    border: 1px solid #2B3A67;
+    background-color: $white;
+    border: 1px solid $dark-blue;
     border-bottom-left-radius: 10px;
-    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 0px 4px 4px $shadow-black;
     padding: 0 10px;
     vertical-align: middle;
   }

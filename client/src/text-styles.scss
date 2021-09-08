@@ -1,6 +1,8 @@
+@import './variables';
+
 .text {
-  font-family: "Roboto";
-  color: #000000;
+  font-family: $fontFamilyMain;
+  color: $black;
   font-weight: 300;
   font-style: normal;
   text-decoration: none;
@@ -27,11 +29,11 @@
   }
 
   &.label {
-    font-family: "Ruda";
+    font-family: $fontFamilySecond;
   }
 
   &.error {
-    color: #ff0000;
+    color: $red;
   }
 
   &.bold {
@@ -39,6 +41,6 @@
   }
 
   &.colored {
-    color: #66999b;
+    color: $light-blue;
   }
 }
