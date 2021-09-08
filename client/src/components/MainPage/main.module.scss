@@ -1,0 +1,31 @@
+@import '../../variables';
+
+.main {
+  padding: 130px 25px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 100%;
+  max-width: $maxWidthContainer + px;
+  box-shadow: 0px 4px 4px $shadow-black;
+
+  .gameOption,
+  .newGame,
+  .connectGame {
+    margin-top: 40px;
+    width: 100%;
+  }
+
+  .gameOption {
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .newGame,
+  .connectGame {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-items: start;
+  }
+}

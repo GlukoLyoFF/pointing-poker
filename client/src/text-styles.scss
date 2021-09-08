@@ -1,0 +1,46 @@
+@import './variables';
+
+.text {
+  font-family: $fontFamilyMain;
+  color: $black;
+  font-weight: 300;
+  font-style: normal;
+  text-decoration: none;
+
+  &.title {
+    display: block;
+    font-weight: 700;
+    font-size: 64px;
+    line-height: 75px;
+  }
+
+  &.subtitle {
+    display: block;
+    font-weight: 700;
+    font-size: 48px;
+    line-height: 56px;
+  }
+
+  &.base,
+  &.label,
+  &.error {
+    font-size: 24px;
+    line-height: 28px;
+  }
+
+  &.label {
+    font-family: $fontFamilySecond;
+  }
+
+  &.error {
+    color: $red;
+  }
+
+  &.bold {
+    font-weight: 700;
+  }
+
+  &.colored {
+    color: $light-blue;
+  }
+}

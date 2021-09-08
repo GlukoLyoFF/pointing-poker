@@ -1,5 +1,28 @@
+@import './variables';
+
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.inputContainer {
+  display: flex;
+  flex-flow: column nowrap;
+
+  .inputLabel {
+    display: flex;
+    align-items: center;
+    height: 47px;
+  }
+
+  .inputField {
+    min-height: 36px;
+    background-color: $white;
+    border: 1px solid $dark-blue;
+    border-bottom-left-radius: 10px;
+    box-shadow: inset 0px 4px 4px $shadow-black;
+    padding: 0 10px;
+    vertical-align: middle;
+  }
 }
