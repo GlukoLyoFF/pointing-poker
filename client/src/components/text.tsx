@@ -6,12 +6,17 @@ export const Text: React.FC<TextProps> = ({
   isBold,
   className,
   children,
+  id,
 }): JSX.Element => {
   const generateClassName = (): string => {
     return `${className} text ${textLvl} ${isHighlight ? 'colored' : ''} ${isBold ? 'bold' : ''}`;
   };
 
-  return <span className={generateClassName()}>{children}</span>;
+  return (
+    <span className={generateClassName()} id={id}>
+      {children}
+    </span>
+  );
 };
 
 interface TextProps {
@@ -19,4 +24,5 @@ interface TextProps {
   isHighlight?: boolean;
   isBold?: boolean;
   className?: string;
+  id?: string;
 }

@@ -1,15 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './app';
+import { App } from './App';
 import reportWebVitals from './reportWebVitals';
+import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import './index.css';
 import './text-styles.scss';
 import '@fontsource/roboto';
 import '@fontsource/ruda';
 
+const theme = unstable_createMuiStrictModeTheme();
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <App />
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),
 );
