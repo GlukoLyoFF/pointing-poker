@@ -1,29 +1,37 @@
 import React from 'react';
-import { AppButton } from '../button';
-import { Text } from '../text';
-import style from './modal.module.scss';
+import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
+import { AppButton } from '../Button';
+import { Text } from '../Text';
 
-export const Modal: React.FC<ModalProps> = ({
+export const AppModal: React.FC<ModalProps> = ({
   title,
   isShow,
   handleSubmit,
   handleCancel,
   children,
 }): JSX.Element => {
-  const showHideClassName = isShow ? style.modalWrap : style.hidden;
+  const dialogLabel = `${title.toLocaleLowerCase().split(' ').join('-')}-dialog-title`;
+
   return (
-    <div className={showHideClassName} onClick={handleCancel}>
-      <div className={style.modal}>
-        <Text textLvl="title" isBold={true}>
+    <>
+      <Dialog
+        fullWidth
+        maxWidth="md"
+        open={isShow}
+        onClose={handleCancel}
+        aria-labelledby={dialogLabel}
+        style={{ paddingTop: '20px' }}
+      >
+        <Text textLvl="title" isBold={true} id={dialogLabel}>
           {title}
         </Text>
-        <div className={style.main}>{children}</div>
-        <div className={style.buttons}>
+        <DialogContent>{children}</DialogContent>
+        <DialogActions style={{ margin: '10px', justifyContent: 'space-between' }}>
           <AppButton name="Confirm" onClickHandler={handleSubmit} />
           <AppButton name="Cancel" color="white" onClickHandler={handleCancel} />
-        </div>
-      </div>
-    </div>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
