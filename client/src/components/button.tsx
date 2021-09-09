@@ -10,7 +10,7 @@ export const AppButton: React.FC<ButtonProps> = ({
   onClickHandler,
 }): JSX.Element => {
   const btnStyle = color === 'white' ? 'outlined' : 'contained';
-  const btnType = isSubmit ? 'submit' : undefined;
+  const btnType = isSubmit ? 'submit' : 'button';
 
   return (
     <Button
