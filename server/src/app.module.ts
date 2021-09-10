@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { GameModule } from './game/game.module';
+import { UserModule } from './user/user.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -11,6 +13,7 @@ import { GameModule } from './game/game.module';
       `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.mpoqa.mongodb.net/Games?retryWrites=true&w=majority`,
     ),
     GameModule,
+    UserModule,
   ],
 })
 export class AppModule {}
