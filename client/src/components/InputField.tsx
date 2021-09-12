@@ -1,6 +1,6 @@
 import React from 'react';
 import style from '../app.module.scss';
-import { Text } from './Text';
+import { Text } from './text';
 
 export const InputField: React.FC<InputProps> = ({
   onChange,

@@ -1,10 +1,10 @@
 import React from 'react';
-import { AppButton } from '../Button';
+import { AppButton } from '../button';
 import { InputField } from '../InputField';
-import { Text } from '../Text';
+import { Text } from '../text';
 import logo from '../../assets/plaining-poker-main-logo.png';
 import style from './main.module.scss';
-import { AppModal } from '../modal/Modal';
+import { AppModal } from '../modal/modal';
 
 export const Main: React.FC = (): JSX.Element => {
   const [connectUrl, setConnectUrl] = React.useState('');
