@@ -3,8 +3,8 @@ import { Members } from './Members/Members';
 
 export const Lobby: React.FC = () => {
   return (
-    <div>
+    <main>
       <Members />
-    </div>
+    </main>
   );
 };
