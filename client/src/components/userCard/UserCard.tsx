@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from '../Text';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import styles from './UserCard.module.scss';
 
@@ -25,8 +26,10 @@ export const UserCard: React.FC<UserCardProp> = ({
     <div className={styles.user}>
       <div className={styles.avatar}>{`${name[0]}${!surname[0] ? '' : surname[0]}`}</div>
       <div className={styles.name}>
-        {`${name}`} {`${surname}`}
-        <div className={styles.job}>{`${job}`}</div>
+        <Text textLvl={'base'}>{`${name} ${surname}`}</Text>
+        <div className={styles.job}>
+          <Text textLvl={'comment'}>{`${job}`}</Text>
+        </div>
       </div>
       <NotInterestedIcon
         onClick={() => {

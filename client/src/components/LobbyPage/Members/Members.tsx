@@ -1,9 +1,10 @@
 import axios from '../../../services/api';
 import React, { useEffect, useState } from 'react';
+import { Text } from '../../Text';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getUsers } from '../../../store/actionCreators/user';
-import { AppModal } from '../../modal/modal';
+import { AppModal } from '../../modal/Modal';
 import { UserCard } from '../../userCard/UserCard';
 import styles from './Members.module.scss';
 
@@ -42,7 +43,9 @@ export const Members: React.FC = () => {
 
   return (
     <>
-      <h3>Members:</h3>
+      <Text textLvl="label" isBold={true}>
+        Members:
+      </Text>
       <div className={styles.container}>
         {state.users.map(elem => {
           return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dialog, DialogActions, DialogContent } from '@material-ui/core';
-import { AppButton } from '../button';
-import { Text } from '../text';
+import { AppButton } from '../Button';
+import { Text } from '../Text';
 
 export const AppModal: React.FC<ModalProps> = ({
   title,

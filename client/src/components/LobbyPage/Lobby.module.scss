@@ -1,2 +1,5 @@
 @import '../../variables';
 
+.container {
+  max-width: $maxWidthContainer + px;
+}
