@@ -8,9 +8,10 @@ interface UserCardProp {
   surname?: string;
   job?: string;
   id: string;
-  handleFlag: (flag: boolean) => void;
-  handleUserName: (name: string) => void;
-  handleUserId: (id: string) => void;
+  handleFlag?: (flag: boolean) => void;
+  handleUserName?: (name: string) => void;
+  handleUserId?: (id: string) => void;
+  status: string;
 }
 
 export const UserCard: React.FC<UserCardProp> = ({
@@ -18,6 +19,7 @@ export const UserCard: React.FC<UserCardProp> = ({
   surname = '',
   job = '',
   id,
+  status,
   handleFlag,
   handleUserName,
   handleUserId,
@@ -26,18 +28,27 @@ export const UserCard: React.FC<UserCardProp> = ({
     <div className={styles.user}>
       <div className={styles.avatar}>{`${name[0]}${!surname[0] ? '' : surname[0]}`}</div>
       <div className={styles.name}>
+        {status === 'master' ? (
+          <div>
+            <Text textLvl="comment">IT'S YOU</Text>
+          </div>
+        ) : null}
         <Text textLvl={'base'}>{`${name} ${surname}`}</Text>
         <div className={styles.job}>
           <Text textLvl={'comment'}>{`${job}`}</Text>
         </div>
       </div>
-      <NotInterestedIcon
-        onClick={() => {
-          handleFlag(true);
-          handleUserName(name);
-          handleUserId(id);
-        }}
-      />
+      {status === 'user' ? (
+        <NotInterestedIcon
+          onClick={() => {
+            if (handleFlag && handleUserName && handleUserId) {
+              handleFlag(true);
+              handleUserName(name);
+              handleUserId(id);
+            }
+          }}
+        />
+      ) : null}
     </div>
   );
 };
