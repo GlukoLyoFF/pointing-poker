@@ -1,0 +1,20 @@
+.addImageCnt {
+  position: relative;
+}
+
+.addImageCnt input[type='text'] {
+  text-align: center;
+  outline: none;
+  width: calc(100% - 120px);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.avaLabel {
+  display: table-caption;
+}
+
+.addPicBtn {
+  position: absolute;
+  top: -36px;
+  right: 0;
+}
