@@ -8,7 +8,8 @@ interface IssueCardProp {
   title: string;
   priority: string;
   id: string;
-  handleFlag: (flag: boolean) => void;
+  modalShowDelete: (flag: boolean) => void;
+  modalShowEdit: (flag: boolean) => void;
   handleIssueId: (id: string) => void;
 }
 
@@ -16,7 +17,8 @@ export const IssueCard: React.FC<IssueCardProp> = ({
   title,
   priority,
   id,
-  handleFlag,
+  modalShowDelete,
+  modalShowEdit,
   handleIssueId,
 }) => {
   return (
@@ -28,11 +30,17 @@ export const IssueCard: React.FC<IssueCardProp> = ({
         </div>
       </div>
       <div>
-        <EditIcon className={styles.btn} />
+        <EditIcon
+          className={styles.btn}
+          onClick={() => {
+            modalShowEdit(true);
+            handleIssueId(id);
+          }}
+        />
         <DeleteOutlineIcon
           className={styles.btn}
           onClick={() => {
-            handleFlag(true);
+            modalShowDelete(true);
             handleIssueId(id);
           }}
         />
