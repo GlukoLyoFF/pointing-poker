@@ -11,7 +11,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto } from './dto/user.dto';
+import { UserDto, UserRole } from './dto/user.dto';
 import { User } from './schemas/user.schema';
 
 @Controller('users')
@@ -30,6 +30,23 @@ export class UserController {
   async getOne(@Param('id') id: string) {
     const oneGame = this.userService.getOne(id);
     return oneGame;
+  }
+
+  @Get('gameid/:gameId&:role')
+  @HttpCode(HttpStatus.OK)
+  async getByGameIdAndRole(
+    @Param('gameId') gameId: string,
+    @Param('role') role: UserRole,
+  ): Promise<User[]> {
+    const userList = this.userService.getByGameIdAndByRole(gameId, role);
+    return userList;
+  }
+
+  @Get('gameid/:gameId')
+  @HttpCode(HttpStatus.OK)
+  async getByGameId(@Param('gameId') gameId: string): Promise<User[]> {
+    const userList = this.userService.getByGameId(gameId);
+    return userList;
   }
 
   @Post()

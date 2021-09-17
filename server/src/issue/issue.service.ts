@@ -20,6 +20,11 @@ export class IssueService {
     return oneIssue;
   }
 
+  async getByGameId(gameId: string): Promise<Issue[]> {
+    const Issue = this.issueModel.find({ gameId: gameId });
+    return Issue;
+  }
+
   async create(issueDto: IssueDto): Promise<Issue> {
     const newIssue = new this.issueModel(issueDto);
     return newIssue.save();

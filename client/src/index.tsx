@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { App } from './App';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { App } from './app';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import './index.css';
@@ -13,7 +15,9 @@ const theme = unstable_createMuiStrictModeTheme();
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root'),

@@ -38,6 +38,12 @@ export class IssueController {
     return checkedIssue;
   }
 
+  @Get('gameid/:gameId')
+  @HttpCode(HttpStatus.OK)
+  async getByGameId(@Param('gameId') gameId: string): Promise<Issue[]> {
+    return this.issueService.getByGameId(gameId);
+  }
+
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id') id: string): Promise<Issue> {
