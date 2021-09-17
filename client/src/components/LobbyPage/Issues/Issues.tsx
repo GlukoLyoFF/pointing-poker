@@ -7,30 +7,54 @@ import { IssueCard } from '../../issueCard/IssueCard';
 import { IssueCardAdd } from '../../issueCardAdd/IssueCardAdd';
 import { AppModal } from '../../modal/Modal';
 import { Text } from '../../Text';
+import { CreateIssueForm } from '../../createIssueForm/CreateIssueForm';
 import styles from './Issues.module.scss';
 
 export const Issues: React.FC = () => {
   const state = useTypeSelector(issues => issues.issues);
   const dispatch = useDispatch();
-  const [getModalShowFlag, setModalShowFlag] = useState(false);
-  const [getDeleteIssueId, setDeleteIssueId] = useState('');
+  const [getModalShowDeleteFlag, setModalShowDeleteFlag] = useState(false);
+  const [getModalShowCreateFlag, setModalShowCreateFlag] = useState(false);
+  const [getModalShowEditFlag, setModalShowEditFlag] = useState(false);
+  const [getIssueId, setIssueId] = useState('');
 
-  const handleFlag = (flag: boolean) => {
-    setModalShowFlag(flag);
+  const modalShowDelete = (flag: boolean) => {
+    setModalShowDeleteFlag(flag);
   };
 
-  const handleSubmit = async () => {
-    await axios.delete(`issues/${getDeleteIssueId}`);
-    handleFlag(false);
+  const modalShowEdit = (flag: boolean) => {
+    setModalShowEditFlag(flag);
+  };
+
+  const modalShowCreate = (flag: boolean) => {
+    setModalShowCreateFlag(flag);
+  };
+
+  const handleSubmitCreateIssue = () => {
+    dispatch(getIssues());
+    modalShowCreate(false);
+  };
+
+  const handleSubmitEditIssue = () => {
+    dispatch(getIssues());
+    modalShowEdit(false);
+  };
+
+  const handleSubmitDeleteIssue = async () => {
+    await axios.delete(`issues/${getIssueId}`);
+    modalShowDelete(false);
     dispatch(getIssues());
   };
 
   const handleCancel = () => {
-    handleFlag(false);
+    modalShowDelete(false);
+    modalShowCreate(false);
+    modalShowEdit(false);
+    dispatch(getIssues());
   };
 
   const handleIssueId = (id: string) => {
-    setDeleteIssueId(id);
+    setIssueId(id);
   };
 
   useEffect(() => {
@@ -49,18 +73,27 @@ export const Issues: React.FC = () => {
               title={elem.title}
               priority={elem.priority}
               id={elem._id}
-              handleFlag={handleFlag}
+              modalShowDelete={modalShowDelete}
+              modalShowEdit={modalShowEdit}
               handleIssueId={handleIssueId}
             />
           );
         })}
-        <IssueCardAdd />
+        <IssueCardAdd modalShow={modalShowCreate} setCreateFormFlag={modalShowCreate} />
         <AppModal
           title={`Delete issue?`}
-          isShow={getModalShowFlag}
-          handleSubmit={handleSubmit}
+          isShow={getModalShowDeleteFlag}
+          handleSubmit={handleSubmitDeleteIssue}
           handleCancel={handleCancel}
           children={`Are you really want to remove this issue from game session?`}
+        />
+        <CreateIssueForm
+          id={getIssueId}
+          flagEdit={getModalShowEditFlag}
+          flagCreate={getModalShowCreateFlag}
+          isShow={!getModalShowEditFlag ? getModalShowCreateFlag : getModalShowEditFlag}
+          handleSubmitFrom={getModalShowEditFlag ? handleSubmitEditIssue : handleSubmitCreateIssue}
+          handleCancel={handleCancel}
         />
       </div>
     </>

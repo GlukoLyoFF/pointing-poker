@@ -55,6 +55,7 @@ export const Members: React.FC = () => {
               surname={elem.lastName}
               job={elem.jobPosition}
               id={elem._id}
+              status={'user'}
               handleFlag={handleFlag}
               handleUserName={handleUserName}
               handleUserId={handleUserId}
