@@ -40,14 +40,25 @@
   align-items: center;
   overflow: hidden;
 
-  .editBtn {
+  .btnsWrap {
     position: absolute;
     top: 5px;
     right: 5px;
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 5px;
+  }
+
+  .editBtn,
+  .removeBtn {
     font-size: 20px;
     border: none;
     background-color: $white;
     cursor: pointer;
+  }
+
+  .removeBtn {
+    color: red;
   }
 
   .topLeft {
