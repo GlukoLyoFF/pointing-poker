@@ -1,5 +1,16 @@
 import { Box, Grid } from '@material-ui/core';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useTypeSelector } from '../../hooks/useTypeSelector';
+import {
+  setSettingGameCards,
+  setSettingIsChangeCard,
+  setSettingIsMasterPlayer,
+  setSettingIsTimer,
+  setSettingRoundTime,
+  setSettingScoreType,
+  setSettingShortScoreType,
+} from '../../store/actionCreators/settings';
 import { AddGameCard } from '../AddGameCard';
 import { GameCard } from '../GameCard';
 import { InputField } from '../InputField';
@@ -7,53 +18,66 @@ import { RoundTimer } from '../RoundTimer';
 import { AppSwitch } from '../Switch';
 import { Text } from '../Text';
 
-interface IGameSettings {
-  masterPlayer: boolean;
-  changeCard: boolean;
-  isTimer: boolean;
-  scoreType: string;
-  shortScoreType: string;
-  roundTime?: number;
-  cardValues: { key: string; value: string }[];
-}
-
 const setKey = (val: string): string => {
   return window.btoa(`${Date.now()}-${val}`);
 };
 
 export const LobbySettings: React.FC = (): JSX.Element => {
-  const [gameSettings, setGameSettings] = React.useState<IGameSettings>({
-    masterPlayer: false,
-    changeCard: false,
-    isTimer: false,
-    roundTime: 150000,
-    scoreType: '',
-    shortScoreType: '',
-    cardValues: [
-      { key: '1', value: '13' },
-      { key: '2', value: '12' },
-      { key: '3', value: '1' },
-    ],
-  });
+  const state = useTypeSelector(store => store.settings);
+  const dispatch = useDispatch();
 
-  const handleSwitch = ({ target: { name, checked } }: React.ChangeEvent<HTMLInputElement>) => {
-    setGameSettings({ ...gameSettings, [name]: checked });
+  const handleIsAsPlayer = ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSettingIsMasterPlayer(checked));
   };
 
-  const gameCards = gameSettings.cardValues.map(({ key, value }) => {
+  const handleIsChangeCard = ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSettingIsChangeCard(checked));
+  };
+
+  const handleIsTimer = ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch(setSettingIsTimer(checked));
+  };
+
+  const changeScoreType = (value: string): void => {
+    dispatch(setSettingScoreType(value));
+  };
+
+  const changeShortScoreType = (value: string): void => {
+    dispatch(setSettingShortScoreType(value));
+  };
+
+  const changeRoundTime = (value: number): void => {
+    dispatch(setSettingRoundTime(value));
+  };
+
+  const addNewGameCard = (): void => {
+    const newCardValues = [...state.cardValues, { key: setKey('Undefined'), value: 'Undefined' }];
+    dispatch(setSettingGameCards(newCardValues));
+  };
+
+  const changeGameCard = (idCard: string, value: string): void => {
+    const newCardValues = state.cardValues.map(card =>
+      card.key === idCard ? { key: card.key, value: value } : card,
+    );
+    dispatch(setSettingGameCards(newCardValues));
+  };
+
+  const removeGameCard = (idCard: string): void => {
+    const newCardValues = state.cardValues.filter(card => card.key !== idCard);
+    dispatch(setSettingGameCards(newCardValues));
+  };
+
+  const gameCards = state.cardValues.map(({ key, value }) => {
     return (
       <Grid item xs key={key}>
         <GameCard
-          type={gameSettings.shortScoreType}
+          type={state.shortScoreType}
           value={value}
           editable={true}
-          onChangeValue={() => {
-            console.log(`change card value for card ${value}`);
+          onChangeValue={({ target }: React.ChangeEvent<HTMLInputElement>) => {
+            changeGameCard(key, target.value);
           }}
-          onRemoveCard={() => {
-            const newCardValues = gameSettings.cardValues.filter(card => card.key !== key);
-            setGameSettings({ ...gameSettings, cardValues: newCardValues });
-          }}
+          onRemoveCard={() => removeGameCard(key)}
         />
       </Grid>
     );
@@ -67,42 +91,40 @@ export const LobbySettings: React.FC = (): JSX.Element => {
       <Box>
         <AppSwitch
           label="Scram master as player:"
-          name="masterPlayer"
-          checked={gameSettings.masterPlayer}
-          onChange={handleSwitch}
+          name="isAsPlayer"
+          checked={state.isAsPlayer}
+          onChange={handleIsAsPlayer}
         />
         <AppSwitch
           label="Changing card in round end:"
-          name="changeCard"
-          checked={gameSettings.changeCard}
-          onChange={handleSwitch}
+          name="isChangeCard"
+          checked={state.isChangeCard}
+          onChange={handleIsChangeCard}
         />
         <AppSwitch
           label="Is timer needed:"
           name="isTimer"
-          checked={gameSettings.isTimer}
-          onChange={handleSwitch}
+          checked={state.isTimer}
+          onChange={handleIsTimer}
         />
         <InputField
           name="scoreType"
-          value={gameSettings.scoreType}
+          value={state.scoreType}
           labelText="Score type:"
-          onChange={val => setGameSettings({ ...gameSettings, scoreType: val })}
+          onChange={changeScoreType}
         />
         <InputField
           name="shortScoreType"
-          value={gameSettings.shortScoreType}
+          value={state.shortScoreType}
           labelText="Score type (Short, no more than 3 symbols):"
-          onChange={val =>
-            setGameSettings({ ...gameSettings, shortScoreType: val.trim().substring(0, 3) })
-          }
+          onChange={changeShortScoreType}
         />
-        {gameSettings.isTimer ? (
+        {state.isTimer ? (
           <RoundTimer
-            time={gameSettings.roundTime}
+            time={state.roundTime}
             label="Round time:"
             editable={true}
-            onChange={val => setGameSettings({ ...gameSettings, roundTime: val })}
+            onChange={changeRoundTime}
           />
         ) : (
           ''
@@ -111,15 +133,7 @@ export const LobbySettings: React.FC = (): JSX.Element => {
         <Grid container spacing={2} justifyContent="flex-start">
           {gameCards}
           <Grid item xs style={{ flexGrow: 6 }}>
-            <AddGameCard
-              onClick={() => {
-                const newCardValues = [
-                  ...gameSettings.cardValues,
-                  { key: setKey('Undefined'), value: 'Undefined' },
-                ];
-                setGameSettings({ ...gameSettings, cardValues: newCardValues });
-              }}
-            />
+            <AddGameCard onClick={addNewGameCard} />
           </Grid>
         </Grid>
       </Box>
