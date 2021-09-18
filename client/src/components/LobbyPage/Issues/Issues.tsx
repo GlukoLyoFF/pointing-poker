@@ -13,21 +13,21 @@ import styles from './Issues.module.scss';
 export const Issues: React.FC = () => {
   const state = useTypeSelector(issues => issues.issues);
   const dispatch = useDispatch();
-  const [getModalShowDeleteFlag, setModalShowDeleteFlag] = useState(false);
-  const [getModalShowCreateFlag, setModalShowCreateFlag] = useState(false);
-  const [getModalShowEditFlag, setModalShowEditFlag] = useState(false);
+  const [isModalVisibleDelete, setModalVisibleDelete] = useState(false);
+  const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
+  const [isModalVisibleEdit, setModalVisibleEdit] = useState(false);
   const [getIssueId, setIssueId] = useState('');
 
   const modalShowDelete = (flag: boolean) => {
-    setModalShowDeleteFlag(flag);
+    setModalVisibleDelete(flag);
   };
 
   const modalShowEdit = (flag: boolean) => {
-    setModalShowEditFlag(flag);
+    setModalVisibleEdit(flag);
   };
 
   const modalShowCreate = (flag: boolean) => {
-    setModalShowCreateFlag(flag);
+    setModalVisibleCreate(flag);
   };
 
   const handleSubmitCreateIssue = () => {
@@ -82,17 +82,17 @@ export const Issues: React.FC = () => {
         <IssueCardAdd modalShow={modalShowCreate} setCreateFormFlag={modalShowCreate} />
         <AppModal
           title={`Delete issue?`}
-          isShow={getModalShowDeleteFlag}
+          isShow={isModalVisibleDelete}
           handleSubmit={handleSubmitDeleteIssue}
           handleCancel={handleCancel}
           children={`Are you really want to remove this issue from game session?`}
         />
         <CreateIssueForm
           id={getIssueId}
-          flagEdit={getModalShowEditFlag}
-          flagCreate={getModalShowCreateFlag}
-          isShow={!getModalShowEditFlag ? getModalShowCreateFlag : getModalShowEditFlag}
-          handleSubmitFrom={getModalShowEditFlag ? handleSubmitEditIssue : handleSubmitCreateIssue}
+          flagEdit={isModalVisibleEdit}
+          flagCreate={isModalVisibleCreate}
+          isShow={!isModalVisibleEdit ? isModalVisibleCreate : isModalVisibleEdit}
+          handleSubmitFrom={isModalVisibleEdit ? handleSubmitEditIssue : handleSubmitCreateIssue}
           handleCancel={handleCancel}
         />
       </div>

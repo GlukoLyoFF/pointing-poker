@@ -1,4 +1,4 @@
-import { DefaultHeadingState, HeadingActions, HeadingActionType } from '../../types/headingType';
+import { DefaultHeadingState, HeadingAction, HeadingActionType } from '../../types/headingType';
 
 const defaultState: DefaultHeadingState = {
   heading: {
@@ -9,7 +9,7 @@ const defaultState: DefaultHeadingState = {
   error: null,
 };
 
-export const headingReduser = (state = defaultState, action: HeadingActions) => {
+export const headingReduser = (state = defaultState, action: HeadingAction) => {
   switch (action.type) {
     case HeadingActionType.SET_HEADING:
       return { ...state, heading: action.payload };
