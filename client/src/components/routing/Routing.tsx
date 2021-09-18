@@ -2,7 +2,7 @@ import { Box } from '@material-ui/core';
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Routes } from './routes';
-import { Main } from '../MainPage/main';
+import { Main } from '../MainPage/Main';
 import styles from './Routing.module.scss';
 
 export const Routing: React.FC = () => {

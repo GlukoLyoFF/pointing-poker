@@ -1,4 +1,4 @@
-import { Main } from '../MainPage/main';
+import { Main } from '../MainPage/Main';
 
 interface RoutesScheme {
   key: string;
