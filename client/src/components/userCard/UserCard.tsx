@@ -1,6 +1,9 @@
 import React from 'react';
 import { Text } from '../Text';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { Avatar } from '../Avatar/Avatar';
+import { useTypeSelector } from '../../hooks/useTypeSelector';
+import { Roles } from '../../types/roleType';
 import styles from './UserCard.module.scss';
 
 interface UserCardProp {
@@ -11,7 +14,8 @@ interface UserCardProp {
   handleFlag?: (flag: boolean) => void;
   handleUserName?: (name: string) => void;
   handleUserId?: (id: string) => void;
-  status: string;
+  status?: string;
+  image: string;
 }
 
 export const UserCard: React.FC<UserCardProp> = ({
@@ -23,12 +27,15 @@ export const UserCard: React.FC<UserCardProp> = ({
   handleFlag,
   handleUserName,
   handleUserId,
+  image,
 }) => {
+  const { currentUser } = useTypeSelector(state => state.currentUser);
+
   return (
     <div className={styles.user}>
-      <div className={styles.avatar}>{`${name[0]}${!surname[0] ? '' : surname[0]}`}</div>
+      <Avatar img={image} name={name} lastName={surname} />
       <div className={styles.name}>
-        {status === 'master' ? (
+        {id === currentUser.userId ? (
           <div>
             <Text textLvl="comment">IT'S YOU</Text>
           </div>
@@ -38,13 +45,15 @@ export const UserCard: React.FC<UserCardProp> = ({
           <Text textLvl={'comment'}>{`${job}`}</Text>
         </div>
       </div>
-      {status === 'user' ? (
+      {status === Roles.user && currentUser.role != Roles.observer ? (
         <NotInterestedIcon
           onClick={() => {
-            if (handleFlag && handleUserName && handleUserId) {
-              handleFlag(true);
-              handleUserName(name);
-              handleUserId(id);
+            if (currentUser.role === Roles.creator) {
+              if (handleFlag && handleUserName && handleUserId) {
+                handleFlag(true);
+                handleUserName(name);
+                handleUserId(id);
+              }
             }
           }}
         />
