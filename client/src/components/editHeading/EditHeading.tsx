@@ -2,14 +2,13 @@ import React, { useRef, useState } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { useDispatch } from 'react-redux';
 import { setHeading } from '../../store/actionCreators/heading';
+import { useTypeSelector } from '../../hooks/useTypeSelector';
 import styles from './EditHeading.module.scss';
+import { Roles } from '../../types/roleType';
 
-interface EditHeadingProp {
-  role: string;
-}
-
-export const EditHeading: React.FC<EditHeadingProp> = ({ role }) => {
+export const EditHeading: React.FC = () => {
   const dispatch = useDispatch();
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const [getInputValue, setInputValue] = useState('');
   const [isInputDisabledValue, setInputDsiabledValue] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -33,10 +32,16 @@ export const EditHeading: React.FC<EditHeadingProp> = ({ role }) => {
         disabled={isInputDisabledValue}
         onBlur={() => {
           handleDisabledValue(true);
-          dispatch(setHeading({ _id: '123', heading: `${getInputValue}`, gameId: '1234' }));
+          dispatch(
+            setHeading({
+              _id: '123',
+              heading: `${getInputValue}`,
+              gameId: `${currentUser.gameId}`,
+            }),
+          );
         }}
       />
-      {role === 'creator' ? (
+      {currentUser.role === Roles.creator ? (
         <EditIcon
           className={styles.editBtn}
           onClick={() => {

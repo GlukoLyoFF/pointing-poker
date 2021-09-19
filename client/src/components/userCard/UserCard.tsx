@@ -2,8 +2,9 @@ import React from 'react';
 import { Text } from '../Text';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Avatar } from '../Avatar/Avatar';
-import styles from './UserCard.module.scss';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
+import { Roles } from '../../types/roleType';
+import styles from './UserCard.module.scss';
 
 interface UserCardProp {
   name: string;
@@ -44,10 +45,10 @@ export const UserCard: React.FC<UserCardProp> = ({
           <Text textLvl={'comment'}>{`${job}`}</Text>
         </div>
       </div>
-      {status === 'user' && currentUser.role != 'observer' ? (
+      {status === Roles.user && currentUser.role != Roles.observer ? (
         <NotInterestedIcon
           onClick={() => {
-            if (currentUser.role === 'creator') {
+            if (currentUser.role === Roles.creator) {
               if (handleFlag && handleUserName && handleUserId) {
                 handleFlag(true);
                 handleUserName(name);

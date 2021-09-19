@@ -8,26 +8,22 @@ import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from '../../../store/actionCreators/creator';
 import styles from './ScramMaster.module.scss';
+import { Roles } from '../../../types/roleType';
 
-interface ScramMasterProps {
-  gameId: string;
-  role: string;
-  userId: string;
-}
-
-export const ScramMaster: React.FC<ScramMasterProps> = ({ gameId, role, userId }) => {
-  const creator = useTypeSelector(state => state.creator.creator);
+export const ScramMaster: React.FC = () => {
+  const { creator } = useTypeSelector(state => state.creator);
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const url = window.location.href;
   const [getLinkValue, setLinkValue] = useState(url);
 
   useEffect(() => {
-    dispatch(getCreator(gameId));
+    dispatch(getCreator(currentUser.gameId));
   }, []);
 
   return (
     <>
-      <EditHeading role={role} />
+      <EditHeading />
       <div className={styles.heading}>
         <Text textLvl="comment">Scram master:</Text>
         <div className={styles.card}>
@@ -36,12 +32,12 @@ export const ScramMaster: React.FC<ScramMasterProps> = ({ gameId, role, userId }
             name={creator.firstName}
             surname={creator.lastName}
             id={creator._id}
-            status={'creator'}
+            status={Roles.creator}
             job={creator.jobPosition}
           />
         </div>
       </div>
-      {role === 'creator' ? (
+      {currentUser.role === Roles.creator ? (
         <div className={styles.copyBox}>
           <InputField
             name={'copy'}
@@ -60,7 +56,7 @@ export const ScramMaster: React.FC<ScramMasterProps> = ({ gameId, role, userId }
           </div>
         </div>
       ) : null}
-      {role === 'creator' ? (
+      {currentUser.role === Roles.creator ? (
         <div className={styles.btnBox}>
           <AppButton name={'Start game'} color={'blue'} onClickHandler={() => {}} />
           <AppButton name={'Cancel game'} color={'white'} onClickHandler={() => {}} />

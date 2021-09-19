@@ -10,12 +10,9 @@ import { Text } from '../../Text';
 import { CreateIssueForm } from '../../createIssueForm/CreateIssueForm';
 import styles from './Issues.module.scss';
 
-interface IssuesProps {
-  gameId: string;
-}
-
-export const Issues: React.FC<IssuesProps> = ({ gameId }) => {
-  const state = useTypeSelector(issues => issues.issues);
+export const Issues: React.FC = () => {
+  const { issues } = useTypeSelector(state => state.issues);
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const [isModalVisibleDelete, setModalVisibleDelete] = useState(false);
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
@@ -35,26 +32,26 @@ export const Issues: React.FC<IssuesProps> = ({ gameId }) => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues(gameId));
+    dispatch(getIssues(currentUser.gameId));
     modalShowCreate(false);
   };
 
   const handleSubmitEditIssue = () => {
-    dispatch(getIssues(gameId));
+    dispatch(getIssues(currentUser.gameId));
     modalShowEdit(false);
   };
 
   const handleSubmitDeleteIssue = async () => {
     await axios.delete(`issues/${getIssueId}`);
     modalShowDelete(false);
-    dispatch(getIssues(gameId));
+    dispatch(getIssues(currentUser.gameId));
   };
 
   const handleCancel = () => {
     modalShowDelete(false);
     modalShowCreate(false);
     modalShowEdit(false);
-    dispatch(getIssues(gameId));
+    dispatch(getIssues(currentUser.gameId));
   };
 
   const handleIssueId = (id: string) => {
@@ -62,7 +59,7 @@ export const Issues: React.FC<IssuesProps> = ({ gameId }) => {
   };
 
   useEffect(() => {
-    dispatch(getIssues(gameId));
+    dispatch(getIssues(currentUser.gameId));
   }, []);
   return (
     <>
@@ -70,7 +67,7 @@ export const Issues: React.FC<IssuesProps> = ({ gameId }) => {
         Issues:
       </Text>
       <div className={styles.container}>
-        {state.issues.map(elem => {
+        {issues.map(elem => {
           return (
             <IssueCard
               key={`${elem._id}`}

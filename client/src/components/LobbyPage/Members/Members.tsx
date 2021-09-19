@@ -6,16 +6,12 @@ import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getUsers } from '../../../store/actionCreators/user';
 import { AppModal } from '../../modal/Modal';
 import { UserCard } from '../../userCard/UserCard';
+import { Roles } from '../../../types/roleType';
 import styles from './Members.module.scss';
 
-interface MembersProps {
-  gameId: string;
-  role: string;
-  userId: string;
-}
-
-export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
-  const state = useTypeSelector(users => users.users);
+export const Members: React.FC = () => {
+  const { users } = useTypeSelector(state => state.users);
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const [getModalShowFlag, setModalShowFlag] = useState(false);
   const [getDeleteUserName, setDeleteUserName] = useState('');
@@ -40,11 +36,11 @@ export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
   const handleSubmit = async () => {
     await axios.delete(`users/${getDeleteUserId}`);
     setModalShowFlag(false);
-    dispatch(getUsers(gameId));
+    dispatch(getUsers(currentUser.gameId));
   };
 
   useEffect(() => {
-    dispatch(getUsers(gameId));
+    dispatch(getUsers(currentUser.gameId));
   }, []);
 
   return (
@@ -53,7 +49,7 @@ export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
         Members:
       </Text>
       <div className={styles.container}>
-        {state.users.map(elem => {
+        {users.map(elem => {
           return (
             <UserCard
               key={`${elem._id}`}
@@ -61,7 +57,7 @@ export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
               surname={elem.lastName}
               job={elem.jobPosition}
               id={elem._id}
-              status={'user'}
+              status={Roles.user}
               handleFlag={handleFlag}
               handleUserName={handleUserName}
               handleUserId={handleUserId}
