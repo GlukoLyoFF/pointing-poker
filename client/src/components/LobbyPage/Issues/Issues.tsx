@@ -91,7 +91,7 @@ export const Issues: React.FC = () => {
           id={getIssueId}
           flagEdit={isModalVisibleEdit}
           flagCreate={isModalVisibleCreate}
-          isShow={!isModalVisibleEdit ? isModalVisibleCreate : isModalVisibleEdit}
+          isShow={isModalVisibleEdit || isModalVisibleCreate}
           handleSubmitFrom={isModalVisibleEdit ? handleSubmitEditIssue : handleSubmitCreateIssue}
           handleCancel={handleCancel}
         />
