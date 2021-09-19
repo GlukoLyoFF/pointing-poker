@@ -7,7 +7,7 @@ import styles from './EditHeading.module.scss';
 export const EditHeading: React.FC = () => {
   const dispatch = useDispatch();
   const [getInputValue, setInputValue] = useState('');
-  const [getInputDisabledValue, setInputDsiabledValue] = useState(true);
+  const [isInputDisabledValue, setInputDsiabledValue] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleDisabledValue = (value: boolean) => {
@@ -26,7 +26,7 @@ export const EditHeading: React.FC = () => {
         value={getInputValue}
         type="text"
         onChange={event => setInputValue(event.target.value)}
-        disabled={getInputDisabledValue}
+        disabled={isInputDisabledValue}
         onBlur={() => {
           handleDisabledValue(true);
           dispatch(setHeading({ _id: '123', heading: `${getInputValue}`, gameId: '1234' }));

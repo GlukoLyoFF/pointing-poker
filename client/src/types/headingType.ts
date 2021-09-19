@@ -18,4 +18,4 @@ interface SetHeadingAction {
   payload: Heading;
 }
 
-export type HeadingActions = SetHeadingAction;
+export type HeadingAction = SetHeadingAction;
