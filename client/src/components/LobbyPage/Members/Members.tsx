@@ -40,11 +40,11 @@ export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
   const handleSubmit = async () => {
     await axios.delete(`users/${getDeleteUserId}`);
     setModalShowFlag(false);
-    dispatch(getUsers('asdfasdfas'));
+    dispatch(getUsers(gameId));
   };
 
   useEffect(() => {
-    dispatch(getUsers('asdfasdfas'));
+    dispatch(getUsers(gameId));
   }, []);
 
   return (
