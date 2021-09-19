@@ -2,6 +2,7 @@ import React from 'react';
 import { Members } from './Members/Members';
 import { Issues } from './Issues/Issues';
 import { ScramMaster } from './ScramMaster/ScramMaster';
+import { LobbySettings } from './Settings';
 import styles from './Lobby.module.scss';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
 import { Roles } from '../../types/roleType';
@@ -14,6 +15,7 @@ export const Lobby: React.FC = () => {
       <ScramMaster />
       <Members />
       {currentUser.role === Roles.creator ? <Issues /> : null}
+      <LobbySettings />
     </main>
   );
 };

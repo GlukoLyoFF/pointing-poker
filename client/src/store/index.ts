@@ -5,6 +5,7 @@ import { creatorReducer } from './reducers/creatorReducer';
 import { currentUserReducer } from './reducers/currentUserReducer';
 import { headingReduser } from './reducers/headingReducer';
 import { issuesReducer } from './reducers/issuesReducer';
+import { settingsReducer } from './reducers/settingsReducer';
 import { usersReducer } from './reducers/usersReducer';
 
 const rootReducer = combineReducers({
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   heading: headingReduser,
   creator: creatorReducer,
   currentUser: currentUserReducer,
+  settings: settingsReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
