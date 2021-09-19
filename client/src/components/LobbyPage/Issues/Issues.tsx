@@ -31,26 +31,26 @@ export const Issues: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues());
+    dispatch(getIssues('asdfasdfas'));
     modalShowCreate(false);
   };
 
   const handleSubmitEditIssue = () => {
-    dispatch(getIssues());
+    dispatch(getIssues('asdfasdfas'));
     modalShowEdit(false);
   };
 
   const handleSubmitDeleteIssue = async () => {
     await axios.delete(`issues/${getIssueId}`);
     modalShowDelete(false);
-    dispatch(getIssues());
+    dispatch(getIssues('asdfasdfas'));
   };
 
   const handleCancel = () => {
     modalShowDelete(false);
     modalShowCreate(false);
     modalShowEdit(false);
-    dispatch(getIssues());
+    dispatch(getIssues('asdfasdfas'));
   };
 
   const handleIssueId = (id: string) => {
@@ -58,7 +58,7 @@ export const Issues: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getIssues());
+    dispatch(getIssues('asdfasdfas'));
   }, []);
   return (
     <>

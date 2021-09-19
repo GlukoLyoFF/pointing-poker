@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text } from '../Text';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
+import { Avatar } from '../Avatar/Avatar';
 import styles from './UserCard.module.scss';
 
 interface UserCardProp {
@@ -12,6 +13,7 @@ interface UserCardProp {
   handleUserName?: (name: string) => void;
   handleUserId?: (id: string) => void;
   status: string;
+  image: string;
 }
 
 export const UserCard: React.FC<UserCardProp> = ({
@@ -23,10 +25,11 @@ export const UserCard: React.FC<UserCardProp> = ({
   handleFlag,
   handleUserName,
   handleUserId,
+  image,
 }) => {
   return (
     <div className={styles.user}>
-      <div className={styles.avatar}>{`${name[0]}${!surname[0] ? '' : surname[0]}`}</div>
+      <Avatar img={image} name={name} lastName={surname} />
       <div className={styles.name}>
         {status === 'master' ? (
           <div>

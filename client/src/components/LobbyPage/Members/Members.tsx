@@ -34,11 +34,11 @@ export const Members: React.FC = () => {
   const handleSubmit = async () => {
     await axios.delete(`users/${getDeleteUserId}`);
     setModalShowFlag(false);
-    dispatch(getUsers());
+    dispatch(getUsers('asdfasdfas'));
   };
 
   useEffect(() => {
-    dispatch(getUsers());
+    dispatch(getUsers('asdfasdfas'));
   }, []);
 
   return (
@@ -59,6 +59,7 @@ export const Members: React.FC = () => {
               handleFlag={handleFlag}
               handleUserName={handleUserName}
               handleUserId={handleUserId}
+              image={elem.image ? elem.image : ''}
             />
           );
         })}
