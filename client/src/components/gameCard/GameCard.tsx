@@ -3,9 +3,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import OfflinePinIcon from '@material-ui/icons/OfflinePin';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import React from 'react';
-import style from '../app.module.scss';
+import style from './GameCard.module.scss';
 import { TextField } from '@material-ui/core';
-import { Text } from './Text';
+import { Text } from '../Text';
 
 export const GameCard: React.FC<GameCardProps> = ({
   type,
@@ -59,8 +59,8 @@ export const GameCard: React.FC<GameCardProps> = ({
 };
 
 interface GameCardProps {
-  type?: string;
-  value?: string;
+  type: string;
+  value: string;
   editable?: boolean;
   isSelected?: boolean;
   onClick?: React.MouseEventHandler;

@@ -1,6 +1,6 @@
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import React from 'react';
-import style from '../app.module.scss';
+import style from './GameCard.module.scss';
 
 export const AddGameCard: React.FC<AddGameCardProps> = ({ onClick }): JSX.Element => {
   return (
@@ -11,5 +11,5 @@ export const AddGameCard: React.FC<AddGameCardProps> = ({ onClick }): JSX.Elemen
 };
 
 interface AddGameCardProps {
-  onClick: React.MouseEventHandler;
+  onClick: () => void;
 }

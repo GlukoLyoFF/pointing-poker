@@ -1,14 +1,8 @@
 import { Grid, TextField } from '@material-ui/core';
 import React from 'react';
+import { generateKey } from '../utils/key-generator';
+import { getMinutesFromTime, getSecondsFromTime } from '../utils/time';
 import { Text } from './Text';
-
-const getMinutesFromTime = (time: number): number => {
-  return Math.floor(time / (60 * 1000));
-};
-
-const getSecondsFromTime = (time: number): number => {
-  return Math.floor((time / 1000) % 60);
-};
 
 export const RoundTimer: React.FC<IRoundTimerProps> = ({
   time,
@@ -34,7 +28,7 @@ export const RoundTimer: React.FC<IRoundTimerProps> = ({
       </Grid>
       <Grid item xs>
         <TextField
-          id="minutes"
+          id={generateKey('minutes')}
           label="minutes"
           type="number"
           value={getMinutesFromTime(Number(time))}
@@ -47,7 +41,7 @@ export const RoundTimer: React.FC<IRoundTimerProps> = ({
       <Text textLvl="base">:</Text>
       <Grid item xs>
         <TextField
-          id="seconds"
+          id={generateKey('seconds')}
           label="seconds"
           type="number"
           value={getSecondsFromTime(Number(time))}
@@ -62,7 +56,7 @@ export const RoundTimer: React.FC<IRoundTimerProps> = ({
 };
 
 interface IRoundTimerProps {
-  time?: number;
+  time: number;
   label?: string;
   editable?: boolean;
   onChange?: (val: number) => void;

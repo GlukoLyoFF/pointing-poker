@@ -11,16 +11,13 @@ import {
   setSettingScoreType,
   setSettingShortScoreType,
 } from '../../store/actionCreators/settings';
-import { AddGameCard } from '../AddGameCard';
-import { GameCard } from '../GameCard';
+import { generateKey } from '../../utils/key-generator';
+import { AddGameCard } from '../gameCard/AddGameCard';
+import { EditableGameCard } from '../gameCard/EditableGameCard';
 import { InputField } from '../InputField';
 import { RoundTimer } from '../RoundTimer';
 import { AppSwitch } from '../Switch';
 import { Text } from '../Text';
-
-const setKey = (val: string): string => {
-  return window.btoa(`${Date.now()}-${val}`);
-};
 
 export const LobbySettings: React.FC = (): JSX.Element => {
   const state = useTypeSelector(store => store.settings);
@@ -51,7 +48,10 @@ export const LobbySettings: React.FC = (): JSX.Element => {
   };
 
   const addNewGameCard = (): void => {
-    const newCardValues = [...state.cardValues, { key: setKey('Undefined'), value: 'Undefined' }];
+    const newCardValues = [
+      ...state.cardValues,
+      { key: generateKey('Undefined'), value: 'Undefined' },
+    ];
     dispatch(setSettingGameCards(newCardValues));
   };
 
@@ -66,22 +66,6 @@ export const LobbySettings: React.FC = (): JSX.Element => {
     const newCardValues = state.cardValues.filter(card => card.key !== idCard);
     dispatch(setSettingGameCards(newCardValues));
   };
-
-  const gameCards = state.cardValues.map(({ key, value }) => {
-    return (
-      <Grid item xs key={key}>
-        <GameCard
-          type={state.shortScoreType}
-          value={value}
-          editable={true}
-          onChangeValue={({ target }: React.ChangeEvent<HTMLInputElement>) => {
-            changeGameCard(key, target.value);
-          }}
-          onRemoveCard={() => removeGameCard(key)}
-        />
-      </Grid>
-    );
-  });
 
   return (
     <Box m="1rem">
@@ -119,7 +103,7 @@ export const LobbySettings: React.FC = (): JSX.Element => {
           labelText="Score type (Short, no more than 3 symbols):"
           onChange={changeShortScoreType}
         />
-        {state.isTimer ? (
+        {state.isTimer && state.roundTime ? (
           <RoundTimer
             time={state.roundTime}
             label="Round time:"
@@ -131,7 +115,20 @@ export const LobbySettings: React.FC = (): JSX.Element => {
         )}
         <Text textLvl="label">Add card values:</Text>
         <Grid container spacing={2} justifyContent="flex-start">
-          {gameCards}
+          {state.cardValues.map(({ key, value }) => {
+            return (
+              <Grid item xs key={key}>
+                <EditableGameCard
+                  type={state.shortScoreType}
+                  value={value}
+                  onChangeValue={({ target }: React.ChangeEvent<HTMLInputElement>) => {
+                    changeGameCard(key, target.value);
+                  }}
+                  onRemoveCard={() => removeGameCard(key)}
+                />
+              </Grid>
+            );
+          })}
           <Grid item xs style={{ flexGrow: 6 }}>
             <AddGameCard onClick={addNewGameCard} />
           </Grid>
