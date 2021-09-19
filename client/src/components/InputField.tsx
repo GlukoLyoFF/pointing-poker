@@ -28,7 +28,7 @@ type InputChangeEvent = React.ChangeEvent<InputElement>;
 interface InputProps {
   name: string;
   value: string;
-  labelText?: React.ReactElement;
+  labelText?: string | React.ReactElement;
   onChange: (val: string) => void;
   type?: 'email' | 'text';
 }

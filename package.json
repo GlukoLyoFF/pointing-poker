@@ -4,7 +4,7 @@
   "description": "Team task Pointing Poker, RSschool React 2021q3 course.",
   "main": "index.js",
   "scripts": {
-    "server-start": "node server/index.js",
+    "server-start": "cd server && npm install && npm run start:dev",
     "client-start": "cd client && npm install && npm start",
     "client-build": "cd client && npm install && npm run build"
   },
