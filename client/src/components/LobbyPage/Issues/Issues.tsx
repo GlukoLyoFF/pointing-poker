@@ -10,7 +10,11 @@ import { Text } from '../../Text';
 import { CreateIssueForm } from '../../createIssueForm/CreateIssueForm';
 import styles from './Issues.module.scss';
 
-export const Issues: React.FC = () => {
+interface IssuesProps {
+  gameId: string;
+}
+
+export const Issues: React.FC<IssuesProps> = ({ gameId }) => {
   const state = useTypeSelector(issues => issues.issues);
   const dispatch = useDispatch();
   const [isModalVisibleDelete, setModalVisibleDelete] = useState(false);
@@ -31,26 +35,26 @@ export const Issues: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues('asdfasdfas'));
+    dispatch(getIssues(gameId));
     modalShowCreate(false);
   };
 
   const handleSubmitEditIssue = () => {
-    dispatch(getIssues('asdfasdfas'));
+    dispatch(getIssues(gameId));
     modalShowEdit(false);
   };
 
   const handleSubmitDeleteIssue = async () => {
     await axios.delete(`issues/${getIssueId}`);
     modalShowDelete(false);
-    dispatch(getIssues('asdfasdfas'));
+    dispatch(getIssues(gameId));
   };
 
   const handleCancel = () => {
     modalShowDelete(false);
     modalShowCreate(false);
     modalShowEdit(false);
-    dispatch(getIssues('asdfasdfas'));
+    dispatch(getIssues(gameId));
   };
 
   const handleIssueId = (id: string) => {
@@ -58,7 +62,7 @@ export const Issues: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getIssues('asdfasdfas'));
+    dispatch(getIssues(gameId));
   }, []);
   return (
     <>

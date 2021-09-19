@@ -8,7 +8,13 @@ import { AppModal } from '../../modal/Modal';
 import { UserCard } from '../../userCard/UserCard';
 import styles from './Members.module.scss';
 
-export const Members: React.FC = () => {
+interface MembersProps {
+  gameId: string;
+  role: string;
+  userId: string;
+}
+
+export const Members: React.FC<MembersProps> = ({ gameId, role, userId }) => {
   const state = useTypeSelector(users => users.users);
   const dispatch = useDispatch();
   const [getModalShowFlag, setModalShowFlag] = useState(false);

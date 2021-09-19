@@ -4,7 +4,11 @@ import { useDispatch } from 'react-redux';
 import { setHeading } from '../../store/actionCreators/heading';
 import styles from './EditHeading.module.scss';
 
-export const EditHeading: React.FC = () => {
+interface EditHeadingProp {
+  role: string;
+}
+
+export const EditHeading: React.FC<EditHeadingProp> = ({ role }) => {
   const dispatch = useDispatch();
   const [getInputValue, setInputValue] = useState('');
   const [isInputDisabledValue, setInputDsiabledValue] = useState(true);
@@ -32,15 +36,17 @@ export const EditHeading: React.FC = () => {
           dispatch(setHeading({ _id: '123', heading: `${getInputValue}`, gameId: '1234' }));
         }}
       />
-      <EditIcon
-        className={styles.editBtn}
-        onClick={() => {
-          handleDisabledValue(false);
-          setTimeout(() => {
-            handleFocus();
-          }, 0);
-        }}
-      />
+      {role === 'creator' ? (
+        <EditIcon
+          className={styles.editBtn}
+          onClick={() => {
+            handleDisabledValue(false);
+            setTimeout(() => {
+              handleFocus();
+            }, 0);
+          }}
+        />
+      ) : null}
     </div>
   );
 };
