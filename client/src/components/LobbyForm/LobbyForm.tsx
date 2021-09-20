@@ -42,7 +42,6 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
               gameId: res.data._id,
               role: 'creator',
             })
-            .then(),
         );
     } else {
       console.log(gameId);
