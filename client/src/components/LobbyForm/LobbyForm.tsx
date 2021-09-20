@@ -44,7 +44,6 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             })
         );
     } else {
-      console.log(gameId);
       axios.post('http://localhost:8888/api/users', {
         firstName: watch('firstName'),
         lastName: watch('lastName'),
