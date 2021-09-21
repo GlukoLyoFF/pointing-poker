@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { postNewIssue, updateIssueById } from '../../api/issues.service';
+import { postNewIssue, updateIssueById } from '../../core/api/issues.service';
 import { Dialog } from '@material-ui/core';
 import { AppButton } from '../Button';
 import { Text } from '../Text';

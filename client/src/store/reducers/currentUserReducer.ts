@@ -2,7 +2,7 @@ import {
   CurrentUserAction,
   DefaultCurrentUserState,
   GetCurrentUserAction,
-} from '../../types/currentUserType';
+} from '../../core/types/currentUserType';
 
 const defaultState: DefaultCurrentUserState = {
   currentUser: {

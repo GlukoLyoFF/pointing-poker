@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { setHeading } from '../../store/actionCreators/heading';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
 import styles from './EditHeading.module.scss';
-import { Roles } from '../../types/roleType';
+import { Roles } from '../../core/types/roleType';
 
 export const EditHeading: React.FC = () => {
   const dispatch = useDispatch();

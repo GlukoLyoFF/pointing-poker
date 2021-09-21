@@ -5,7 +5,7 @@ import { ScramMaster } from './ScramMaster/ScramMaster';
 import { LobbySettings } from './Settings';
 import styles from './Lobby.module.scss';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
-import { Roles } from '../../types/roleType';
+import { Roles } from '../../core/types/roleType';
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);

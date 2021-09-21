@@ -1,7 +1,7 @@
 import { IUser } from '../types/get200Types';
 import { IUserBody } from '../types/postToServerTypes';
 import { UserRole } from '../types/userType';
-import axios from './api';
+import axios from '.';
 
 const path = 'users';
 

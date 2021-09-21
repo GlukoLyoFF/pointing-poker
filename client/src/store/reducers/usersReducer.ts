@@ -1,4 +1,4 @@
-import { DefaultStateUsers, UsersAction, UsersActionTypes } from '../../types/userType';
+import { DefaultStateUsers, UsersAction, UsersActionTypes } from '../../core/types/userType';
 
 const defaultState: DefaultStateUsers = {
   users: [],

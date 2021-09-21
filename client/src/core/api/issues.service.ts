@@ -1,6 +1,6 @@
 import { IIssue } from '../types/get200Types';
 import { IIssueBody } from '../types/postToServerTypes';
-import axios from './api';
+import axios from '.';
 
 const path = 'issues';
 

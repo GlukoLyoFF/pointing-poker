@@ -1,4 +1,4 @@
-import { DefaultStateIssues, IssueActionType, IssuesAction } from '../../types/issueType';
+import { DefaultStateIssues, IssueActionType, IssuesAction } from '../../core/types/issueType';
 
 const defaultState: DefaultStateIssues = {
   issues: [],

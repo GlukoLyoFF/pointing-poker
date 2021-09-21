@@ -11,7 +11,7 @@ import {
   setSettingScoreType,
   setSettingShortScoreType,
 } from '../../store/actionCreators/settings';
-import { generateKey } from '../../utils/key-generator';
+import { generateKey } from '../../core/utils/key-generator';
 import { AddGameCard } from '../gameCard/AddGameCard';
 import { EditableGameCard } from '../gameCard/EditableGameCard';
 import { InputField } from '../InputField';

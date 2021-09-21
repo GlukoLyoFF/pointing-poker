@@ -3,7 +3,7 @@ import { Text } from '../Text';
 import NotInterestedIcon from '@material-ui/icons/NotInterested';
 import { Avatar } from '../Avatar/Avatar';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
-import { Roles } from '../../types/roleType';
+import { Roles } from '../../core/types/roleType';
 import styles from './UserCard.module.scss';
 
 interface UserCardProp {

@@ -1,4 +1,4 @@
-import axios from './api';
+import axios from '.';
 import { IGame } from '../types/get200Types';
 import { IGameBody } from '../types/postToServerTypes';
 

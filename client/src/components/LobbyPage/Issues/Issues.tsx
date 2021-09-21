@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { deleteIssueById } from '../../../api/issues.service';
+import { deleteIssueById } from '../../../core/api/issues.service';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getIssues } from '../../../store/actionCreators/issue';
