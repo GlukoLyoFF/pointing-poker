@@ -1,4 +1,4 @@
-import axios from '../../../services/api';
+import { deleteUserById } from '../../../api/users.service';
 import React, { useEffect, useState } from 'react';
 import { Text } from '../../Text';
 import { useDispatch } from 'react-redux';
@@ -34,7 +34,7 @@ export const Members: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await axios.delete(`users/${getDeleteUserId}`);
+    await deleteUserById(getDeleteUserId);
     setModalShowFlag(false);
     dispatch(getUsers(currentUser.gameId));
   };

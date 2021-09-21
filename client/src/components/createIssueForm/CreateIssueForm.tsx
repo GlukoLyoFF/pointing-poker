@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import axios from '../../services/api';
+import { postNewIssue, updateIssueById } from '../../api/issues.service';
 import { Dialog } from '@material-ui/core';
 import { AppButton } from '../Button';
 import { Text } from '../Text';
@@ -41,13 +41,13 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
   };
 
   const handleSubmitCreateIssue = handleSubmit(data => {
-    axios.post(`issues`, data).then(() => {
+    postNewIssue(data).then(() => {
       handleSubmitFrom();
     });
   });
 
   const handleSubmitEditIssue = handleSubmit(data => {
-    axios.put(`issues/${id}`, data).then(() => {
+    updateIssueById(id, data).then(() => {
       handleSubmitFrom();
     });
   });
