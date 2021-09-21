@@ -1,17 +1,13 @@
-import axios from '../../services/api';
 import { Dispatch } from 'redux';
-import {
-  IGameCard,
-  IGameSettings,
-  SettingsAction,
-  SettingsActionTypes,
-} from '../../types/settingsType';
+import { getGameById, updateGameById } from '../../core/api/game.service';
+import { IGame } from '../../core/types/get200Types';
+import { IGameCard, SettingsAction, SettingsActionTypes } from '../../core/types/settingsType';
 
 export const getGameSettings = (idGame: string) => {
   return async (dispatch: Dispatch<SettingsAction>): Promise<void> => {
     try {
-      const response = await axios.get(`games/${idGame}`);
-      dispatch({ type: SettingsActionTypes.GET_SETTINGS, payload: response.data.gameSettings });
+      const response = await getGameById(idGame);
+      dispatch({ type: SettingsActionTypes.GET_SETTINGS, payload: response.gameSettings });
     } catch (e) {
       dispatch({
         type: SettingsActionTypes.GET_SETTINGS_ERROR,
@@ -21,9 +17,17 @@ export const getGameSettings = (idGame: string) => {
   };
 };
 
-export const setGameSettings = (settings: IGameSettings) => {
-  return (dispatch: Dispatch<SettingsAction>): void => {
-    dispatch({ type: SettingsActionTypes.SET_SETTINGS, payload: settings });
+export const setGameSettings = (settings: IGame) => {
+  return async (dispatch: Dispatch<SettingsAction>): Promise<void> => {
+    try {
+      const response = await updateGameById(settings._id, settings);
+      dispatch({ type: SettingsActionTypes.GET_SETTINGS, payload: response.gameSettings });
+    } catch (e) {
+      dispatch({
+        type: SettingsActionTypes.GET_SETTINGS_ERROR,
+        payload: 'Settings loading error. Default settings loaded',
+      });
+    }
   };
 };
 

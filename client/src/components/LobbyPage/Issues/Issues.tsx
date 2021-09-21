@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../../services/api';
+import { deleteIssueById } from '../../../core/api/issues.service';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getIssues } from '../../../store/actionCreators/issue';
@@ -42,9 +42,10 @@ export const Issues: React.FC = () => {
   };
 
   const handleSubmitDeleteIssue = async () => {
-    await axios.delete(`issues/${getIssueId}`);
-    modalShowDelete(false);
-    dispatch(getIssues(currentUser.gameId));
+    deleteIssueById(getIssueId).then(() => {
+      modalShowDelete(false);
+      dispatch(getIssues(currentUser.gameId));
+    });
   };
 
   const handleCancel = () => {

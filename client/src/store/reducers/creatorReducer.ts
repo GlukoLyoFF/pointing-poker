@@ -1,15 +1,22 @@
-import { CreatorActions, CreatorActionTypes, DefaultStateCreator } from '../../types/creatorType';
+import {
+  CreatorActions,
+  CreatorActionTypes,
+  DefaultStateCreator,
+} from '../../core/types/creatorType';
+import { Roles } from '../../core/types/roleType';
+
+const defaultCreator = {
+  role: Roles.creator,
+  image: '',
+  jobPosition: '',
+  lastName: '',
+  firstName: '',
+  gameId: '',
+  _id: '',
+};
 
 const defaultState: DefaultStateCreator = {
-  creator: {
-    role: '',
-    image: '',
-    jobPosition: '',
-    lastName: '',
-    firstName: '',
-    gameId: '',
-    _id: '',
-  },
+  creator: defaultCreator,
   error: null,
 };
 
@@ -19,32 +26,16 @@ export const creatorReducer = (
 ): DefaultStateCreator => {
   switch (action.type) {
     case CreatorActionTypes.GET_CREATOR:
+      return defaultState;
+    case CreatorActionTypes.GET_CREATOR_SUCCESS:
       return {
         error: null,
-        creator: {
-          role: '',
-          image: '',
-          jobPosition: '',
-          lastName: '',
-          firstName: '',
-          gameId: '',
-          _id: '',
-        },
+        creator: action.payload,
       };
-    case CreatorActionTypes.GET_CREATOR_SUCCESS:
-      return { error: null, creator: action.payload };
     case CreatorActionTypes.GET_CREATOR_ERROR:
       return {
         error: action.payload,
-        creator: {
-          role: '',
-          image: '',
-          jobPosition: '',
-          lastName: '',
-          firstName: '',
-          gameId: '',
-          _id: '',
-        },
+        creator: defaultCreator,
       };
     default:
       return state;

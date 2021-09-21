@@ -8,7 +8,7 @@ import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from '../../../store/actionCreators/creator';
 import styles from './ScramMaster.module.scss';
-import { Roles } from '../../../types/roleType';
+import { Roles } from '../../../core/types/roleType';
 
 export const ScramMaster: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);

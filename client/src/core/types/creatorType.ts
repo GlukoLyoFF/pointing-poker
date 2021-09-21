@@ -1,3 +1,5 @@
+import { UserRole } from './userType';
+
 export enum CreatorActionTypes {
   GET_CREATOR = 'GET_CREATOR',
   GET_CREATOR_SUCCESS = 'GET_CREATOR_SUCCESS',
@@ -5,7 +7,7 @@ export enum CreatorActionTypes {
 }
 
 export interface Creator {
-  role: string;
+  role: UserRole;
   image: string;
   jobPosition: string;
   lastName: string;

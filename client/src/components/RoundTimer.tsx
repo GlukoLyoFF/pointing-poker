@@ -1,7 +1,7 @@
 import { Grid, TextField } from '@material-ui/core';
 import React from 'react';
-import { generateKey } from '../utils/key-generator';
-import { getMinutesFromTime, getSecondsFromTime } from '../utils/time';
+import { generateKey } from '../core/utils/key-generator';
+import { getMinutesFromTime, getSecondsFromTime } from '../core/utils/time';
 import { Text } from './Text';
 
 export const RoundTimer: React.FC<IRoundTimerProps> = ({

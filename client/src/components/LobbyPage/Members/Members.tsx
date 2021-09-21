@@ -1,4 +1,4 @@
-import axios from '../../../services/api';
+import { deleteUserById } from '../../../core/api/users.service';
 import React, { useEffect, useState } from 'react';
 import { Text } from '../../Text';
 import { useDispatch } from 'react-redux';
@@ -6,7 +6,7 @@ import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getUsers } from '../../../store/actionCreators/user';
 import { AppModal } from '../../modal/Modal';
 import { UserCard } from '../../userCard/UserCard';
-import { Roles } from '../../../types/roleType';
+import { Roles } from '../../../core/types/roleType';
 import styles from './Members.module.scss';
 
 export const Members: React.FC = () => {
@@ -34,7 +34,7 @@ export const Members: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await axios.delete(`users/${getDeleteUserId}`);
+    await deleteUserById(getDeleteUserId);
     setModalShowFlag(false);
     dispatch(getUsers(currentUser.gameId));
   };

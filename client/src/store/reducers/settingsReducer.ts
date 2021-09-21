@@ -1,4 +1,4 @@
-import { IGameSettings, SettingsAction, SettingsActionTypes } from '../../types/settingsType';
+import { IGameSettings, SettingsAction, SettingsActionTypes } from '../../core/types/settingsType';
 
 const defaultState: IGameSettings = {
   isAsPlayer: false,
