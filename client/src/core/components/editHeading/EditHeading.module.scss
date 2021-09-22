@@ -1,0 +1,33 @@
+@import 'core/sass/variables';
+
+.container {
+  width: 70%;
+  margin: 0 auto;
+
+  .input {
+    width: 95%;
+    outline: none;
+    border:none;
+    background-image:none;
+    background-color:transparent;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;  
+    font-family: $fontFamilySecond;
+    color: $black;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 28px;
+    overflow: hidden;
+  }
+
+  .editBtn {
+    margin-left: 5px;
+    color: $gray;
+    &:hover {
+      cursor: pointer;
+      color: $red;
+    }
+  }
+}

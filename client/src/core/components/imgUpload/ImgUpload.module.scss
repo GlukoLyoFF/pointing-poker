@@ -1,0 +1,22 @@
+@import 'core/sass/variables';
+
+.addImageCnt {
+  position: relative;
+}
+
+.addImageCnt input[type='text'] {
+  text-align: center;
+  outline: none;
+  width: calc(100% - 120px);
+  box-shadow: $base-shadow;
+}
+
+.avaLabel {
+  display: table-caption;
+}
+
+.addPicBtn {
+  position: absolute;
+  top: -36px;
+  right: 0;
+}

@@ -1,0 +1,49 @@
+@import 'core/sass/variables';
+
+.user {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: $base-shadow;
+  padding-top: 5px;
+
+  .name {
+    text-align: left;
+    margin-right: 10px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .avatar {
+    width: 64px;
+    height: 64px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border-radius: 50%;
+    background-color: $green;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+    color: $white;
+    text-shadow: $base-shadow;
+    font-family: $fontFamilyMain;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 35px;
+    line-height: 56px;
+  }
+
+  svg {
+    color: $gray;
+    margin-left: auto;
+    margin-right: 5px;
+    cursor: pointer;
+  }
+
+  svg:hover {
+    color: $red;
+  }
+}

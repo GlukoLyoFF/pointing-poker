@@ -1,0 +1,23 @@
+@import 'core/sass/variables';
+
+.header {
+  background: $dark-blue;
+  position: relative;
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  img {
+    width: 70px;
+    height: 70px;
+    z-index: 10;
+    position: absolute;
+    top: 15px;
+    left: 64px;
+  }
+  .bottomLine {
+    background-color: $light-blue;
+    height: 20px;
+    box-shadow: 0px 4px 4px $shadow-black;
+  }
+}
