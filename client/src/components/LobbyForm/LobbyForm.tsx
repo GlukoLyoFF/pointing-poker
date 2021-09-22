@@ -13,7 +13,7 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
   const [isObserver, setIsObserver] = useState(false);
 
   return (
-    <form className={styleForm.form} id={id} onSubmit={}>
+    <form className={styleForm.form} id={id} onSubmit={() => {}}>
       {!isCreator && (
         <div className={styleForm.observerCnt__switcherCnt}>
           <h3 className={styleForm.observerCnt__switcherTitle}>Connect as Observer</h3>
@@ -37,12 +37,7 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
               Your first name:
             </Text>
           </div>
-          <input
-            className={style.inputField}
-            id="firstName"
-            type="text"
-            defaultValue=""
-          />
+          <input className={style.inputField} id="firstName" type="text" defaultValue="" />
         </label>
         <label htmlFor={'lastName'} className={style.inputContainer}>
           <div className={styleForm.titleCnt}>
@@ -50,22 +45,15 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
               Your last name(optional):
             </Text>
           </div>
-          <input
-            className={style.inputField}
-            type="text"
-          />
+          <input className={style.inputField} type="text" />
         </label>
         <label htmlFor={'jobPosition'} className={style.inputContainer}>
           <div className={styleForm.titleCnt}>
             <Text textLvl="base" className={style.inputLabel}>
               Your job position(optional):
             </Text>
-
           </div>
-          <input
-            className={style.inputField}
-            type="text"
-          />
+          <input className={style.inputField} type="text" />
         </label>
         <ImgUpload
           firstName={'firstName'}

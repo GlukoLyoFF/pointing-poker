@@ -1,0 +1,11 @@
+@import '../../variables';
+
+.container {
+  border: 1px solid black;
+  width: 100%;
+  max-width: $maxWidth + px;
+
+  .gamePage {
+    max-width: $maxWidthContainer + px;
+  }
+}
