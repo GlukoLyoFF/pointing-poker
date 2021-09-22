@@ -19,6 +19,7 @@ export const IssueGameSection: React.FC = () => {
   const settings = useTypeSelector(store => store.settings);
   const dispatch = useDispatch();
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
+  const [isRaundStart, setRaundStartValue] = useState(false);
   const [getIssueId, setIssueId] = useState('');
 
   const modalShowCreate = (flag: boolean) => {
@@ -41,6 +42,10 @@ export const IssueGameSection: React.FC = () => {
 
   const changeRoundTime = (value: number): void => {
     dispatch(setSettingRoundTime(value));
+  };
+
+  const handleRaundStart = (flag: boolean) => {
+    setRaundStartValue(flag);
   };
 
   useEffect(() => {
@@ -74,14 +79,25 @@ export const IssueGameSection: React.FC = () => {
         ) : null}
       </Grid>
       <Grid className={styles.timer}>
-        {settings.isTimer && settings.roundTime && currentUser.role === Roles.creator ? (
+        {settings.isTimer && currentUser.role === Roles.creator ? (
           <>
             <RoundTimer
-              time={settings.roundTime}
+              time={Number(settings.roundTime)}
               editable={currentUser.role === Roles.creator ? true : false}
               onChange={changeRoundTime}
             />
-            <AppButton name={'Run Round'} color={'blue'} onClickHandler={() => {}} />
+            {isRaundStart ? (
+              <div>
+                <AppButton name={'Restart round'} color={'blue'} onClickHandler={() => {}} />
+                <AppButton name={'Next issue'} color={'blue'} onClickHandler={() => {}} />
+              </div>
+            ) : (
+              <AppButton
+                name={'Run Round'}
+                color={'blue'}
+                onClickHandler={() => handleRaundStart(true)}
+              />
+            )}
           </>
         ) : null}
       </Grid>

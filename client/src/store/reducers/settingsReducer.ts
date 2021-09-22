@@ -3,7 +3,7 @@ import { IGameSettings, SettingsAction, SettingsActionTypes } from '../../core/t
 const defaultState: IGameSettings = {
   isAsPlayer: false,
   isChangeCard: false,
-  isTimer: true,
+  isTimer: false,
   roundTime: 150000,
   scoreType: 'story point',
   shortScoreType: 'SP',

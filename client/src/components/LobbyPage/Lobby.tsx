@@ -14,8 +14,12 @@ export const Lobby: React.FC = () => {
     <main className={styles.container}>
       <ScramMaster />
       <Members />
-      {currentUser.role === Roles.creator ? <Issues /> : null}
-      <LobbySettings />
+      {currentUser.role === Roles.creator ? (
+        <>
+          <Issues />
+          <LobbySettings />
+        </>
+      ) : null}
     </main>
   );
 };

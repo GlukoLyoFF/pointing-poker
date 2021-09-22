@@ -4,7 +4,8 @@ import { Roles } from '../../core/types/roleType';
 import { CardField } from './CardField/CardField';
 import styles from './GamePage.module.scss';
 import { IssueGameSection } from './IssueGameSection/IssueGameSection';
-import { ScramMasterGameSection } from './ScramMasterGamePage/ScramMasterGameSection';
+import { ScramMasterGameSection } from './ScramMasterGameSection/ScramMasterGameSection';
+import { ProgressSection } from './ProgressSection/ProgressSection';
 
 export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -16,6 +17,7 @@ export const GamePage: React.FC = () => {
         <IssueGameSection />
         {currentUser.role === Roles.user ? <CardField /> : null}
       </div>
+      <ProgressSection />
     </main>
   );
 };

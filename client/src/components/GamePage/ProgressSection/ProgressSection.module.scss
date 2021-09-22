@@ -1,0 +1,12 @@
+@import '../../../variables';
+
+.heading {
+  display: flex;
+  justify-content: space-around;
+}
+
+.cards {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
