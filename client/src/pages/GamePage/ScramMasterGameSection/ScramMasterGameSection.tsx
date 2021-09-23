@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useTypeSelector } from '../../../hooks/useTypeSelector';
-import { getCreator } from '../../../store/actionCreators/creator';
-import { Roles } from '../../../core/types/roleType';
-import { EditHeading } from '../../editHeading/EditHeading';
-import { UserCard } from '../../userCard/UserCard';
-import { Text } from '../../Text';
-import { AppButton } from '../../Button';
+import { useTypeSelector } from 'core/hooks/useTypeSelector';
+import { getCreator } from 'store/actionCreators/creator';
+import { Roles } from 'core/types/roleType';
+import { EditHeading } from 'core/components/editHeading/EditHeading';
+import { UserCard } from 'core/components/userCard/UserCard';
+import { Text } from 'core/components/Text';
+import { AppButton } from 'core/components/Button';
 import { Grid } from '@material-ui/core';
-import { RoundTimer } from '../../RoundTimer';
+import { RoundTimer } from 'core/components/RoundTimer';
 import styles from './ScramMasterGameSection.module.scss';
 
 export const ScramMasterGameSection: React.FC = () => {
