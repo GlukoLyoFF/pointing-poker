@@ -8,7 +8,7 @@ import { getUsers } from 'store/actionCreators/user';
 import { AppModal } from 'core/components/modal/Modal';
 import { Text } from 'core/components/Text';
 import { UserCard } from 'core/components/userCard/UserCard';
-import { ProgressCard } from 'pages/progressCard/ProgressCard';
+import { ProgressCard } from 'core/components/progressCard/ProgressCard';
 import styles from './ProgressSection.module.scss';
 
 export const ProgressSection: React.FC = () => {
