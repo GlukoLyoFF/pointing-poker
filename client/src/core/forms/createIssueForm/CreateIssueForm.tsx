@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { postNewIssue, updateIssueById } from 'core/api/issues.service';
 import { Dialog } from '@material-ui/core';
 import { AppButton } from 'core/components/Button';
@@ -32,6 +33,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
     title = 'Create issue';
   }
   const dialogLabel = `${title.toLocaleLowerCase().split(' ').join('-')}-dialog-title`;
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const { register, handleSubmit, setValue } = useForm<FormValues>();
 
   const [getPriority, setPriority] = useState('Low');
@@ -103,7 +105,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
               name="Yes"
               color="blue"
               onClickHandler={() => {
-                setValue('gameId', '123');
+                setValue('gameId', `${currentUser.gameId}`);
               }}
             />
             <AppButton name="No" color="white" onClickHandler={handleCancel} />
@@ -116,7 +118,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
 
 interface ModalProps {
   id: string;
-  flagEdit: boolean;
+  flagEdit?: boolean;
   flagCreate: boolean;
   isShow: boolean;
   handleSubmitFrom: () => void;
