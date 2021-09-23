@@ -6,9 +6,7 @@ import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
 import './index.css';
-import './text-styles.scss';
-import '@fontsource/roboto';
-import '@fontsource/ruda';
+import 'core/sass/text-styles.scss';
 
 const theme = unstable_createMuiStrictModeTheme();
 

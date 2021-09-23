@@ -1,8 +1,8 @@
 import React from 'react';
+import { Routing } from 'routing/Routing';
+import { Footer } from 'core/components/footer/Footer';
+import { Header } from 'core/components/header/Header';
 import style from './app.module.scss';
-import { Routing } from './components/routing/Routing';
-import { Footer } from './components/footer/Footer';
-import { Header } from './components/header/Header';
 
 export const App: React.FC = () => {
   return (
