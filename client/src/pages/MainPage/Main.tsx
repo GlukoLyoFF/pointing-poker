@@ -3,12 +3,15 @@ import { AppButton } from 'core/components/Button';
 import { AppModal } from 'core/components/modal/Modal';
 import { Text } from 'core/components/Text';
 import { InputField } from 'core/components/InputField';
+import { LobbyForm } from 'core/forms/connectLobbyForm/LobbyForm';
 import logo from 'assets/plaining-poker-main-logo.png';
 import style from './Main.module.scss';
 
 export const Main: React.FC = (): JSX.Element => {
   const [connectUrl, setConnectUrl] = React.useState('');
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
+  const [isOpenConnectLobby, setIsOpenConnectLobby] = React.useState<boolean>(false);
+  const [gameId, setGameId] = React.useState('');
 
   const handleStartGameOpen = () => {
     setIsOpen(true);
@@ -16,6 +19,19 @@ export const Main: React.FC = (): JSX.Element => {
 
   const handleStartGameClose = () => {
     setIsOpen(false);
+  };
+
+  const handleConnectLobbyOpen = () => {
+    axios.get(connectUrl).then(res => {
+      if (res.data._id) {
+        setIsOpenConnectLobby(true);
+        setGameId(res.data._id);
+      }
+    });
+  };
+
+  const handleConnectLobbyClose = () => {
+    setIsOpenConnectLobby(false);
   };
 
   const connectLabel = (
@@ -51,16 +67,24 @@ export const Main: React.FC = (): JSX.Element => {
             onChange={setConnectUrl}
             labelText={connectLabel}
           />
-          <AppButton name="Connect" onClickHandler={() => {}} />
+          <AppButton name="Connect" onClickHandler={handleConnectLobbyOpen} />
         </div>
       </div>
       <AppModal
+        id="startLobby"
         isShow={isOpen}
         title="Start new game"
-        handleSubmit={() => {}}
         handleCancel={handleStartGameClose}
       >
-        <Text textLvl="base">Game started</Text>
+        <LobbyForm id="startLobby" isCreator={true} />
+      </AppModal>
+      <AppModal
+        id="connectLobby"
+        isShow={isOpenConnectLobby}
+        title="Connect to lobby"
+        handleCancel={handleConnectLobbyClose}
+      >
+        <LobbyForm id="connectLobby" isCreator={false} gameId={gameId} />
       </AppModal>
     </main>
   );

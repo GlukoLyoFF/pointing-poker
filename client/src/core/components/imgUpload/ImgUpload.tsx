@@ -3,13 +3,13 @@ import React, { ChangeEvent, FC, useState } from 'react';
 import Resizer from 'react-image-file-resizer';
 import { InputField } from 'core/components/InputField';
 import { Text } from 'core/components/Text';
-import styles from './ImgUpload.module.scss';
 import { Avatar } from 'core/components/avatar/Avatar';
-import axios from 'axios';
+import styles from './ImgUpload.module.scss';
 
 export const ImgUpload: FC<ImgUploadProps> = ({
   img,
   setImg,
+  statusFail,
   setStatusFail,
   firstName,
   lastName,
@@ -33,23 +33,13 @@ export const ImgUpload: FC<ImgUploadProps> = ({
             case 'svg':
               Resizer.imageFileResizer(
                 selectedFile,
-                100,
-                100,
+                120,
+                120,
                 ext[1],
-                100,
+                120,
                 0,
                 uri => {
                   setImg(uri as string);
-                  axios
-                    .post('http://localhost:8888/api/users', {
-                      firstName: 'Fred',
-                      lastName: 'Flintstone',
-                      jobPosition: 'dev',
-                      image: uri,
-                      gameId: 'fdfsdfsdfsd',
-                      role: 'creator',
-                    })
-                    .then();
                 },
                 'base64',
               );
@@ -74,8 +64,13 @@ export const ImgUpload: FC<ImgUploadProps> = ({
           value={fileName}
           labelText={label('Image:')}
           onChange={setFileName}
-          //readOnly
+          readOnly
         />
+        {statusFail && (
+          <span className={styles.error}>
+            The image must be in .svg .jpeg .jpg .png .gif format.
+          </span>
+        )}
         <Button className={styles.addPicBtn} color="primary" variant="contained" component="label">
           Upload File
           <input id="file" type="file" name="file" hidden onChange={fileChangedHandler} />
@@ -92,6 +87,7 @@ interface ImgUploadProps {
   img: string;
   firstName: string;
   lastName: string;
+  statusFail: boolean;
   setImg: (val: string) => void;
   setStatusFail: (val: boolean) => void;
 }

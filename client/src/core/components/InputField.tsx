@@ -31,4 +31,5 @@ interface InputProps {
   labelText?: string | React.ReactElement;
   onChange: (val: string) => void;
   type?: 'email' | 'text';
+  readOnly?: true;
 }

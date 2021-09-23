@@ -7,7 +7,9 @@
 }
 
 .inputContainer {
+  position: relative;
   display: flex;
+  width: -webkit-fill-available;
   flex-flow: column nowrap;
 
   .inputLabel {

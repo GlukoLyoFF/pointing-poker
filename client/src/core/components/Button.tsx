@@ -32,5 +32,5 @@ interface ButtonProps {
   isDisabled?: boolean;
   isSubmit?: boolean;
   idForm?: string;
-  onClickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickHandler?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

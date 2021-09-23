@@ -3,8 +3,8 @@ import styles from './Avatar.module.scss';
 
 export const Avatar: FC<AvatarProps> = ({ img, name, lastName }) => {
   const letters = (ftName: string, sndName: string): string => {
-    const firstName = ftName.trim();
-    const secondName = sndName.trim();
+    const firstName = ftName?.trim() || '';
+    const secondName = sndName?.trim() || '';
 
     if (secondName == '' && firstName == '') return '+';
     if (secondName == '' && firstName.length > 2)
@@ -15,7 +15,7 @@ export const Avatar: FC<AvatarProps> = ({ img, name, lastName }) => {
 
   return (
     <div className={styles.avatar}>
-      {img != '' ? <img width="100" height="100" src={img} /> : <h3>{letters(name, lastName)}</h3>}
+      {img != '' ? <img width="120" height="120" src={img} /> : <h3>{letters(name, lastName)}</h3>}
     </div>
   );
 };

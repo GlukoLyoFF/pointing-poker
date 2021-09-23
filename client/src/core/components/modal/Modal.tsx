@@ -6,6 +6,7 @@ import { Text } from 'core/components/Text';
 export const AppModal: React.FC<ModalProps> = ({
   title,
   isShow,
+  id,
   handleSubmit,
   handleCancel,
   children,
@@ -27,7 +28,7 @@ export const AppModal: React.FC<ModalProps> = ({
         </Text>
         <DialogContent>{children}</DialogContent>
         <DialogActions style={{ margin: '10px', justifyContent: 'space-between' }}>
-          <AppButton name="Confirm" onClickHandler={handleSubmit} />
+          <AppButton name="Confirm" idForm={id} isSubmit={true} onClickHandler={handleSubmit} />
           <AppButton name="Cancel" color="white" onClickHandler={handleCancel} />
         </DialogActions>
       </Dialog>
@@ -37,7 +38,8 @@ export const AppModal: React.FC<ModalProps> = ({
 
 interface ModalProps {
   title: string;
+  id?: string;
   isShow: boolean;
-  handleSubmit: () => void;
+  handleSubmit?: () => void;
   handleCancel: () => void;
 }
