@@ -33,15 +33,14 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
           title: 'default_title',
         })
         .then(res =>
-          axios
-            .post('http://localhost:8888/api/users', {
-              firstName: watch('firstName'),
-              lastName: watch('lastName'),
-              jobPosition: watch('jobPosition'),
-              image: image,
-              gameId: res.data._id,
-              role: 'creator',
-            })
+          axios.post('http://localhost:8888/api/users', {
+            firstName: watch('firstName'),
+            lastName: watch('lastName'),
+            jobPosition: watch('jobPosition'),
+            image: image,
+            gameId: res.data._id,
+            role: 'creator',
+          }),
         );
     } else {
       axios.post('http://localhost:8888/api/users', {
@@ -64,8 +63,8 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             <input
               type="checkbox"
               onClick={() =>
-                setIsObserver(state => {
-                  return !state;
+                setIsObserver(isObs => {
+                  return !isObs;
                 })
               }
             />
