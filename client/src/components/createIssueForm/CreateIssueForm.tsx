@@ -8,6 +8,7 @@ import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import styles from './CreateIssueForm.module.scss';
 import styleInput from '../../app.module.scss';
+import { useTypeSelector } from '../../hooks/useTypeSelector';
 
 type FormValues = {
   title: string;
@@ -32,6 +33,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
     title = 'Create issue';
   }
   const dialogLabel = `${title.toLocaleLowerCase().split(' ').join('-')}-dialog-title`;
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const { register, handleSubmit, setValue } = useForm<FormValues>();
 
   const [getPriority, setPriority] = useState('Low');
@@ -103,7 +105,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
               name="Yes"
               color="blue"
               onClickHandler={() => {
-                setValue('gameId', '123');
+                setValue('gameId', `${currentUser.gameId}`);
               }}
             />
             <AppButton name="No" color="white" onClickHandler={handleCancel} />
@@ -116,7 +118,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
 
 interface ModalProps {
   id: string;
-  flagEdit: boolean;
+  flagEdit?: boolean;
   flagCreate: boolean;
   isShow: boolean;
   handleSubmitFrom: () => void;
