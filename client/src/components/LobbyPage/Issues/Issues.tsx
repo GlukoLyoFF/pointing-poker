@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../../services/api';
+import { deleteIssueById } from '../../../core/api/issues.service';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../hooks/useTypeSelector';
 import { getIssues } from '../../../store/actionCreators/issue';
@@ -11,7 +11,8 @@ import { CreateIssueForm } from '../../createIssueForm/CreateIssueForm';
 import styles from './Issues.module.scss';
 
 export const Issues: React.FC = () => {
-  const state = useTypeSelector(issues => issues.issues);
+  const { issues } = useTypeSelector(state => state.issues);
+  const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const [isModalVisibleDelete, setModalVisibleDelete] = useState(false);
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
@@ -31,26 +32,27 @@ export const Issues: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues());
+    dispatch(getIssues(currentUser.gameId));
     modalShowCreate(false);
   };
 
   const handleSubmitEditIssue = () => {
-    dispatch(getIssues());
+    dispatch(getIssues(currentUser.gameId));
     modalShowEdit(false);
   };
 
   const handleSubmitDeleteIssue = async () => {
-    await axios.delete(`issues/${getIssueId}`);
-    modalShowDelete(false);
-    dispatch(getIssues());
+    deleteIssueById(getIssueId).then(() => {
+      modalShowDelete(false);
+      dispatch(getIssues(currentUser.gameId));
+    });
   };
 
   const handleCancel = () => {
     modalShowDelete(false);
     modalShowCreate(false);
     modalShowEdit(false);
-    dispatch(getIssues());
+    dispatch(getIssues(currentUser.gameId));
   };
 
   const handleIssueId = (id: string) => {
@@ -58,7 +60,7 @@ export const Issues: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getIssues());
+    dispatch(getIssues(currentUser.gameId));
   }, []);
   return (
     <>
@@ -66,7 +68,7 @@ export const Issues: React.FC = () => {
         Issues:
       </Text>
       <div className={styles.container}>
-        {state.issues.map(elem => {
+        {issues.map(elem => {
           return (
             <IssueCard
               key={`${elem._id}`}

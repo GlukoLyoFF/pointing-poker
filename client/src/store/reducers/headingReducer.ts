@@ -1,4 +1,8 @@
-import { DefaultHeadingState, HeadingAction, HeadingActionType } from '../../types/headingType';
+import {
+  DefaultHeadingState,
+  HeadingAction,
+  HeadingActionType,
+} from '../../core/types/headingType';
 
 const defaultState: DefaultHeadingState = {
   heading: {

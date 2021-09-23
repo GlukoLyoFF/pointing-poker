@@ -1,3 +1,5 @@
+import { Roles } from './roleType';
+
 export enum UsersActionTypes {
   GET_USERS = 'GET_USERS',
   GET_USERS_SUCCESS = 'GET_USERS_SUCCESS',
@@ -5,7 +7,7 @@ export enum UsersActionTypes {
 }
 
 export interface User {
-  role?: string;
+  role?: UserRole;
   image?: string;
   jobPosition?: string;
   lastName?: string;
@@ -13,6 +15,8 @@ export interface User {
   gameId: string;
   _id: string;
 }
+
+export type UserRole = Roles.creator | Roles.observer | Roles.user;
 
 export interface DefaultStateUsers {
   users: User[];
