@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, NotFoundException, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { VoteDto } from './dto/vote.dto';
 import { Vote } from './schemas/vote.schema';
 import { VoteService } from './vote.service';
@@ -17,7 +28,7 @@ export class VoteController {
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getOne(@Param('id') id: string) {
-    const oneVote= this.voteService.getOne(id);
+    const oneVote = this.voteService.getOne(id);
     return oneVote;
   }
 
@@ -39,7 +50,7 @@ export class VoteController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   async update(@Param('id') id: string, @Body() voteDto: VoteDto) {
-    const updatedVote= this.voteService.update(id, voteDto);
+    const updatedVote = this.voteService.update(id, voteDto);
     if (!updatedVote) throw new NotFoundException("Vote doesn't exist!");
     return updatedVote;
   }

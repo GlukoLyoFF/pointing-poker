@@ -1,4 +1,4 @@
-import { Get, HttpCode, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AppGateway } from 'src/gateway/app.gateway';
@@ -23,7 +23,6 @@ export class VoteService {
   }
   async delete(id: string): Promise<Vote> {
     const deletedVote = await this.voteModel.findByIdAndDelete(id);
-    //this.gateway.handleDeleteUser(deletedUser);
     return deletedVote;
   }
   async update(id: string, userDto: VoteDto): Promise<Vote> {
@@ -31,7 +30,6 @@ export class VoteService {
   }
   async create(voteDto: VoteDto): Promise<Vote> {
     const newVote = new this.voteModel(voteDto);
-    //this.gateway.handleCreateUser(newVote);
     return newVote.save();
   }
 }

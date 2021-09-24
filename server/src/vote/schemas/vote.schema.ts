@@ -1,4 +1,3 @@
-import { IssueDto } from './../../issue/dto/issue.dto';
 import { UserDto } from './../../user/dto/user.dto';
 import { Document, set } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';

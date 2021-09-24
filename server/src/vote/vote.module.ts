@@ -10,6 +10,6 @@ import { VoteService } from './vote.service';
     MongooseModule.forFeature([{ name: Vote.name, schema: VoteSchema }]),
   ],
   controllers: [VoteController],
-  providers: [VoteService, AppGateway]
+  providers: [VoteService, AppGateway],
 })
 export class VoteModule {}
