@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AppGateway } from 'src/gateway/app.gateway';
 import { IssueDto } from './dto/issue.dto';
 import { Issue, IssueDocument } from './schemas/issue.schema';
 
@@ -8,6 +9,7 @@ import { Issue, IssueDocument } from './schemas/issue.schema';
 export class IssueService {
   constructor(
     @InjectModel(Issue.name) private issueModel: Model<IssueDocument>,
+    private gateway: AppGateway,
   ) {}
 
   async getAll(): Promise<Issue[]> {
@@ -16,7 +18,8 @@ export class IssueService {
   }
 
   async getOne(id: string): Promise<Issue> {
-    const oneIssue = this.issueModel.findById(id);
+    const oneIssue = await this.issueModel.findById(id);
+    this.gateway.handleChooseIssue(oneIssue);
     return oneIssue;
   }
 
@@ -27,11 +30,13 @@ export class IssueService {
 
   async create(issueDto: IssueDto): Promise<Issue> {
     const newIssue = new this.issueModel(issueDto);
+    this.gateway.handleCreateIssue(newIssue);
     return newIssue.save();
   }
 
   async remove(id: string): Promise<Issue> {
-    const removedIssue = this.issueModel.findByIdAndRemove(id);
+    const removedIssue = await this.issueModel.findByIdAndRemove(id);
+    this.gateway.handleDeleteIssue(removedIssue);
     return removedIssue;
   }
 

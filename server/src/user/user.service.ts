@@ -4,16 +4,20 @@ import { Model } from 'mongoose';
 import { UserDto, UserRole } from './dto/user.dto';
 import { FileService } from 'src/file/file.service';
 import { User, UserDocument } from './schemas/user.schema';
+import { AppGateway } from 'src/gateway/app.gateway';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private fileService: FileService,
+    private gateway: AppGateway,
   ) {}
 
   async delete(id: string): Promise<User> {
-    return this.userModel.findByIdAndDelete(id);
+    const deletedUser = await this.userModel.findByIdAndDelete(id);
+    this.gateway.handleDeleteUser(deletedUser);
+    return deletedUser;
   }
   async update(id: string, userDto: UserDto): Promise<User> {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true });
@@ -22,6 +26,7 @@ export class UserService {
     const { image } = userDto;
     const fileName = await this.fileService.createFile(image);
     const newUser = new this.userModel({ ...userDto, image: fileName });
+    this.gateway.handleCreateUser(newUser);
     return newUser.save();
   }
   async getOne(id: string): Promise<User> {
