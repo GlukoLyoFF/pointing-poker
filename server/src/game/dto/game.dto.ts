@@ -5,7 +5,7 @@ export class GameSettings {
   scoreType: string;
   shortScoreType: string;
   roundTime: number;
-  cardValues: {key: string; value: string}[]
+  cardValues: { key: string; value: string }[];
 }
 
 export class GameDto {

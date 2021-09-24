@@ -14,15 +14,17 @@ export class Game {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ default: {
-    isAsPlayer: true,
-    isChangeCard: false,
-    isTimer: true,
-    scoreType: "string",
-    shortScoreType: "str",
-    roundTime: 888,
-    cardValues: [{key: "unknown", value: "cup"}]
-  } })
+  @Prop({
+    default: {
+      isAsPlayer: true,
+      isChangeCard: false,
+      isTimer: true,
+      scoreType: 'string',
+      shortScoreType: 'str',
+      roundTime: 888,
+      cardValues: [{ key: 'unknown', value: 'cup' }],
+    },
+  })
   gameSettings: GameSettings;
 }
 
