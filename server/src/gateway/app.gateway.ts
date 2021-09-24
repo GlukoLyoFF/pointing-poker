@@ -100,6 +100,4 @@ export class AppGateway
     };
     this.wss.emit('endGameMsg', answer);
   }
-
-
 }
