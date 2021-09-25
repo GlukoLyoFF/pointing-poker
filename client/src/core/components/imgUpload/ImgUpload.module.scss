@@ -1,0 +1,42 @@
+@import 'core/sass/variables';
+
+.addImageCnt {
+  display: flex;
+  position: relative;
+}
+
+.addImageCnt input[type='text'] {
+  flex-flow: row nowrap;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 28px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  outline: none;
+  box-shadow: $base-shadow;
+}
+
+.avaLabel {
+  margin-top: 20px;
+  display: table-caption;
+}
+
+.addPicBtn {
+  display: flex;
+  flex-wrap: nowrap;
+  align-self: flex-end;
+
+  & span {
+     white-space: nowrap;
+  }
+}
+
+.error {
+  color:red;
+  position: absolute;
+  top: 15px;
+  left: 80px;
+}

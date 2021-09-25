@@ -1,0 +1,22 @@
+@import 'core/sass/variables';
+
+.container {
+  margin-top: 30px;
+  
+  .heading {
+    margin-left: 10px;
+    margin-right: auto;
+    margin-bottom: 10px;
+  }
+
+  .issues {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 15px;
+  }
+
+  .timer {
+    display: flex;
+  }
+}

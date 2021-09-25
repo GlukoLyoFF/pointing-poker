@@ -1,0 +1,33 @@
+@import 'core/sass/variables';
+
+.footer {
+  height: 70px;
+  background: $dark-blue;
+  flex-shrink: 0;
+  box-shadow: 0px 4px 4px $shadow-black;
+
+  .box {
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    img {
+      width: 70px;
+      height: 60px;
+      padding-top: 8px;
+    }
+    .listLink {
+      display: flex;
+      list-style-type: none;
+      gap: 10px;
+     a {
+       color: $yellow;
+       text-decoration: none;
+     }
+    }
+    h3 {
+      color: $yellow;
+    }
+  }
+}

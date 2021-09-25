@@ -1,0 +1,10 @@
+@import 'core/sass/variables';
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: $base-shadow;
+  padding-left: 10px;
+  padding-right: 10px;
+}

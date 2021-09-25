@@ -1,0 +1,27 @@
+@import 'core/sass/variables';
+
+.heading {
+  text-align: left;
+
+  .card {
+    width: 33%;
+  }
+}
+
+.copyBox {
+  display: flex;
+  align-items: flex-end;
+  width: 30%;
+}
+
+.btnBox {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.btnBoxUser {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
