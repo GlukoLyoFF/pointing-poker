@@ -45,6 +45,13 @@ export enum Events {
   UpdateIssueMsg = 'updateIssueMsg',
   DeleteIssue = 'deleteIssue',
   DeleteIssueMsg = 'deleteIssueMsg',
+
+  StartRound = 'startRound',
+  StartRoundMsg = 'startRoundMsg',
+  ReStartRound = 'reStartRound',
+  ReStartRoundMsg = 'reStartRoundMsg',
+  EndRound = 'endRound',
+  EndRoundMsg = 'endRoundMsg',
 }
 
 const WSPORT = 5000;
@@ -166,5 +173,32 @@ export class AppGateway
       payload: message,
     };
     this.wss.emit(Events.EndGameMsg, answer);
+  }
+
+  @SubscribeMessage(Events.StartRound)
+  handleStartRound(client: Socket, message: string): void {
+    const answer: IPayload<string> = {
+      event: Events.StartRound,
+      payload: message,
+    };
+    this.wss.emit(Events.StartRoundMsg, answer);
+  }
+
+  @SubscribeMessage(Events.ReStartRound)
+  handleReStartRound(client: Socket, message: string): void {
+    const answer: IPayload<string> = {
+      event: Events.ReStartRound,
+      payload: message,
+    };
+    this.wss.emit(Events.ReStartRoundMsg, answer);
+  }
+
+  @SubscribeMessage(Events.EndRound)
+  handleEndRound(client: Socket, message: string): void {
+    const answer: IPayload<string> = {
+      event: Events.EndRound,
+      payload: message,
+    };
+    this.wss.emit(Events.EndRoundMsg, answer);
   }
 }
