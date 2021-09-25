@@ -19,9 +19,11 @@ export class UserService {
     this.gateway.handleDeleteUser(deletedUser);
     return deletedUser;
   }
+
   async update(id: string, userDto: UserDto): Promise<User> {
     return this.userModel.findByIdAndUpdate(id, userDto, { new: true });
   }
+
   async create(userDto: UserDto): Promise<User> {
     const { image } = userDto;
     const fileName = await this.fileService.createFile(image);
@@ -29,18 +31,22 @@ export class UserService {
     this.gateway.handleCreateUser(newUser);
     return newUser.save();
   }
+
   async getOne(id: string): Promise<User> {
+    const findOne = await this.userModel.findById(id);
+    this.gateway.handleChooseUser(findOne);
     return this.userModel.findById(id);
   }
+
   async getAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
+
   async getByGameIdAndByRole(gameId: string, role: UserRole): Promise<User[]> {
-    console.log(gameId, role);
     return this.userModel.find({ gameId: gameId, role: role }).exec();
   }
+
   async getByGameId(gameId: string): Promise<User[]> {
-    console.log(gameId);
     return this.userModel.find({ gameId: gameId }).exec();
   }
 }

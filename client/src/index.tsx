@@ -10,6 +10,26 @@ import './text-styles.scss';
 import '@fontsource/roboto';
 import '@fontsource/ruda';
 
+import { io } from 'socket.io-client';
+const SERVER_URL = 'http://localhost:5000';
+export const ws = io(SERVER_URL);
+ws.on('connection', data => console.log(data));
+ws.on('disconnection', data => console.log(data));
+
+ws.on('startGameMsg', data => console.log(data));
+ws.on('changeGameSettingsMsg', data => console.log(data));
+ws.on('changeTitleMsg', data => console.log(data));
+ws.on('endGameMsg', data => console.log(data));
+
+ws.on('createUserMsg', data => console.log(data));
+ws.on('chooseUserMsg', data => console.log(data));
+ws.on('deleteUserMsg', data => console.log(data));
+
+ws.on('createIssueMsg', data => console.log(data));
+ws.on('chooseIssueMsg', data => console.log(data));
+ws.on('updateIssueMsg', data => console.log(data));
+ws.on('deleteIssueMsg', data => console.log(data));
+
 const theme = unstable_createMuiStrictModeTheme();
 
 ReactDOM.render(

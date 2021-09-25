@@ -1,9 +1,7 @@
-//import { AppGateway } from 'src/app.gateway';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AppGateway } from 'src/gateway/app.gateway';
-//import { appGateway } from 'src/app.module';
 import { GameDto } from './dto/game.dto';
 import { Game, GameDocument } from './schemas/game.schema';
 
@@ -38,9 +36,29 @@ export class GameService {
   }
 
   async update(id: string, gameDto: GameDto): Promise<Game> {
-    const updatedGame = this.gameModel.findByIdAndUpdate(id, gameDto, {
+    const updatedGame = await this.gameModel.findByIdAndUpdate(id, gameDto, {
       new: true,
     });
     return updatedGame;
+  }
+
+  async updateGameSettings(id: string, gameDto: GameDto): Promise<Game> {
+    const updatedGameSettings = await this.gameModel.findByIdAndUpdate(
+      id,
+      gameDto,
+      {
+        new: true,
+      },
+    );
+    this.gateway.handleChangeGameSettings(updatedGameSettings);
+    return updatedGameSettings;
+  }
+
+  async updateTitle(id: string, gameDto: GameDto): Promise<Game> {
+    const updatedTitle = await this.gameModel.findByIdAndUpdate(id, gameDto, {
+      new: true,
+    });
+    this.gateway.handleChangeTitle(updatedTitle);
+    return updatedTitle;
   }
 }

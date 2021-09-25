@@ -8,7 +8,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Scope } from '@nestjs/common';
 import { IssueDocument } from 'src/issue/schemas/issue.schema';
 import { UserDocument } from 'src/user/schemas/user.schema';
 
@@ -17,8 +17,38 @@ interface IPayload<T> {
   payload: T;
 }
 
+export enum Events {
+  Connection = 'connection',
+  Disconnection = 'disconnection',
+
+  CreateUser = 'createUser',
+  CreateUserMsg = 'createUserMsg',
+  ChooseUser = 'chooseUser',
+  ChooseUserMsg = 'chooseUserMsg',
+  DeleteUser = 'deleteUser',
+  DeleteUserMsg = 'deleteUserMsg',
+
+  StartGame = 'startGame',
+  StartGameMsg = 'startGameMsg',
+  ChangeGameSettings = 'changeGameSettings',
+  ChangeGameSettingsMsg = 'changeGameSettingsMsg',
+  ChangeTitle = 'changeTitle',
+  ChangeTitleMsg = 'changeTitleMsg',
+  EndGame = 'endGame',
+  EndGameMsg = 'endGameMsg',
+
+  CreateIssue = 'createIssue',
+  CreateIssueMsg = 'createIssueMsg',
+  ChooseIssue = 'chooseIssue',
+  ChooseIssueMsg = 'chooseIssueMsg',
+  UpdateIssue = 'updateIssue',
+  UpdateIssueMsg = 'updateIssueMsg',
+  DeleteIssue = 'deleteIssue',
+  DeleteIssueMsg = 'deleteIssueMsg',
+}
+
 @WebSocketGateway(5000, { cors: true })
-@Injectable()
+@Injectable({ scope: Scope.DEFAULT })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -28,76 +58,112 @@ export class AppGateway
 
   handleDisconnect(client: Socket) {
     this.logger.log(`Client disconected: ${client.id}`);
-    client.emit('disconnection', `Disconect: ${client.id}`);
+    client.emit(Events.Disconnection, `Disconect: ${client.id}`);
   }
   handleConnection(client: Socket) {
     this.logger.log(`new client connected: ${client.id}`);
-    client.emit('connection', `Success connection: ${client.id}`);
+    client.emit(Events.Connection, `Success connection: ${client.id}`);
   }
   afterInit() {
     this.logger.log('Initialized');
   }
 
-  @SubscribeMessage('createUser')
+  @SubscribeMessage(Events.CreateUser)
   handleCreateUser(message: UserDocument): void {
     const answer: IPayload<UserDocument> = {
-      event: 'createUser',
+      event: Events.CreateUser,
       payload: message,
     };
-    this.wss.emit('createUserMsg', answer);
+    this.wss.emit(Events.CreateUserMsg, answer);
   }
 
-  @SubscribeMessage('deleteUser')
+  @SubscribeMessage(Events.ChooseUser)
+  handleChooseUser(message: UserDocument): void {
+    const answer: IPayload<UserDocument> = {
+      event: Events.ChooseUser,
+      payload: message,
+    };
+    this.wss.emit(Events.ChooseUserMsg, answer);
+  }
+
+  @SubscribeMessage(Events.DeleteUser)
   handleDeleteUser(message: UserDocument): void {
     const answer: IPayload<UserDocument> = {
-      event: 'deleteIssue',
+      event: Events.DeleteUser,
       payload: message,
     };
-    this.wss.emit('deleteUserMsg', answer);
+    this.wss.emit(Events.DeleteUserMsg, answer);
   }
 
-  @SubscribeMessage('createIssue')
+  @SubscribeMessage(Events.CreateIssue)
   handleCreateIssue(message: IssueDocument): void {
     const answer: IPayload<IssueDocument> = {
-      event: 'createIssue',
+      event: Events.CreateIssue,
       payload: message,
     };
-    this.wss.emit('createIssueMsg', answer);
+    this.wss.emit(Events.CreateIssueMsg, answer);
   }
 
-  @SubscribeMessage('chooseIssue')
+  @SubscribeMessage(Events.ChooseIssue)
   handleChooseIssue(message: IssueDocument): void {
     const answer: IPayload<IssueDocument> = {
-      event: 'chooseIssue',
+      event: Events.ChooseIssue,
       payload: message,
     };
-    this.wss.emit('chooseIssueMsg', answer);
+    this.wss.emit(Events.ChooseIssueMsg, answer);
   }
 
-  @SubscribeMessage('deleteIssue')
+  @SubscribeMessage(Events.UpdateIssue)
+  handleUpdateIssue(message: IssueDocument): void {
+    const answer: IPayload<IssueDocument> = {
+      event: Events.UpdateIssue,
+      payload: message,
+    };
+    this.wss.emit(Events.UpdateIssueMsg, answer);
+  }
+
+  @SubscribeMessage(Events.DeleteIssue)
   handleDeleteIssue(message: IssueDocument): void {
     const answer: IPayload<IssueDocument> = {
-      event: 'deleteIssue',
+      event: Events.DeleteIssue,
       payload: message,
     };
-    this.wss.emit('deleteIssueMsg', answer);
+    this.wss.emit(Events.DeleteIssueMsg, answer);
   }
 
-  @SubscribeMessage('startGame')
+  @SubscribeMessage(Events.StartGame)
   handleStartGame(message: GameDocument): void {
     const answer: IPayload<GameDocument> = {
-      event: 'startGame',
+      event: Events.StartGame,
       payload: message,
     };
-    this.wss.emit('startGameMsg', answer);
+    this.wss.emit(Events.StartGameMsg, answer);
   }
 
-  @SubscribeMessage('endGame')
-  handleEndGame(message: GameDocument): void {
+  @SubscribeMessage(Events.ChangeGameSettings)
+  handleChangeGameSettings(message: GameDocument): void {
     const answer: IPayload<GameDocument> = {
-      event: 'endGame',
+      event: Events.ChangeGameSettings,
       payload: message,
     };
-    this.wss.emit('endGameMsg', answer);
+    this.wss.emit(Events.ChangeGameSettingsMsg, answer);
+  }
+
+  @SubscribeMessage(Events.ChangeTitle)
+  handleChangeTitle(message: GameDocument): void {
+    const answer: IPayload<GameDocument> = {
+      event: Events.ChangeTitle,
+      payload: message,
+    };
+    this.wss.emit(Events.ChangeTitleMsg, answer);
+  }
+
+  @SubscribeMessage(Events.EndGame)
+  handleEndGame(message: GameDocument): void {
+    const answer: IPayload<GameDocument> = {
+      event: Events.EndGame,
+      payload: message,
+    };
+    this.wss.emit(Events.EndGameMsg, answer);
   }
 }
