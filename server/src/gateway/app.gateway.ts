@@ -47,7 +47,8 @@ export enum Events {
   DeleteIssueMsg = 'deleteIssueMsg',
 }
 
-@WebSocketGateway(5000, { cors: true })
+const WSPORT = 5000;
+@WebSocketGateway(WSPORT, { cors: true })
 @Injectable({ scope: Scope.DEFAULT })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
