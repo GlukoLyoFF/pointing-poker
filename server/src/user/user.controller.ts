@@ -21,15 +21,15 @@ export class UserController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAll(): Promise<User[]> {
-    const allGames = this.userService.getAll();
-    return allGames;
+    const allUsers = this.userService.getAll();
+    return allUsers;
   }
 
   @Get(':id')
   @HttpCode(HttpStatus.OK)
   async getOne(@Param('id') id: string) {
-    const oneGame = this.userService.getOne(id);
-    return oneGame;
+    const oneUser = await this.userService.getOne(id);
+    return oneUser;
   }
 
   @Get('gameid/:gameId&:role')
@@ -53,7 +53,6 @@ export class UserController {
   @HttpCode(HttpStatus.CREATED)
   async create(@Body() userDto: UserDto) {
     const createdUser = this.userService.create(userDto);
-    if (!createdUser) throw new NotFoundException("User doesn't exist!");
     return createdUser;
   }
 
@@ -61,7 +60,6 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async update(@Param('id') id: string, @Body() userDto: UserDto) {
     const updatedUser = this.userService.update(id, userDto);
-    if (!updatedUser) throw new NotFoundException("User doesn't exist!");
     return updatedUser;
   }
 
@@ -69,7 +67,6 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id') id: string) {
     const deletedUser = this.userService.delete(id);
-    if (!deletedUser) throw new NotFoundException("User doesn't exist!");
     return deletedUser;
   }
 }
