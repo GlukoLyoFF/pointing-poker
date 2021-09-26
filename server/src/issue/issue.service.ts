@@ -41,9 +41,10 @@ export class IssueService {
   }
 
   async update(id: string, issueDto: IssueDto): Promise<Issue> {
-    const updatedIssue = this.issueModel.findByIdAndUpdate(id, issueDto, {
+    const updatedIssue = await this.issueModel.findByIdAndUpdate(id, issueDto, {
       new: true,
     });
+    this.gateway.handleUpdateIssue(updatedIssue);
     return updatedIssue;
   }
 }

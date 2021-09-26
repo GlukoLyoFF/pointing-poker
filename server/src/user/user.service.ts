@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto, UserRole } from './dto/user.dto';
@@ -15,13 +15,25 @@ export class UserService {
   ) {}
 
   async delete(id: string): Promise<User> {
-    const deletedUser = await this.userModel.findByIdAndDelete(id);
-    this.gateway.handleDeleteUser(deletedUser);
-    return deletedUser;
+    try {
+      const deletedUser = await this.userModel.findByIdAndDelete(id);
+      this.gateway.handleDeleteUser(deletedUser);
+      return deletedUser;
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
   }
+
   async update(id: string, userDto: UserDto): Promise<User> {
-    return this.userModel.findByIdAndUpdate(id, userDto, { new: true });
+    try {
+      return this.userModel.findByIdAndUpdate(id, userDto, { new: true });
+    } catch {
+      throw new NotFoundException(
+        "User doesn't exist or check request's body!",
+      );
+    }
   }
+
   async create(userDto: UserDto): Promise<User> {
     const { image } = userDto;
     const fileName = await this.fileService.createFile(image);
@@ -29,18 +41,34 @@ export class UserService {
     this.gateway.handleCreateUser(newUser);
     return newUser.save();
   }
+
   async getOne(id: string): Promise<User> {
-    return this.userModel.findById(id);
+    try {
+      const findOne = await this.userModel.findById(id);
+      this.gateway.handleChooseUser(findOne);
+      return this.userModel.findById(id);
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
   }
+
   async getAll(): Promise<User[]> {
     return this.userModel.find().exec();
   }
+
   async getByGameIdAndByRole(gameId: string, role: UserRole): Promise<User[]> {
-    console.log(gameId, role);
-    return this.userModel.find({ gameId: gameId, role: role }).exec();
+    try {
+      return this.userModel.find({ gameId: gameId, role: role }).exec();
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
   }
+
   async getByGameId(gameId: string): Promise<User[]> {
-    console.log(gameId);
-    return this.userModel.find({ gameId: gameId }).exec();
+    try {
+      return this.userModel.find({ gameId: gameId }).exec();
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
   }
 }

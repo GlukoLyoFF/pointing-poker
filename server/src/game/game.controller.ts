@@ -56,4 +56,26 @@ export class GameController {
     if (!editedPost) throw new NotFoundException("Game doesn't exist!");
     return editedPost;
   }
+
+  @Put('title/:id')
+  @HttpCode(HttpStatus.OK)
+  async updateTitle(
+    @Param('id') id: string,
+    @Body() updateGameDto: GameDto,
+  ): Promise<Game> {
+    const editedPost = this.gameService.updateTitle(id, updateGameDto);
+    if (!editedPost) throw new NotFoundException("Game doesn't exist!");
+    return editedPost;
+  }
+
+  @Put('settings/:id')
+  @HttpCode(HttpStatus.OK)
+  async updateSettings(
+    @Param('id') id: string,
+    @Body() updateGameDto: GameDto,
+  ): Promise<Game> {
+    const editedPost = this.gameService.updateGameSettings(id, updateGameDto);
+    if (!editedPost) throw new NotFoundException("Game doesn't exist!");
+    return editedPost;
+  }
 }
