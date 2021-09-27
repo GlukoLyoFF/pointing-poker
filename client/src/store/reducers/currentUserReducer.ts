@@ -1,8 +1,8 @@
 import {
-  CurrentUserAction,
+  CurrentUserActions,
+  CurrentUserActionType,
   DefaultCurrentUserState,
-  GetCurrentUserAction,
-} from '../../core/types/currentUserType';
+} from 'core/types/currentUserType';
 
 const defaultState: DefaultCurrentUserState = {
   currentUser: {
@@ -12,10 +12,12 @@ const defaultState: DefaultCurrentUserState = {
   },
 };
 
-export const currentUserReducer = (state = defaultState, action: GetCurrentUserAction) => {
+export const currentUserReducer = (state = defaultState, action: CurrentUserActions) => {
   switch (action.type) {
-    case CurrentUserAction.GET_CURRENT_USER:
+    case CurrentUserActionType.GET_CURRENT_USER:
       return state;
+    case CurrentUserActionType.SET_CURRENT_USER:
+      return { ...state, currentUser: action.payload };
     default:
       return state;
   }
