@@ -8,6 +8,7 @@ import { ImgUpload } from 'core/components/imgUpload/ImgUpload';
 import { Text } from 'core/components/Text';
 import styleForm from './LobbyForm.module.scss';
 import style from '../../../app.module.scss';
+import { setCurrentUser } from 'store/actionCreators/currentUser';
 
 type IUser = {
   firstName: string;
@@ -45,17 +46,20 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             gameId: res.data._id,
             role: Roles.creator,
           }),
-        );
+        )
+        .then(res => dispatch(setCurrentUser(res.data)));
       history.push('/lobby');
     } else {
-      axios.post('http://localhost:8888/api/users', {
-        firstName: watch('firstName'),
-        lastName: watch('lastName'),
-        jobPosition: watch('jobPosition'),
-        image: image,
-        gameId: gameId,
-        role: isObserver ? Roles.observer : Roles.user,
-      });
+      axios
+        .post('http://localhost:8888/api/users', {
+          firstName: watch('firstName'),
+          lastName: watch('lastName'),
+          jobPosition: watch('jobPosition'),
+          image: image,
+          gameId: gameId,
+          role: isObserver ? 'observer' : 'member',
+        })
+        .then(res => dispatch(setCurrentUser(res.data)));
       history.push('/lobby');
     }
   };

@@ -5,10 +5,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Text } from '../Text';
 import styles from './IssueCard.module.scss';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
-import { Roles } from '../../core/types/roleType';
-import { deleteIssueById } from '../../core/api/issues.service';
+import { Roles } from 'core/types/roleType';
+import { deleteIssueById } from 'core/api/issues.service';
 import { useDispatch } from 'react-redux';
-import { getIssues } from '../../store/actionCreators/issue';
+import { getIssues } from 'store/actionCreators/issue';
 
 interface IssueCardProp {
   title: string;
