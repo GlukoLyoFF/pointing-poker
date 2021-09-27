@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { deleteIssueById } from 'core/api/issues.service';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { getIssues } from 'store/actionCreators/issue';
+import { deleteIssue, editIssue, getIssues, setIssue } from 'store/actionCreators/issue';
 import { IssueCard } from 'core/components/issueCard/IssueCard';
 import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { AppModal } from 'core/components/modal/Modal';
 import { Text } from 'core/components/Text';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
 import styles from './Issues.module.scss';
+import { ws } from 'core/api';
 
 export const Issues: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);
@@ -32,19 +33,16 @@ export const Issues: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues(currentUser.gameId));
     modalShowCreate(false);
   };
 
   const handleSubmitEditIssue = () => {
-    dispatch(getIssues(currentUser.gameId));
     modalShowEdit(false);
   };
 
   const handleSubmitDeleteIssue = async () => {
     deleteIssueById(getIssueId).then(() => {
       modalShowDelete(false);
-      dispatch(getIssues(currentUser.gameId));
     });
   };
 
@@ -52,7 +50,6 @@ export const Issues: React.FC = () => {
     modalShowDelete(false);
     modalShowCreate(false);
     modalShowEdit(false);
-    dispatch(getIssues(currentUser.gameId));
   };
 
   const handleIssueId = (id: string) => {
@@ -61,6 +58,15 @@ export const Issues: React.FC = () => {
 
   useEffect(() => {
     dispatch(getIssues(currentUser.gameId));
+    ws.on('createIssueMsg', data => {
+      dispatch(setIssue(data.payload));
+    });
+    ws.on('deleteIssueMsg', data => {
+      dispatch(deleteIssue(data.payload));
+    });
+    ws.on('updateIssueMsg', data => {
+      dispatch(editIssue(data.payload));
+    });
   }, []);
   return (
     <>

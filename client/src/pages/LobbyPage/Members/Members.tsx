@@ -3,11 +3,12 @@ import React, { useEffect, useState } from 'react';
 import { Text } from '../../../core/components/Text';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../core/hooks/useTypeSelector';
-import { getUsers } from '../../../store/actionCreators/user';
+import { deleteUser, getUsers } from '../../../store/actionCreators/user';
 import { AppModal } from '../../../core/components/modal/Modal';
 import { UserCard } from '../../../core/components/userCard/UserCard';
 import { Roles } from '../../../core/types/roleType';
 import styles from './Members.module.scss';
+import { ws } from 'core/api';
 
 export const Members: React.FC = () => {
   const { users } = useTypeSelector(state => state.users);
@@ -33,14 +34,16 @@ export const Members: React.FC = () => {
     setDeleteUserId(id);
   };
 
-  const handleSubmit = async () => {
-    await deleteUserById(getDeleteUserId);
+  const handleSubmit = () => {
+    deleteUserById(getDeleteUserId);
     setModalShowFlag(false);
-    dispatch(getUsers(currentUser.gameId));
   };
 
   useEffect(() => {
     dispatch(getUsers(currentUser.gameId));
+    ws.on('deleteUserMsg', data => {
+      dispatch(deleteUser(data.payload));
+    });
   }, []);
 
   return (

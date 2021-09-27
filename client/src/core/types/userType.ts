@@ -4,6 +4,7 @@ export enum UsersActionTypes {
   GET_USERS = 'GET_USERS',
   GET_USERS_SUCCESS = 'GET_USERS_SUCCESS',
   GET_USERS_ERROR = 'GET_USERS_ERROR',
+  DELETE_USER = 'DELETE_USER',
 }
 
 export interface User {
@@ -37,4 +38,13 @@ interface GetUsersActionError {
   payload: string;
 }
 
-export type UsersAction = GetUsersAction | GetUsersActionSuccess | GetUsersActionError;
+interface DeleteUserAction {
+  type: UsersActionTypes.DELETE_USER;
+  payload: User;
+}
+
+export type UsersActions =
+  | GetUsersAction
+  | GetUsersActionSuccess
+  | GetUsersActionError
+  | DeleteUserAction;

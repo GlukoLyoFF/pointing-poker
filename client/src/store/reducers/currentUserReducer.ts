@@ -6,8 +6,8 @@ import {
 
 const defaultState: DefaultCurrentUserState = {
   currentUser: {
-    userId: '614099d1b22b6739b438c717',
-    gameId: 'asdfasdfas',
+    userId: '6151ddf4d4eaac08eca12f35',
+    gameId: 'dsf897ef67dyf78w678',
     role: 'creator',
   },
 };

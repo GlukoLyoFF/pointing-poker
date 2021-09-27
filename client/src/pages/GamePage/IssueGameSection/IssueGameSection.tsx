@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Roles } from 'core/types/roleType';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { getIssues } from 'store/actionCreators/issue';
+import { deleteIssue, getIssues, setIssue } from 'store/actionCreators/issue';
 import { setSettingRoundTime } from 'store/actionCreators/settings';
 import { AppButton } from 'core/components/Button';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
@@ -12,6 +12,7 @@ import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
 import styles from './IssueGameSection.module.scss';
+import { ws } from 'core/api';
 
 export const IssueGameSection: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);
@@ -27,7 +28,6 @@ export const IssueGameSection: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues(currentUser.gameId));
     modalShowCreate(false);
   };
 
@@ -37,7 +37,6 @@ export const IssueGameSection: React.FC = () => {
 
   const handleCancel = () => {
     modalShowCreate(false);
-    dispatch(getIssues(currentUser.gameId));
   };
 
   const changeRoundTime = (value: number): void => {
@@ -50,6 +49,12 @@ export const IssueGameSection: React.FC = () => {
 
   useEffect(() => {
     dispatch(getIssues(currentUser.gameId));
+    ws.on('createIssueMsg', data => {
+      dispatch(setIssue(data.payload));
+    });
+    ws.on('deleteIssueMsg', data => {
+      dispatch(deleteIssue(data.payload));
+    });
   }, []);
 
   return (

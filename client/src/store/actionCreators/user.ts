@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
-import { UsersAction, UsersActionTypes } from '../../core/types/userType';
+import { User, UsersActions, UsersActionTypes } from 'core/types/userType';
 import { getUsersByGameByRole } from '../../core/api/users.service';
-import { Roles } from '../../core/types/roleType';
+import { Roles } from 'core/types/roleType';
 
 export const getUsers = (gameId: string) => {
-  return async (dispatch: Dispatch<UsersAction>) => {
+  return async (dispatch: Dispatch<UsersActions>) => {
     try {
       dispatch({ type: UsersActionTypes.GET_USERS });
       const response = await getUsersByGameByRole(gameId, Roles.user);
@@ -15,5 +15,12 @@ export const getUsers = (gameId: string) => {
         payload: 'User loading error',
       });
     }
+  };
+};
+
+export const deleteUser = (user: User) => {
+  return (dispatch: Dispatch<UsersActions>): void => {
+    console.log(user);
+    dispatch({ type: UsersActionTypes.DELETE_USER, payload: user });
   };
 };

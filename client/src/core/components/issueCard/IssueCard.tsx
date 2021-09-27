@@ -5,10 +5,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import { Text } from '../Text';
 import styles from './IssueCard.module.scss';
 import { useTypeSelector } from '../../hooks/useTypeSelector';
-import { Roles } from '../../core/types/roleType';
-import { deleteIssueById } from '../../core/api/issues.service';
+import { Roles } from 'core/types/roleType';
+import { deleteIssueById } from 'core/api/issues.service';
 import { useDispatch } from 'react-redux';
-import { getIssues } from '../../store/actionCreators/issue';
 
 interface IssueCardProp {
   title: string;
@@ -35,23 +34,8 @@ export const IssueCard: React.FC<IssueCardProp> = ({
   const dispatch = useDispatch();
   const className = currentIssueId !== id ? `${styles.issue}` : `${styles.issue} ${styles.green}`;
 
-  const handleSubmitDeleteIssue = async () => {
-    if (currentIssueId) {
-      deleteIssueById(currentIssueId).then(() => {
-        dispatch(getIssues(currentUser.gameId));
-      });
-    }
-  };
-
   return (
-    <div
-      className={className}
-      onClick={() => {
-        if (currentUser.role === Roles.creator) {
-          handleIssueId(id);
-        }
-      }}
-    >
+    <div className={styles.issue}>
       <div className={styles.title}>
         <Text textLvl={'base'}>{title}</Text>
         <div className={styles.priority}>
@@ -60,7 +44,7 @@ export const IssueCard: React.FC<IssueCardProp> = ({
       </div>
       <div>
         {gameMode && currentUser.role === Roles.creator ? (
-          <CloseIcon className={styles.btn} onClick={() => handleSubmitDeleteIssue()} />
+          <CloseIcon className={styles.btn} onClick={() => deleteIssueById(id)} />
         ) : null}
         {!gameMode ? (
           <>
