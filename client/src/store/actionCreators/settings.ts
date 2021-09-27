@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { getGameById, updateGameById } from '../../core/api/game.service';
-import { IGame } from '../../core/types/get200Types';
-import { IGameCard, SettingsAction, SettingsActionTypes } from '../../core/types/settingsType';
+import { getGameById, updateGameById } from 'core/api/game.service';
+import { IGame } from 'core/types/get200Types';
+import { IGameCard, SettingsAction, SettingsActionTypes } from 'core/types/settingsType';
 
 export const getGameSettings = (idGame: string) => {
   return async (dispatch: Dispatch<SettingsAction>): Promise<void> => {

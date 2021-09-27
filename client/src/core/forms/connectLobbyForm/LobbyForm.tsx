@@ -1,6 +1,9 @@
 import axios from 'axios';
 import React, { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { Roles } from 'core/types/roleType';
 import { ImgUpload } from 'core/components/imgUpload/ImgUpload';
 import { Text } from 'core/components/Text';
 import styleForm from './LobbyForm.module.scss';
@@ -16,6 +19,8 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
   const [image, setImage] = useState<string>('');
   const [statusFail, setStatusFail] = useState(false);
   const [isObserver, setIsObserver] = useState(false);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const {
     register,
@@ -38,9 +43,10 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             jobPosition: watch('jobPosition'),
             image: image,
             gameId: res.data._id,
-            role: 'creator',
+            role: Roles.creator,
           }),
         );
+      history.push('/lobby');
     } else {
       axios.post('http://localhost:8888/api/users', {
         firstName: watch('firstName'),
@@ -48,8 +54,9 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
         jobPosition: watch('jobPosition'),
         image: image,
         gameId: gameId,
-        role: isObserver ? 'observer' : 'member',
+        role: isObserver ? Roles.observer : Roles.user,
       });
+      history.push('/lobby');
     }
   };
 

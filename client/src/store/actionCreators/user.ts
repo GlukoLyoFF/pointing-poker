@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { UsersAction, UsersActionTypes } from '../../core/types/userType';
-import { getUsersByGameByRole } from '../../core/api/users.service';
-import { Roles } from '../../core/types/roleType';
+import { UsersAction, UsersActionTypes } from 'core/types/userType';
+import { getUsersByGameByRole } from 'core/api/users.service';
+import { Roles } from 'core/types/roleType';
 
 export const getUsers = (gameId: string) => {
   return async (dispatch: Dispatch<UsersAction>) => {
