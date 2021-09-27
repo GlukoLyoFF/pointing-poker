@@ -7,7 +7,9 @@ import { PlayerVoteService } from './playerVote.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: PlayerVote.name, schema: PlayerVoteSchema }]),
+    MongooseModule.forFeature([
+      { name: PlayerVote.name, schema: PlayerVoteSchema },
+    ]),
   ],
   controllers: [PlayerVoteController],
   providers: [PlayerVoteService, AppGateway],

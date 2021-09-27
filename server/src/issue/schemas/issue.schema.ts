@@ -11,7 +11,7 @@ export class Issue {
   @Prop({ required: true })
   title: string;
 
-  @Prop({default: ''})
+  @Prop({ default: '' })
   link: string;
 
   @Prop({ required: true })

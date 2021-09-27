@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -45,7 +44,10 @@ export class IssueVoteController {
     @Param('gameId') gameId: string,
     @Param('issueId') issueId: string,
   ): Promise<IssueVote[]> {
-    const issueVoteList = this.voteService.getByGameIdAndPlayerId(gameId, issueId);
+    const issueVoteList = this.voteService.getByGameIdAndPlayerId(
+      gameId,
+      issueId,
+    );
     return issueVoteList;
   }
 

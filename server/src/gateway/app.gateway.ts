@@ -11,6 +11,8 @@ import {
 import { Injectable, Logger, Scope } from '@nestjs/common';
 import { IssueDocument } from 'src/issue/schemas/issue.schema';
 import { UserDocument } from 'src/user/schemas/user.schema';
+import { PlayerVoteDocument } from 'src/playerVote/schemas/playerVote.schema';
+import { IssueVoteDocument } from 'src/issueVote/schemas/issueVote.schema';
 
 interface IPayload<T> {
   event: string;
@@ -52,6 +54,20 @@ export enum Events {
   ReStartRoundMsg = 'reStartRoundMsg',
   EndRound = 'endRound',
   EndRoundMsg = 'endRoundMsg',
+
+  AddVoteByPlayer = 'addVoteByPlayer',
+  AddVoteByPlayerMsg = 'addVoteByPlayerMsg',
+  DeleteVoteByPlayer = 'deleteVoteByPlayer',
+  DeleteVoteByPlayerMsg = 'deleteVoteByPlayerMsg',
+  ChangeVoteByPlayer = 'changeVoteByPlayer',
+  ChangeVoteByPlayerMsg = 'changeVoteByPlayerMsg',
+
+  AddVoteByIssue = 'addVoteByIssue',
+  AddVoteByIssueMsg = 'addVoteByIssueMsg',
+  DeleteVoteByIssue = 'deleteVoteByIssue',
+  DeleteVoteByIssueMsg = 'deleteVoteByIssueMsg',
+  ChangeVoteByIssue = 'changeVoteByIssue',
+  ChangeVoteByIssueMsg = 'changeVoteByIssueMsg',
 }
 
 const WSPORT = 5000;
@@ -173,6 +189,60 @@ export class AppGateway
       payload: message,
     };
     this.wss.emit(Events.EndGameMsg, answer);
+  }
+
+  @SubscribeMessage(Events.AddVoteByPlayer)
+  handleAddVoteByPlayer(message: PlayerVoteDocument): void {
+    const answer: IPayload<PlayerVoteDocument> = {
+      event: Events.AddVoteByPlayer,
+      payload: message,
+    };
+    this.wss.emit(Events.AddVoteByPlayerMsg, answer);
+  }
+
+  @SubscribeMessage(Events.DeleteVoteByPlayer)
+  handleDeleteVoteByPlayer(message: PlayerVoteDocument): void {
+    const answer: IPayload<PlayerVoteDocument> = {
+      event: Events.DeleteVoteByPlayer,
+      payload: message,
+    };
+    this.wss.emit(Events.DeleteVoteByPlayerMsg, answer);
+  }
+
+  @SubscribeMessage(Events.ChangeVoteByPlayer)
+  handleChangeVoteByPlayer(message: PlayerVoteDocument): void {
+    const answer: IPayload<PlayerVoteDocument> = {
+      event: Events.ChangeVoteByPlayer,
+      payload: message,
+    };
+    this.wss.emit(Events.ChangeVoteByPlayerMsg, answer);
+  }
+
+  @SubscribeMessage(Events.AddVoteByIssue)
+  handleAddVoteByIssue(message: IssueVoteDocument): void {
+    const answer: IPayload<IssueVoteDocument> = {
+      event: Events.AddVoteByIssue,
+      payload: message,
+    };
+    this.wss.emit(Events.AddVoteByIssueMsg, answer);
+  }
+
+  @SubscribeMessage(Events.DeleteVoteByIssue)
+  handleDeleteVoteByIssue(message: IssueVoteDocument): void {
+    const answer: IPayload<IssueVoteDocument> = {
+      event: Events.DeleteVoteByIssue,
+      payload: message,
+    };
+    this.wss.emit(Events.DeleteVoteByIssueMsg, answer);
+  }
+
+  @SubscribeMessage(Events.ChangeVoteByIssue)
+  handleChangeVoteByIssue(message: IssueVoteDocument): void {
+    const answer: IPayload<IssueVoteDocument> = {
+      event: Events.ChangeVoteByIssue,
+      payload: message,
+    };
+    this.wss.emit(Events.ChangeVoteByIssueMsg, answer);
   }
 
   @SubscribeMessage(Events.StartRound)

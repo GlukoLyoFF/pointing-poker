@@ -25,9 +25,14 @@ export class PlayerVoteService {
   async getByGameId(gameId: string): Promise<PlayerVote[]> {
     return this.voteModel.find({ gameId: gameId }).exec();
   }
-  async getByGameIdAndPlayerId(gameId: string, targetId: string): Promise<PlayerVote[]> {
+  async getByGameIdAndPlayerId(
+    gameId: string,
+    targetId: string,
+  ): Promise<PlayerVote[]> {
     try {
-      return await this.voteModel.find({ gameId: gameId, targetId: targetId }).exec();
+      return await this.voteModel
+        .find({ gameId: gameId, targetId: targetId })
+        .exec();
     } catch {
       throw new NotFoundException("Vote doesn't exist!");
     }
@@ -36,6 +41,7 @@ export class PlayerVoteService {
   async delete(id: string): Promise<PlayerVote> {
     try {
       const deletedVote = await this.voteModel.findByIdAndDelete(id);
+      this.gateway.handleDeleteVoteByPlayer(deletedVote);
       return deletedVote;
     } catch {
       throw new NotFoundException("Vote doesn't exist!");
@@ -43,14 +49,19 @@ export class PlayerVoteService {
   }
   async update(id: string, userDto: PlayerVoteDto): Promise<PlayerVote> {
     try {
-      return await this.voteModel.findByIdAndUpdate(id, userDto, { new: true });
+      const updatedVote = await this.voteModel.findByIdAndUpdate(id, userDto, {
+        new: true,
+      });
+      this.gateway.handleChangeVoteByPlayer(updatedVote);
+      return updatedVote;
     } catch {
       throw new NotFoundException("Vote doesn't exist!");
     }
   }
   async create(voteDto: PlayerVoteDto): Promise<PlayerVote> {
     try {
-    const newVote = new this.voteModel(voteDto);
+      const newVote = new this.voteModel(voteDto);
+      this.gateway.handleAddVoteByPlayer(newVote);
       return await newVote.save();
     } catch {
       throw new NotFoundException("Vote doesn't exist!");

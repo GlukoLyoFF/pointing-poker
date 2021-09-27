@@ -7,7 +7,9 @@ import { IssueVoteService } from './issueVote.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: IssueVote.name, schema: IssueVoteSchema }]),
+    MongooseModule.forFeature([
+      { name: IssueVote.name, schema: IssueVoteSchema },
+    ]),
   ],
   controllers: [IssueVoteController],
   providers: [IssueVoteService, AppGateway],

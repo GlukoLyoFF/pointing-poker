@@ -17,7 +17,7 @@ export class IssueVote {
   @Prop({ required: true })
   issueId: string;
 
-  @Prop({ default: {key: '', value: ''}})
+  @Prop({ default: { key: '', value: '' } })
   vote: IIssueVote;
 }
 
