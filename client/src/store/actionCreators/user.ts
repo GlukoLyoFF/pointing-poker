@@ -1,6 +1,11 @@
 import { Dispatch } from 'redux';
+<<<<<<< HEAD
 import { User, UsersActions, UsersActionTypes } from 'core/types/userType';
 import { getUsersByGameByRole } from '../../core/api/users.service';
+=======
+import { UsersAction, UsersActionTypes } from 'core/types/userType';
+import { getUsersByGameByRole } from 'core/api/users.service';
+>>>>>>> 3dafdb5a3deffccb09d0ab45e55b74bac6d4253a
 import { Roles } from 'core/types/roleType';
 
 export const getUsers = (gameId: string) => {
