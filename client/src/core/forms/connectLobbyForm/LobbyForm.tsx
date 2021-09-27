@@ -47,8 +47,8 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             role: Roles.creator,
           }),
         )
-        .then(res => dispatch(setCurrentUser(res.data)));
-      history.push('/lobby');
+        .then(res => dispatch(setCurrentUser(res.data)))
+        .then(() => history.push('/lobby'));
     } else {
       axios
         .post('http://localhost:8888/api/users', {
@@ -57,10 +57,10 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
           jobPosition: watch('jobPosition'),
           image: image,
           gameId: gameId,
-          role: isObserver ? 'observer' : 'member',
+          role: isObserver ? Roles.observer : Roles.user,
         })
-        .then(res => dispatch(setCurrentUser(res.data)));
-      history.push('/lobby');
+        .then(res => dispatch(setCurrentUser(res.data)))
+        .then(() => history.push('/lobby'));
     }
   };
 
