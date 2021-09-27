@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { FC, useState } from 'react';
+import { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { ImgUpload } from 'core/components/imgUpload/ImgUpload';
 import { Text } from 'core/components/Text';
@@ -24,7 +24,7 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
     formState: { errors },
   } = useForm<IUser>();
 
-  const formSubmitHandler: SubmitHandler<IUser> = (data: IUser) => {
+  const formSubmitHandler: SubmitHandler<IUser> = () => {
     if (isCreator) {
       axios
         .post('http://localhost:8888/api/games', {

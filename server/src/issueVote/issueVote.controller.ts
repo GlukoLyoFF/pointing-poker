@@ -10,17 +10,17 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { VoteDto } from './dto/vote.dto';
-import { Vote } from './schemas/vote.schema';
-import { VoteService } from './vote.service';
+import { IssueVoteDto } from './dto/issueVote.dto';
+import { IssueVote } from './schemas/issueVote.schema';
+import { IssueVoteService } from './issueVote.service';
 
-@Controller('votes')
-export class VoteController {
-  constructor(private voteService: VoteService) {}
+@Controller('issuevotes')
+export class IssueVoteController {
+  constructor(private voteService: IssueVoteService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAll(): Promise<Vote[]> {
+  async getAll(): Promise<IssueVote[]> {
     const allVotes = this.voteService.getAll();
     return allVotes;
   }
@@ -34,14 +34,24 @@ export class VoteController {
 
   @Get('gameid/:gameId')
   @HttpCode(HttpStatus.OK)
-  async getByGameId(@Param('gameId') gameId: string): Promise<Vote[]> {
+  async getByGameId(@Param('gameId') gameId: string): Promise<IssueVote[]> {
     const voteList = this.voteService.getByGameId(gameId);
     return voteList;
   }
 
+  @Get('gameidandissueid/:gameId&:issueId')
+  @HttpCode(HttpStatus.OK)
+  async getByGameIdAndRole(
+    @Param('gameId') gameId: string,
+    @Param('issueId') issueId: string,
+  ): Promise<IssueVote[]> {
+    const issueVoteList = this.voteService.getByGameIdAndPlayerId(gameId, issueId);
+    return issueVoteList;
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() voteDto: VoteDto) {
+  async create(@Body() voteDto: IssueVoteDto) {
     const createdVote = this.voteService.create(voteDto);
     if (!createdVote) throw new NotFoundException("Vote doesn't exist!");
     return createdVote;
@@ -49,7 +59,7 @@ export class VoteController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  async update(@Param('id') id: string, @Body() voteDto: VoteDto) {
+  async update(@Param('id') id: string, @Body() voteDto: IssueVoteDto) {
     const updatedVote = this.voteService.update(id, voteDto);
     if (!updatedVote) throw new NotFoundException("Vote doesn't exist!");
     return updatedVote;

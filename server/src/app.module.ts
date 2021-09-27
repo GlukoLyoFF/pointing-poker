@@ -4,7 +4,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { GameModule } from './game/game.module';
 import { UserModule } from './user/user.module';
 import { IssueModule } from './issue/issue.module';
-import { VoteModule } from './vote/vote.module';
+import { PlayerVoteModule } from './playerVote/playerVote.module';
+import { IssueVoteModule } from './issueVote/issueVote.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { VoteModule } from './vote/vote.module';
     GameModule,
     UserModule,
     IssueModule,
-    VoteModule,
+    PlayerVoteModule,
+    IssueVoteModule,
   ],
   providers: [],
 })
