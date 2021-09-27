@@ -1,11 +1,13 @@
 import axios from 'axios';
 import React, { FC, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { Roles } from 'core/types/roleType';
 import { ImgUpload } from 'core/components/imgUpload/ImgUpload';
 import { Text } from 'core/components/Text';
 import styleForm from './LobbyForm.module.scss';
 import style from '../../../app.module.scss';
-import { useDispatch } from 'react-redux';
 import { setCurrentUser } from 'store/actionCreators/currentUser';
 
 type IUser = {
@@ -19,6 +21,7 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
   const [statusFail, setStatusFail] = useState(false);
   const [isObserver, setIsObserver] = useState(false);
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const {
     register,
@@ -41,10 +44,11 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
             jobPosition: watch('jobPosition'),
             image: image,
             gameId: res.data._id,
-            role: 'creator',
+            role: Roles.creator,
           }),
         )
-        .then(res => dispatch(setCurrentUser(res.data)));
+        .then(res => dispatch(setCurrentUser(res.data)))
+        .then(() => history.push('/lobby'));
     } else {
       axios
         .post('http://localhost:8888/api/users', {
@@ -53,9 +57,10 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
           jobPosition: watch('jobPosition'),
           image: image,
           gameId: gameId,
-          role: isObserver ? 'observer' : 'member',
+          role: isObserver ? Roles.observer : Roles.user,
         })
-        .then(res => dispatch(setCurrentUser(res.data)));
+        .then(res => dispatch(setCurrentUser(res.data)))
+        .then(() => history.push('/lobby'));
     }
   };
 

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { Heading, HeadingAction, HeadingActionType } from '../../core/types/headingType';
+import { Heading, HeadingAction, HeadingActionType } from 'core/types/headingType';
 
 export const setHeading = (heading: Heading) => {
   return (dispatch: Dispatch<HeadingAction>) => {
