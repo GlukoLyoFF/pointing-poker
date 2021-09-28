@@ -12,7 +12,8 @@ import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
 import styles from './IssueGameSection.module.scss';
-import { ws } from 'core/api';
+import { socket } from 'core/api/socket.service';
+import { Message } from 'core/types/socketMessageType';
 
 export const IssueGameSection: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);
@@ -49,11 +50,11 @@ export const IssueGameSection: React.FC = () => {
 
   useEffect(() => {
     dispatch(getIssues(currentUser.gameId));
-    ws.on('createIssueMsg', data => {
-      dispatch(setIssue(data.payload));
+    socket.on(Message.createIssue, msg => {
+      dispatch(setIssue(msg.payload));
     });
-    ws.on('deleteIssueMsg', data => {
-      dispatch(deleteIssue(data.payload));
+    socket.on(Message.deleteIssue, msg => {
+      dispatch(deleteIssue(msg.payload));
     });
   }, []);
 

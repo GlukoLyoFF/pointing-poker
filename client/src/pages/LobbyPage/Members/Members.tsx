@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { Text } from '../../../core/components/Text';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from '../../../core/hooks/useTypeSelector';
-import { deleteUser, getUsers } from '../../../store/actionCreators/user';
+import { deleteUser, getUsers, setUser } from '../../../store/actionCreators/user';
 import { AppModal } from '../../../core/components/modal/Modal';
 import { UserCard } from '../../../core/components/userCard/UserCard';
 import { Roles } from '../../../core/types/roleType';
 import styles from './Members.module.scss';
-import { ws } from 'core/api';
+import { Message } from 'core/types/socketMessageType';
+import { socket } from 'core/api/socket.service';
+import { clearCurrentUser } from 'store/actionCreators/currentUser';
 
 export const Members: React.FC = () => {
   const { users } = useTypeSelector(state => state.users);
@@ -41,8 +43,12 @@ export const Members: React.FC = () => {
 
   useEffect(() => {
     dispatch(getUsers(currentUser.gameId));
-    ws.on('deleteUserMsg', data => {
-      dispatch(deleteUser(data.payload));
+    socket.on(Message.deleteUser, msg => {
+      dispatch(deleteUser(msg.payload));
+      dispatch(clearCurrentUser(msg.payload));
+    });
+    socket.on(Message.createUser, msg => {
+      dispatch(setUser(msg.payload));
     });
   }, []);
 

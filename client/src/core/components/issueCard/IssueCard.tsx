@@ -8,10 +8,7 @@ import { useTypeSelector } from '../../hooks/useTypeSelector';
 import { Roles } from 'core/types/roleType';
 import { deleteIssueById } from 'core/api/issues.service';
 import { useDispatch } from 'react-redux';
-<<<<<<< HEAD
-=======
 import { getIssues } from 'store/actionCreators/issue';
->>>>>>> 3dafdb5a3deffccb09d0ab45e55b74bac6d4253a
 
 interface IssueCardProp {
   title: string;

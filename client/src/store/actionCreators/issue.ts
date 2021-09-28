@@ -1,10 +1,6 @@
 import { Dispatch } from 'react';
 import { getIssuesByGame } from 'core/api/issues.service';
-<<<<<<< HEAD
 import { Issue, IssueActionType, IssuesAction } from 'core/types/issueType';
-=======
-import { IssueActionType, IssuesAction } from 'core/types/issueType';
->>>>>>> 3dafdb5a3deffccb09d0ab45e55b74bac6d4253a
 
 export const getIssues = (gameId: string) => {
   return async (dispatch: Dispatch<IssuesAction>): Promise<void> => {

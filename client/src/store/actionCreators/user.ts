@@ -1,11 +1,6 @@
 import { Dispatch } from 'redux';
-<<<<<<< HEAD
 import { User, UsersActions, UsersActionTypes } from 'core/types/userType';
-import { getUsersByGameByRole } from '../../core/api/users.service';
-=======
-import { UsersAction, UsersActionTypes } from 'core/types/userType';
 import { getUsersByGameByRole } from 'core/api/users.service';
->>>>>>> 3dafdb5a3deffccb09d0ab45e55b74bac6d4253a
 import { Roles } from 'core/types/roleType';
 
 export const getUsers = (gameId: string) => {
@@ -25,7 +20,12 @@ export const getUsers = (gameId: string) => {
 
 export const deleteUser = (user: User) => {
   return (dispatch: Dispatch<UsersActions>): void => {
-    console.log(user);
     dispatch({ type: UsersActionTypes.DELETE_USER, payload: user });
+  };
+};
+
+export const setUser = (user: User) => {
+  return (dispatch: Dispatch<UsersActions>): void => {
+    dispatch({ type: UsersActionTypes.SET_USER, payload: user });
   };
 };

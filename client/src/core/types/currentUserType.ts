@@ -27,6 +27,7 @@ interface SetCurrentUser {
 
 interface ClearCurrentUserAction {
   type: CurrentUserActionType.CLEAR_CURRENT_USER;
+  payload: IUser;
 }
 
 export type CurrentUserActions = GetCurrentUserAction | SetCurrentUser | ClearCurrentUserAction;
