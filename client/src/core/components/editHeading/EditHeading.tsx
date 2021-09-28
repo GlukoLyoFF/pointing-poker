@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import { useDispatch } from 'react-redux';
-import { setHeading } from 'store/actionCreators/heading';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import styles from './EditHeading.module.scss';
 import { Roles } from 'core/types/roleType';
+import { postGameHeader, setGameTitle } from 'store/actionCreators/gameInfo';
+import styles from './EditHeading.module.scss';
 
 export const EditHeading: React.FC = () => {
+  const { gameInfo } = useTypeSelector(state => state.gameInfo);
   const dispatch = useDispatch();
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const [getInputValue, setInputValue] = useState('');
@@ -21,6 +22,10 @@ export const EditHeading: React.FC = () => {
     inputRef.current?.focus();
   };
 
+  const handleChangeTitle = ({ target }: React.ChangeEvent<HTMLInputElement>): void => {
+    dispatch(setGameTitle(target.value));
+  };
+
   return (
     <div className={styles.container}>
       <input
@@ -28,15 +33,15 @@ export const EditHeading: React.FC = () => {
         ref={inputRef}
         value={getInputValue}
         type="text"
-        onChange={event => setInputValue(event.target.value)}
+        onChange={handleChangeTitle}
         disabled={isInputDisabledValue}
         onBlur={() => {
           handleDisabledValue(true);
           dispatch(
-            setHeading({
-              _id: '123',
-              heading: `${getInputValue}`,
-              gameId: `${currentUser.gameId}`,
+            postGameHeader({
+              _id: gameInfo._id,
+              title: gameInfo.title,
+              url: gameInfo.url,
             }),
           );
         }}
