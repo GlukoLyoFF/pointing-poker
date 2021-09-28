@@ -11,9 +11,9 @@ import { IssueCard } from 'core/components/issueCard/IssueCard';
 import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
-import styles from './IssueGameSection.module.scss';
 import { socket } from 'core/api/socket.service';
 import { Message } from 'core/types/socketMessageType';
+import styles from './IssueGameSection.module.scss';
 
 export const IssueGameSection: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);

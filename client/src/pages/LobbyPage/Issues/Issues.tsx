@@ -8,9 +8,9 @@ import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { AppModal } from 'core/components/modal/Modal';
 import { Text } from 'core/components/Text';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
-import styles from './Issues.module.scss';
 import { socket } from 'core/api/socket.service';
 import { Message } from 'core/types/socketMessageType';
+import styles from './Issues.module.scss';
 
 export const Issues: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);

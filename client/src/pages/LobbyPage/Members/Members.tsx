@@ -1,16 +1,16 @@
-import { deleteUserById } from '../../../core/api/users.service';
+import { deleteUserById } from 'core/api/users.service';
 import React, { useEffect, useState } from 'react';
-import { Text } from '../../../core/components/Text';
+import { Text } from 'core/components/Text';
 import { useDispatch } from 'react-redux';
-import { useTypeSelector } from '../../../core/hooks/useTypeSelector';
-import { deleteUser, getUsers, setUser } from '../../../store/actionCreators/user';
-import { AppModal } from '../../../core/components/modal/Modal';
-import { UserCard } from '../../../core/components/userCard/UserCard';
-import { Roles } from '../../../core/types/roleType';
-import styles from './Members.module.scss';
+import { useTypeSelector } from 'core/hooks/useTypeSelector';
+import { deleteUser, getUsers, setUser } from 'store/actionCreators/user';
+import { AppModal } from 'core/components/modal/Modal';
+import { UserCard } from 'core/components/userCard/UserCard';
+import { Roles } from 'core/types/roleType';
 import { Message } from 'core/types/socketMessageType';
 import { socket } from 'core/api/socket.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
+import styles from './Members.module.scss';
 
 export const Members: React.FC = () => {
   const { users } = useTypeSelector(state => state.users);
