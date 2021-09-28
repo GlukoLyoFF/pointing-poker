@@ -40,7 +40,12 @@ export const postGameHeader = (header: IGameHeader) => {
   return async (dispatch: Dispatch<GameInfoAction>): Promise<void> => {
     try {
       const response = await updateGameTitleById(header._id, header);
-      dispatch({ type: GameInfoActionType.GET_GAME_INFO, payload: response });
+      const newHeader: IGameHeader = {
+        _id: response._id,
+        url: response.url,
+        title: response.title,
+      };
+      dispatch({ type: GameInfoActionType.GET_GAME_HEADER, payload: newHeader });
     } catch (e) {
       dispatch(errorAction);
     }

@@ -4,6 +4,7 @@ import { IGameCard } from './settingsType';
 export enum GameInfoActionType {
   GET_GAME_INFO = 'GET_GAME_INFO',
   GET_GAME_INFO_ERROR = 'GET_GAME_INFO_ERROR',
+  GET_GAME_HEADER = 'GET_GAME_HEADER',
   SET_TITLE = 'SET_TITLE',
   SET_LINK = 'SET_LINK',
   SET_MASTER_PLAYER = 'SET_MASTER_PLAYER',
@@ -29,6 +30,11 @@ export interface DefaultGameInfoState {
 interface GetGameInfoAction {
   type: GameInfoActionType.GET_GAME_INFO;
   payload: IGame;
+}
+
+interface GetGameHeaderAction {
+  type: GameInfoActionType.GET_GAME_HEADER;
+  payload: IGameHeader;
 }
 
 interface GetGameInfoErrorAction {
@@ -84,6 +90,7 @@ interface SetGameCardsAction {
 export type GameInfoAction =
   | GetGameInfoAction
   | GetGameInfoErrorAction
+  | GetGameHeaderAction
   | SetTitleAction
   | SetLinkAction
   | SetMasterPlayerAction

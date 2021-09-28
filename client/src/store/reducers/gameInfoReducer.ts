@@ -25,6 +25,8 @@ export const gameInfoReducer = (
   switch (action.type) {
     case GameInfoActionType.GET_GAME_INFO:
       return { error: null, gameInfo: action.payload };
+    case GameInfoActionType.GET_GAME_HEADER:
+      return { error: null, gameInfo: { ...state.gameInfo, ...action.payload } };
     case GameInfoActionType.SET_TITLE:
       return { ...state, gameInfo: { ...state.gameInfo, title: action.payload } };
     case GameInfoActionType.SET_LINK:
