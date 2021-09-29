@@ -2,14 +2,13 @@ import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import CloseIcon from '@material-ui/icons/Close';
-import { Text } from '../Text';
-import styles from './IssueCard.module.scss';
-import { useTypeSelector } from '../../hooks/useTypeSelector';
+import { Text } from 'core/components/Text';
+import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { Roles } from 'core/types/roleType';
 import { deleteIssueById } from 'core/api/issues.service';
 import { useDispatch } from 'react-redux';
 import { getIssues } from 'store/actionCreators/issue';
-
+import styles from './IssueCard.module.scss';
 interface IssueCardProp {
   title: string;
   priority: string;

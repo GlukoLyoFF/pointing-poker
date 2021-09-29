@@ -10,17 +10,17 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { VoteDto } from './dto/vote.dto';
-import { Vote } from './schemas/vote.schema';
-import { VoteService } from './vote.service';
+import { PlayerVoteDto } from './dto/playerVote.dto';
+import { PlayerVote } from './schemas/playerVote.schema';
+import { PlayerVoteService } from './playerVote.service';
 
-@Controller('votes')
-export class VoteController {
-  constructor(private voteService: VoteService) {}
+@Controller('playervotes')
+export class PlayerVoteController {
+  constructor(private voteService: PlayerVoteService) {}
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  async getAll(): Promise<Vote[]> {
+  async getAll(): Promise<PlayerVote[]> {
     const allVotes = this.voteService.getAll();
     return allVotes;
   }
@@ -34,14 +34,27 @@ export class VoteController {
 
   @Get('gameid/:gameId')
   @HttpCode(HttpStatus.OK)
-  async getByGameId(@Param('gameId') gameId: string): Promise<Vote[]> {
+  async getByGameId(@Param('gameId') gameId: string): Promise<PlayerVote[]> {
     const voteList = this.voteService.getByGameId(gameId);
     return voteList;
   }
 
+  @Get('gameidandtargetid/:gameId&:targetId')
+  @HttpCode(HttpStatus.OK)
+  async getByGameIdAndRole(
+    @Param('gameId') gameId: string,
+    @Param('targetId') targetId: string,
+  ): Promise<PlayerVote[]> {
+    const playerVoteList = this.voteService.getByGameIdAndPlayerId(
+      gameId,
+      targetId,
+    );
+    return playerVoteList;
+  }
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() voteDto: VoteDto) {
+  async create(@Body() voteDto: PlayerVoteDto) {
     const createdVote = this.voteService.create(voteDto);
     if (!createdVote) throw new NotFoundException("Vote doesn't exist!");
     return createdVote;
@@ -49,7 +62,7 @@ export class VoteController {
 
   @Put(':id')
   @HttpCode(HttpStatus.OK)
-  async update(@Param('id') id: string, @Body() voteDto: VoteDto) {
+  async update(@Param('id') id: string, @Body() voteDto: PlayerVoteDto) {
     const updatedVote = this.voteService.update(id, voteDto);
     if (!updatedVote) throw new NotFoundException("Vote doesn't exist!");
     return updatedVote;

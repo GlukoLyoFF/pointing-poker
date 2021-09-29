@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -34,7 +33,6 @@ export class GameController {
   @HttpCode(HttpStatus.OK)
   async getOne(@Param('id') id: string): Promise<Game> {
     const checkedGame = this.gameService.getOne(id);
-    if (!checkedGame) throw new NotFoundException("Game doesn't exist!");
     return checkedGame;
   }
 
@@ -42,7 +40,6 @@ export class GameController {
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id') id: string): Promise<Game> {
     const deletedGame = this.gameService.remove(id);
-    if (!deletedGame) throw new NotFoundException("Game doesn't exist!");
     return deletedGame;
   }
 
@@ -53,7 +50,6 @@ export class GameController {
     @Body() updateGameDto: GameDto,
   ): Promise<Game> {
     const editedPost = this.gameService.update(id, updateGameDto);
-    if (!editedPost) throw new NotFoundException("Game doesn't exist!");
     return editedPost;
   }
 
@@ -64,7 +60,6 @@ export class GameController {
     @Body() updateGameDto: GameDto,
   ): Promise<Game> {
     const editedPost = this.gameService.updateTitle(id, updateGameDto);
-    if (!editedPost) throw new NotFoundException("Game doesn't exist!");
     return editedPost;
   }
 
@@ -75,7 +70,6 @@ export class GameController {
     @Body() updateGameDto: GameDto,
   ): Promise<Game> {
     const editedPost = this.gameService.updateGameSettings(id, updateGameDto);
-    if (!editedPost) throw new NotFoundException("Game doesn't exist!");
     return editedPost;
   }
 }

@@ -5,7 +5,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   Param,
   Post,
   Put,
@@ -34,7 +33,6 @@ export class IssueController {
   @HttpCode(HttpStatus.OK)
   async getOne(@Param('id') id: string): Promise<Issue> {
     const checkedIssue = this.issueService.getOne(id);
-    if (!checkedIssue) throw new NotFoundException("Issue doesn't exist!");
     return checkedIssue;
   }
 
@@ -48,7 +46,6 @@ export class IssueController {
   @HttpCode(HttpStatus.OK)
   async delete(@Param('id') id: string): Promise<Issue> {
     const deletedIssue = this.issueService.remove(id);
-    if (!deletedIssue) throw new NotFoundException("Issue doesn't exist!");
     return deletedIssue;
   }
 
@@ -59,7 +56,6 @@ export class IssueController {
     @Body() issueDto: IssueDto,
   ): Promise<Issue> {
     const editedIssue = this.issueService.update(id, issueDto);
-    if (!editedIssue) throw new NotFoundException("Issue doesn't exist!");
     return editedIssue;
   }
 }

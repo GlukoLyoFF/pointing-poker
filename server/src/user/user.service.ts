@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDto, UserRole } from './dto/user.dto';
+import { UserDto } from './dto/user.dto';
 import { FileService } from 'src/file/file.service';
 import { User, UserDocument } from './schemas/user.schema';
 import { AppGateway } from 'src/gateway/app.gateway';
@@ -10,8 +15,9 @@ import { AppGateway } from 'src/gateway/app.gateway';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private fileService: FileService,
+    @Inject(forwardRef(() => AppGateway))
     private gateway: AppGateway,
+    private fileService: FileService,
   ) {}
 
   async delete(id: string): Promise<User> {
@@ -26,7 +32,7 @@ export class UserService {
 
   async update(id: string, userDto: UserDto): Promise<User> {
     try {
-      return this.userModel.findByIdAndUpdate(id, userDto, { new: true });
+      return await this.userModel.findByIdAndUpdate(id, userDto, { new: true });
     } catch {
       throw new NotFoundException(
         "User doesn't exist or check request's body!",
@@ -35,11 +41,15 @@ export class UserService {
   }
 
   async create(userDto: UserDto): Promise<User> {
-    const { image } = userDto;
-    const fileName = await this.fileService.createFile(image);
-    const newUser = new this.userModel({ ...userDto, image: fileName });
-    this.gateway.handleCreateUser(newUser);
-    return newUser.save();
+    try {
+      const { image } = userDto;
+      const fileName = await this.fileService.createFile(image);
+      const newUser = new this.userModel({ ...userDto, image: fileName });
+      this.gateway.handleCreateUser(newUser);
+      return await newUser.save();
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
   }
 
   async getOne(id: string): Promise<User> {
@@ -53,12 +63,12 @@ export class UserService {
   }
 
   async getAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    return await this.userModel.find().exec();
   }
 
-  async getByGameIdAndByRole(gameId: string, role: UserRole): Promise<User[]> {
+  async getByGameIdAndByRole(gameId: string, role: string): Promise<User[]> {
     try {
-      return this.userModel.find({ gameId: gameId, role: role }).exec();
+      return await this.userModel.find({ gameId: gameId, role: role }).exec();
     } catch {
       throw new NotFoundException("User doesn't exist!");
     }
@@ -66,7 +76,25 @@ export class UserService {
 
   async getByGameId(gameId: string): Promise<User[]> {
     try {
-      return this.userModel.find({ gameId: gameId }).exec();
+      return await this.userModel.find({ gameId: gameId }).exec();
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
+  }
+
+  async deleteByGameId(gameId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedUsersByGameId = await this.userModel.deleteMany({
+        gameId: gameId,
+      });
+      return deletedUsersByGameId;
     } catch {
       throw new NotFoundException("User doesn't exist!");
     }

@@ -1,24 +1,23 @@
-import { UserDto } from './../../user/dto/user.dto';
 import { Document, set } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-export type VoteDocument = Vote & Document;
+export type PlayerVoteDocument = PlayerVote & Document;
 
 set('useFindAndModify', false);
 
 @Schema()
-export class Vote {
+export class PlayerVote {
   @Prop({ required: true })
   gameId: string;
 
   @Prop({ required: true })
-  data: UserDto;
+  playerId: string;
 
   @Prop({ required: true })
-  type: string;
+  targetId: string;
 
-  @Prop({ default: '' })
+  @Prop({ default: false })
   vote: boolean;
 }
 
-export const VoteSchema = SchemaFactory.createForClass(Vote);
+export const PlayerVoteSchema = SchemaFactory.createForClass(PlayerVote);
