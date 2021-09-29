@@ -22,7 +22,7 @@ export const ScramMasterGameSection: React.FC = () => {
   }, []);
 
   return (
-    <Grid container direction="column" md={12}>
+    <Grid container direction="column">
       <EditHeading />
       <Grid container justifyContent="space-between" alignItems="flex-end">
         <Grid item>
