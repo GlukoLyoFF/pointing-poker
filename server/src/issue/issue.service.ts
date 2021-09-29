@@ -79,4 +79,22 @@ export class IssueService {
       );
     }
   }
+
+  async deleteByGameId(gameId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedIssuesByGameId = await this.issueModel.deleteMany({
+        gameId: gameId,
+      });
+      return deletedIssuesByGameId;
+    } catch {
+      throw new NotFoundException("Issues doesn't exist!");
+    }
+  }
 }

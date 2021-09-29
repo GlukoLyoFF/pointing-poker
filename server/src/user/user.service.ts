@@ -81,4 +81,22 @@ export class UserService {
       throw new NotFoundException("User doesn't exist!");
     }
   }
+
+  async deleteByGameId(gameId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedUsersByGameId = await this.userModel.deleteMany({
+        gameId: gameId,
+      });
+      return deletedUsersByGameId;
+    } catch {
+      throw new NotFoundException("User doesn't exist!");
+    }
+  }
 }

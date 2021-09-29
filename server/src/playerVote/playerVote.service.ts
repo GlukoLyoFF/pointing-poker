@@ -73,4 +73,39 @@ export class PlayerVoteService {
       throw new NotFoundException("Vote doesn't exist!");
     }
   }
+  async deletePlayerVotesByUserId(userId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedPlayersVotesByUserId = await this.voteModel.deleteMany({
+        playerId: userId,
+      });
+      return deletedPlayersVotesByUserId;
+    } catch {
+      throw new NotFoundException("Votes doesn't exist!");
+    }
+  }
+
+  async deletePlayerVotesByGameId(gameId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedPlayersVotesByGameId = await this.voteModel.deleteMany({
+        gameId: gameId,
+      });
+      return deletedPlayersVotesByGameId;
+    } catch {
+      throw new NotFoundException("Votes doesn't exist!");
+    }
+  }
 }

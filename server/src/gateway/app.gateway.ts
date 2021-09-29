@@ -119,6 +119,29 @@ export class AppGateway
     this.logger.log('Initialized');
   }
 
+  @SubscribeMessage(Events.FinishGame)
+  async handleFinishGame(client: Socket, message: IFinishGame): Promise<void> {
+    if (message.role === 'creator') {
+      await this.gameService.remove(message.gameId);
+      await this.userService.deleteByGameId(message.gameId);
+      await this.issueService.deleteByGameId(message.gameId);
+      await this.playerVoteService.deletePlayerVotesByGameId(message.gameId);
+      await this.issueVoteService.deleteIssueVotesByGameId(message.gameId);
+    } else {
+      await this.userService.delete(message.userId);
+      await this.playerVoteService.deletePlayerVotesByUserId(message.userId);
+      await this.issueVoteService.deleteIssueVotesByUserId(message.userId);
+    }
+    const answer: IPayload<string> = {
+      event: Events.FinishGame,
+      payload:
+        message.role === 'creator'
+          ? 'Game was deleted successfully'
+          : 'User was deleted successfully',
+    };
+    this.wss.emit(Events.FinishGameMsg, answer);
+  }
+
   @SubscribeMessage(Events.CreateUser)
   handleCreateUser(message: UserDocument): void {
     const answer: IPayload<UserDocument> = {
