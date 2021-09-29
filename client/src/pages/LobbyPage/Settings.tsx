@@ -10,7 +10,7 @@ import {
   setSettingRoundTime,
   setSettingScoreType,
   setSettingShortScoreType,
-} from 'store/actionCreators/settings';
+} from 'store/actionCreators/gameInfo';
 import { generateKey } from 'core/utils/key-generator';
 import { AddGameCard } from 'core/components/gameCard/AddGameCard';
 import { EditableGameCard } from 'core/components/gameCard/EditableGameCard';
@@ -20,7 +20,7 @@ import { AppSwitch } from 'core/components/Switch';
 import { Text } from 'core/components/Text';
 
 export const LobbySettings: React.FC = (): JSX.Element => {
-  const state = useTypeSelector(store => store.settings);
+  const state = useTypeSelector(store => store.gameInfo.gameInfo.gameSettings);
   const dispatch = useDispatch();
 
   const handleIsAsPlayer = ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {

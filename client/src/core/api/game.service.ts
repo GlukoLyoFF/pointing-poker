@@ -28,3 +28,13 @@ export const deleteGameById = async (gameId: string): Promise<IGame> => {
   const response = await axios.delete(`${path}/${gameId}`);
   return response.data;
 };
+
+export const updateGameSettingsById = async (gameId: string, body: IGameBody): Promise<IGame> => {
+  const response = await axios.put(`${path}/settings/${gameId}`, body);
+  return response.data;
+};
+
+export const updateGameTitleById = async (gameId: string, body: IGameBody): Promise<IGame> => {
+  const response = await axios.put(`${path}/title/${gameId}`, body);
+  return response.data;
+};
