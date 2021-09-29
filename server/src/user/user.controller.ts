@@ -10,7 +10,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDto, UserRole } from './dto/user.dto';
+import { UserDto } from './dto/user.dto';
 import { User } from './schemas/user.schema';
 
 @Controller('users')
@@ -35,7 +35,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   async getByGameIdAndRole(
     @Param('gameId') gameId: string,
-    @Param('role') role: UserRole,
+    @Param('role') role: string,
   ): Promise<User[]> {
     const userList = this.userService.getByGameIdAndByRole(gameId, role);
     return userList;

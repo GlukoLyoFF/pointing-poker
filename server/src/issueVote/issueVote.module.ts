@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppGateway } from 'src/gateway/app.gateway';
 import { IssueVote, IssueVoteSchema } from './schemas/issueVote.schema';
 import { IssueVoteController } from './issueVote.controller';
 import { IssueVoteService } from './issueVote.service';
@@ -12,6 +11,7 @@ import { IssueVoteService } from './issueVote.service';
     ]),
   ],
   controllers: [IssueVoteController],
-  providers: [IssueVoteService, AppGateway],
+  providers: [IssueVoteService],
+  exports: [IssueVoteService],
 })
 export class IssueVoteModule {}

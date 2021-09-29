@@ -1,7 +1,12 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { UserDto, UserRole } from './dto/user.dto';
+import { UserDto } from './dto/user.dto';
 import { FileService } from 'src/file/file.service';
 import { User, UserDocument } from './schemas/user.schema';
 import { AppGateway } from 'src/gateway/app.gateway';
@@ -10,8 +15,9 @@ import { AppGateway } from 'src/gateway/app.gateway';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private fileService: FileService,
+    @Inject(forwardRef(() => AppGateway))
     private gateway: AppGateway,
+    private fileService: FileService,
   ) {}
 
   async delete(id: string): Promise<User> {
@@ -60,7 +66,7 @@ export class UserService {
     return await this.userModel.find().exec();
   }
 
-  async getByGameIdAndByRole(gameId: string, role: UserRole): Promise<User[]> {
+  async getByGameIdAndByRole(gameId: string, role: string): Promise<User[]> {
     try {
       return await this.userModel.find({ gameId: gameId, role: role }).exec();
     } catch {

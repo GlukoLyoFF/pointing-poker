@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppGateway } from 'src/gateway/app.gateway';
 import { PlayerVote, PlayerVoteSchema } from './schemas/playerVote.schema';
 import { PlayerVoteController } from './playerVote.controller';
 import { PlayerVoteService } from './playerVote.service';
@@ -12,6 +11,7 @@ import { PlayerVoteService } from './playerVote.service';
     ]),
   ],
   controllers: [PlayerVoteController],
-  providers: [PlayerVoteService, AppGateway],
+  providers: [PlayerVoteService],
+  exports: [PlayerVoteService],
 })
 export class PlayerVoteModule {}

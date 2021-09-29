@@ -1,3 +1,4 @@
+import { AppGatewayModule } from './gateway/app.gateway.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -15,12 +16,12 @@ import { IssueVoteModule } from './issueVote/issueVote.module';
     MongooseModule.forRoot(
       `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASS}@cluster0.mpoqa.mongodb.net/Games?retryWrites=true&w=majority`,
     ),
+    AppGatewayModule,
     GameModule,
     UserModule,
     IssueModule,
     PlayerVoteModule,
     IssueVoteModule,
   ],
-  providers: [],
 })
 export class AppModule {}

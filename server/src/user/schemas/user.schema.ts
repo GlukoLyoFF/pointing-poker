@@ -1,6 +1,6 @@
 import { Document, set } from 'mongoose';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { UserRole } from '../dto/user.dto';
+//import { UserRole } from '../dto/user.dto';
 
 export type UserDocument = User & Document;
 
@@ -21,7 +21,7 @@ export class User {
   image: string;
 
   @Prop({ default: '' })
-  role: UserRole;
+  role: string;
 
   @Prop({ required: true })
   gameId: string;

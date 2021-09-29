@@ -1,4 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { AppGateway } from 'src/gateway/app.gateway';
@@ -9,6 +14,7 @@ import { IssueVote, IssueVoteDocument } from './schemas/issueVote.schema';
 export class IssueVoteService {
   constructor(
     @InjectModel(IssueVote.name) private voteModel: Model<IssueVoteDocument>,
+    @Inject(forwardRef(() => AppGateway))
     private gateway: AppGateway,
   ) {}
 

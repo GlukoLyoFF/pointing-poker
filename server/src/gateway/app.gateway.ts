@@ -1,3 +1,4 @@
+import { GameService } from './../game/game.service';
 import { GameDocument } from './../game/schemas/game.schema';
 import { Socket, Server } from 'socket.io';
 import {
@@ -8,15 +9,25 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Injectable, Logger, Scope } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { IssueDocument } from 'src/issue/schemas/issue.schema';
 import { UserDocument } from 'src/user/schemas/user.schema';
 import { PlayerVoteDocument } from 'src/playerVote/schemas/playerVote.schema';
 import { IssueVoteDocument } from 'src/issueVote/schemas/issueVote.schema';
+import { UserService } from 'src/user/user.service';
+import { IssueService } from 'src/issue/issue.service';
+import { PlayerVoteService } from 'src/playerVote/playerVote.service';
+import { IssueVoteService } from 'src/issueVote/issueVote.service';
 
 interface IPayload<T> {
   event: string;
   payload: T;
+}
+
+interface IFinishGame {
+  role: string;
+  gameId: string;
+  userId: string;
 }
 
 export enum Events {
@@ -68,15 +79,31 @@ export enum Events {
   DeleteVoteByIssueMsg = 'deleteVoteByIssueMsg',
   ChangeVoteByIssue = 'changeVoteByIssue',
   ChangeVoteByIssueMsg = 'changeVoteByIssueMsg',
+
+  FinishGame = 'finishGame',
+  FinishGameMsg = 'finishGameMsg',
 }
 
 const WSPORT = 5000;
+@Injectable()
 @WebSocketGateway(WSPORT, { cors: true })
-@Injectable({ scope: Scope.DEFAULT })
 export class AppGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() wss: Server;
+
+  constructor(
+    @Inject(forwardRef(() => GameService))
+    private gameService: GameService,
+    @Inject(forwardRef(() => UserService))
+    private userService: UserService,
+    @Inject(forwardRef(() => IssueService))
+    private issueService: IssueService,
+    @Inject(forwardRef(() => PlayerVoteService))
+    private playerVoteService: PlayerVoteService,
+    @Inject(forwardRef(() => IssueVoteService))
+    private issueVoteService: IssueVoteService,
+  ) {}
 
   private logger: Logger = new Logger('AppGateway');
 
