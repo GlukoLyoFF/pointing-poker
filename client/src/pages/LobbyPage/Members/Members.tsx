@@ -1,12 +1,15 @@
-import { deleteUserById } from '../../../core/api/users.service';
+import { deleteUserById } from 'core/api/users.service';
 import React, { useEffect, useState } from 'react';
-import { Text } from '../../../core/components/Text';
+import { Text } from 'core/components/Text';
 import { useDispatch } from 'react-redux';
-import { useTypeSelector } from '../../../core/hooks/useTypeSelector';
-import { getUsers } from '../../../store/actionCreators/user';
-import { AppModal } from '../../../core/components/modal/Modal';
-import { UserCard } from '../../../core/components/userCard/UserCard';
-import { Roles } from '../../../core/types/roleType';
+import { useTypeSelector } from 'core/hooks/useTypeSelector';
+import { deleteUser, getUsers, setUser } from 'store/actionCreators/user';
+import { AppModal } from 'core/components/modal/Modal';
+import { UserCard } from 'core/components/userCard/UserCard';
+import { Roles } from 'core/types/roleType';
+import { IUserMsg, Message } from 'core/types/socketMessageType';
+import { socket } from 'core/api/socket.service';
+import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './Members.module.scss';
 
 export const Members: React.FC = () => {
@@ -33,14 +36,26 @@ export const Members: React.FC = () => {
     setDeleteUserId(id);
   };
 
-  const handleSubmit = async () => {
-    await deleteUserById(getDeleteUserId);
+  const handleSubmit = () => {
+    deleteUserById(getDeleteUserId);
     setModalShowFlag(false);
-    dispatch(getUsers(currentUser.gameId));
   };
 
   useEffect(() => {
+    const socketSetUser = (msg: IUserMsg) => {
+      dispatch(setUser(msg.payload));
+    };
+    const socketDeleteUser = (msg: IUserMsg) => {
+      dispatch(deleteUser(msg.payload));
+      dispatch(clearCurrentUser(msg.payload));
+    };
     dispatch(getUsers(currentUser.gameId));
+    socket.on(Message.deleteUser, socketDeleteUser);
+    socket.on(Message.createUser, socketSetUser);
+    return () => {
+      socket.off(Message.createUser, socketSetUser);
+      socket.off(Message.deleteUser, socketDeleteUser);
+    };
   }, []);
 
   return (

@@ -2,7 +2,7 @@ import { io } from 'socket.io-client';
 import { Message } from 'core/types/socketMessageType';
 
 const SERVER_URL = 'http://localhost:5000';
-const socket = io(SERVER_URL, {
+export const socket = io(SERVER_URL, {
   reconnectionDelayMax: 10000,
 });
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Roles } from 'core/types/roleType';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { getIssues } from 'store/actionCreators/issue';
+import { deleteIssue, getIssues, setIssue } from 'store/actionCreators/issue';
 import { setSettingRoundTime } from 'store/actionCreators/gameInfo';
 import { AppButton } from 'core/components/Button';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
@@ -11,6 +11,8 @@ import { IssueCard } from 'core/components/issueCard/IssueCard';
 import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
+import { socket } from 'core/api/socket.service';
+import { IIssueMsg, Message } from 'core/types/socketMessageType';
 import styles from './IssueGameSection.module.scss';
 
 export const IssueGameSection: React.FC = () => {
@@ -27,7 +29,6 @@ export const IssueGameSection: React.FC = () => {
   };
 
   const handleSubmitCreateIssue = () => {
-    dispatch(getIssues(currentUser.gameId));
     modalShowCreate(false);
   };
 
@@ -37,7 +38,6 @@ export const IssueGameSection: React.FC = () => {
 
   const handleCancel = () => {
     modalShowCreate(false);
-    dispatch(getIssues(currentUser.gameId));
   };
 
   const changeRoundTime = (value: number): void => {
@@ -49,7 +49,19 @@ export const IssueGameSection: React.FC = () => {
   };
 
   useEffect(() => {
+    const socketCreateIssue = (msg: IIssueMsg) => {
+      dispatch(setIssue(msg.payload));
+    };
+    const socketDeleteIssue = (msg: IIssueMsg) => {
+      dispatch(deleteIssue(msg.payload));
+    };
     dispatch(getIssues(currentUser.gameId));
+    socket.on(Message.createIssue, socketCreateIssue);
+    socket.on(Message.deleteIssue, socketDeleteIssue);
+    return () => {
+      socket.off(Message.createIssue, socketCreateIssue);
+      socket.off(Message.deleteIssue, socketDeleteIssue);
+    };
   }, []);
 
   return (

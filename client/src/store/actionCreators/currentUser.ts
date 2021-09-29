@@ -8,8 +8,8 @@ export const setCurrentUser = (currentUser: IUser) => {
   };
 };
 
-export const clearCurrentUser = () => {
+export const clearCurrentUser = (user: IUser) => {
   return (dispatch: Dispatch<CurrentUserActions>): void => {
-    dispatch({ type: CurrentUserActionType.CLEAR_CURRENT_USER });
+    dispatch({ type: CurrentUserActionType.CLEAR_CURRENT_USER, payload: user });
   };
 };

@@ -18,7 +18,13 @@ export const currentUserReducer = (state = defaultState, action: CurrentUserActi
     case CurrentUserActionType.GET_CURRENT_USER:
       return state;
     case CurrentUserActionType.CLEAR_CURRENT_USER:
-      return defaultState;
+      return {
+        ...state,
+        currentUser:
+          state.currentUser.userId === action.payload._id
+            ? { userId: '', gameId: '', role: Roles.user }
+            : state.currentUser,
+      };
     case CurrentUserActionType.SET_CURRENT_USER:
       return {
         ...state,
