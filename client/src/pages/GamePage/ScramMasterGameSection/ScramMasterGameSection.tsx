@@ -14,7 +14,7 @@ import styles from './ScramMasterGameSection.module.scss';
 export const ScramMasterGameSection: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const settings = useTypeSelector(store => store.settings);
+  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,9 +43,9 @@ export const ScramMasterGameSection: React.FC = () => {
             onClickHandler={() => {}}
           />
         </Grid>
-        {settings.isTimer && settings.roundTime && currentUser.role !== Roles.creator ? (
+        {gameSettings.isTimer && gameSettings.roundTime && currentUser.role !== Roles.creator ? (
           <RoundTimer
-            time={settings.roundTime}
+            time={gameSettings.roundTime}
             editable={currentUser.role === Roles.creator ? true : false}
           />
         ) : null}

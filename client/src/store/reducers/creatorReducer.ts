@@ -1,9 +1,5 @@
-import {
-  CreatorActions,
-  CreatorActionTypes,
-  DefaultStateCreator,
-} from '../../core/types/creatorType';
-import { Roles } from '../../core/types/roleType';
+import { CreatorActions, CreatorActionTypes, DefaultStateCreator } from 'core/types/creatorType';
+import { Roles } from 'core/types/roleType';
 
 const defaultCreator = {
   role: Roles.creator,

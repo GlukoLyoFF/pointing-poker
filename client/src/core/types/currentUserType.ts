@@ -1,6 +1,9 @@
+import { IUser } from './get200Types';
+
 export enum CurrentUserActionType {
-  GET_CURRENT_USER = 'GET_CURREBT_USER',
+  GET_CURRENT_USER = 'GET_CURRENT_USER',
   SET_CURRENT_USER = 'SET_CURRENT_USER',
+  CLEAR_CURRENT_USER = 'CLEAR_CURRENT_USER',
 }
 
 export interface CurrentUser {
@@ -19,7 +22,12 @@ interface GetCurrentUserAction {
 
 interface SetCurrentUser {
   type: CurrentUserActionType.SET_CURRENT_USER;
-  payload: CurrentUser;
+  payload: IUser;
 }
 
-export type CurrentUserActions = GetCurrentUserAction | SetCurrentUser;
+interface ClearCurrentUserAction {
+  type: CurrentUserActionType.CLEAR_CURRENT_USER;
+  payload: IUser;
+}
+
+export type CurrentUserActions = GetCurrentUserAction | SetCurrentUser | ClearCurrentUserAction;

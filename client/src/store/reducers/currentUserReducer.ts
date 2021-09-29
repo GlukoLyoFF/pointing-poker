@@ -3,12 +3,13 @@ import {
   CurrentUserActionType,
   DefaultCurrentUserState,
 } from 'core/types/currentUserType';
+import { Roles } from 'core/types/roleType';
 
 const defaultState: DefaultCurrentUserState = {
   currentUser: {
-    userId: '614099d1b22b6739b438c717',
-    gameId: 'asdfasdfas',
-    role: 'creator',
+    userId: '',
+    gameId: '',
+    role: Roles.user,
   },
 };
 
@@ -16,8 +17,23 @@ export const currentUserReducer = (state = defaultState, action: CurrentUserActi
   switch (action.type) {
     case CurrentUserActionType.GET_CURRENT_USER:
       return state;
+    case CurrentUserActionType.CLEAR_CURRENT_USER:
+      return {
+        ...state,
+        currentUser:
+          state.currentUser.userId === action.payload._id
+            ? { userId: '', gameId: '', role: Roles.user }
+            : state.currentUser,
+      };
     case CurrentUserActionType.SET_CURRENT_USER:
-      return { ...state, currentUser: action.payload };
+      return {
+        ...state,
+        currentUser: {
+          userId: action.payload._id,
+          gameId: action.payload.gameId,
+          role: action.payload.role,
+        },
+      };
     default:
       return state;
   }
