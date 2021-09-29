@@ -9,7 +9,7 @@ import { AppModal } from 'core/components/modal/Modal';
 import { Text } from 'core/components/Text';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
 import { socket } from 'core/api/socket.service';
-import { Message } from 'core/types/socketMessageType';
+import { IIssueMsg, Message } from 'core/types/socketMessageType';
 import styles from './Issues.module.scss';
 
 export const Issues: React.FC = () => {
@@ -59,12 +59,18 @@ export const Issues: React.FC = () => {
 
   useEffect(() => {
     dispatch(getIssues(currentUser.gameId));
-    socket.on(Message.createIssue, msg => {
+    const socketCreateIssue = (msg: IIssueMsg) => {
       dispatch(setIssue(msg.payload));
-    });
-    socket.on(Message.deleteIssue, msg => {
+    };
+    const socketDeleteIssue = (msg: IIssueMsg) => {
       dispatch(deleteIssue(msg.payload));
-    });
+    };
+    socket.on(Message.createIssue, socketCreateIssue);
+    socket.on(Message.deleteIssue, socketDeleteIssue);
+    return () => {
+      socket.off(Message.createIssue, socketCreateIssue);
+      socket.off(Message.deleteIssue, socketDeleteIssue);
+    };
   }, []);
   return (
     <>

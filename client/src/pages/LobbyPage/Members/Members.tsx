@@ -7,7 +7,7 @@ import { deleteUser, getUsers, setUser } from 'store/actionCreators/user';
 import { AppModal } from 'core/components/modal/Modal';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { Roles } from 'core/types/roleType';
-import { Message } from 'core/types/socketMessageType';
+import { IUserMsg, Message } from 'core/types/socketMessageType';
 import { socket } from 'core/api/socket.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './Members.module.scss';
@@ -42,14 +42,20 @@ export const Members: React.FC = () => {
   };
 
   useEffect(() => {
-    dispatch(getUsers(currentUser.gameId));
-    socket.on(Message.deleteUser, msg => {
+    const socketSetUser = (msg: IUserMsg) => {
+      dispatch(setUser(msg.payload));
+    };
+    const socketDeleteUser = (msg: IUserMsg) => {
       dispatch(deleteUser(msg.payload));
       dispatch(clearCurrentUser(msg.payload));
-    });
-    socket.on(Message.createUser, msg => {
-      dispatch(setUser(msg.payload));
-    });
+    };
+    dispatch(getUsers(currentUser.gameId));
+    socket.on(Message.deleteUser, socketDeleteUser);
+    socket.on(Message.createUser, socketSetUser);
+    return () => {
+      socket.off(Message.createUser, socketSetUser);
+      socket.off(Message.deleteUser, socketDeleteUser);
+    };
   }, []);
 
   return (
