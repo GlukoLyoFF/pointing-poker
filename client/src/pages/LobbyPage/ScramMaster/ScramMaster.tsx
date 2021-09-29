@@ -7,19 +7,23 @@ import { UserCard } from 'core/components/userCard/UserCard';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from 'store/actionCreators/creator';
-import styles from './ScramMaster.module.scss';
 import { Roles } from 'core/types/roleType';
+import { setGameLink } from 'store/actionCreators/gameInfo';
+import styles from './ScramMaster.module.scss';
 
 export const ScramMaster: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const { gameInfo } = useTypeSelector(state => state.gameInfo);
   const dispatch = useDispatch();
-  const url = window.location.href;
-  const [getLinkValue, setLinkValue] = useState(url);
 
   useEffect(() => {
     dispatch(getCreator(currentUser.gameId));
   }, []);
+
+  const handleChangeLink = (value: string): void => {
+    dispatch(setGameLink(value));
+  };
 
   return (
     <>
@@ -41,16 +45,16 @@ export const ScramMaster: React.FC = () => {
         <div className={styles.copyBox}>
           <InputField
             name={'copy'}
-            value={`${getLinkValue}`}
-            labelText={<span>Link to lobby:</span>}
-            onChange={event => setLinkValue(event)}
+            value={`${gameInfo.url}`}
+            labelText="Link to lobby:"
+            onChange={handleChangeLink}
           />
           <div>
             <AppButton
               name={'Copy'}
               color={'blue'}
               onClickHandler={() => {
-                navigator.clipboard.writeText(getLinkValue);
+                navigator.clipboard.writeText(gameInfo.url);
               }}
             />
           </div>

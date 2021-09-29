@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Roles } from 'core/types/roleType';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { deleteIssue, getIssues, setIssue } from 'store/actionCreators/issue';
-import { setSettingRoundTime } from 'store/actionCreators/settings';
+import { setSettingRoundTime } from 'store/actionCreators/gameInfo';
 import { AppButton } from 'core/components/Button';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
 import { IssueCard } from 'core/components/issueCard/IssueCard';
@@ -18,7 +18,7 @@ import styles from './IssueGameSection.module.scss';
 export const IssueGameSection: React.FC = () => {
   const { issues } = useTypeSelector(state => state.issues);
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const settings = useTypeSelector(store => store.settings);
+  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const dispatch = useDispatch();
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
   const [isRaundStart, setRaundStartValue] = useState(false);
@@ -85,10 +85,10 @@ export const IssueGameSection: React.FC = () => {
         ) : null}
       </Grid>
       <Grid className={styles.timer}>
-        {settings.isTimer && currentUser.role === Roles.creator ? (
+        {gameSettings.isTimer && currentUser.role === Roles.creator ? (
           <>
             <RoundTimer
-              time={Number(settings.roundTime)}
+              time={Number(gameSettings.roundTime)}
               editable={currentUser.role === Roles.creator ? true : false}
               onChange={changeRoundTime}
             />
