@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store } from 'store';
+import persistor from 'store/persistStore';
 import { App } from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core/styles';
@@ -14,7 +16,9 @@ ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </ThemeProvider>
   </React.StrictMode>,
