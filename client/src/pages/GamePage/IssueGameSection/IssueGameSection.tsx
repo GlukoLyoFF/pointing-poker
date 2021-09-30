@@ -65,7 +65,7 @@ export const IssueGameSection: React.FC = () => {
   }, []);
 
   return (
-    <Grid container md={12} direction="column" className={styles.container}>
+    <Grid container direction="column" className={styles.container}>
       <Text textLvl="label" isBold={true} className={styles.heading}>
         Issues:
       </Text>

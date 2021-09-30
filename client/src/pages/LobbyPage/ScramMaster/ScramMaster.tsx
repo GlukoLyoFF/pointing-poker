@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { EditHeading } from 'core/components/editHeading/EditHeading';
 import { InputField } from 'core/components/InputField';
 import { AppButton } from 'core/components/Button';
@@ -8,8 +8,10 @@ import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from 'store/actionCreators/creator';
 import { Roles } from 'core/types/roleType';
-import { setGameLink } from 'store/actionCreators/gameInfo';
+import { postGameInfo, setGameLink } from 'store/actionCreators/gameInfo';
+import { socket } from 'core/api/socket.service';
 import styles from './ScramMaster.module.scss';
+import { Message } from 'core/types/socketMessageType';
 
 export const ScramMaster: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);
@@ -23,6 +25,10 @@ export const ScramMaster: React.FC = () => {
 
   const handleChangeLink = (value: string): void => {
     dispatch(setGameLink(value));
+  };
+  const handleStartGame = (): void => {
+    dispatch(postGameInfo(gameInfo));
+    socket.emit('startRound', Message.startGame);
   };
 
   return (
@@ -62,7 +68,7 @@ export const ScramMaster: React.FC = () => {
       ) : null}
       {currentUser.role === Roles.creator ? (
         <div className={styles.btnBox}>
-          <AppButton name={'Start game'} color={'blue'} onClickHandler={() => {}} />
+          <AppButton name={'Start game'} color={'blue'} onClickHandler={handleStartGame} />
           <AppButton name={'Cancel game'} color={'white'} onClickHandler={() => {}} />
         </div>
       ) : (
