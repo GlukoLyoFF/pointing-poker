@@ -18,6 +18,7 @@ import { UserService } from 'src/user/user.service';
 import { IssueService } from 'src/issue/issue.service';
 import { PlayerVoteService } from 'src/playerVote/playerVote.service';
 import { IssueVoteService } from 'src/issueVote/issueVote.service';
+import { ChatService } from 'src/chat/chat.service';
 
 interface IPayload<T> {
   event: string;
@@ -103,6 +104,8 @@ export class AppGateway
     private playerVoteService: PlayerVoteService,
     @Inject(forwardRef(() => IssueVoteService))
     private issueVoteService: IssueVoteService,
+    @Inject(forwardRef(() => ChatService))
+    private chatService: ChatService,
   ) {}
 
   private logger: Logger = new Logger('AppGateway');
