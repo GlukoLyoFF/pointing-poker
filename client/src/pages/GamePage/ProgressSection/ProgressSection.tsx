@@ -46,7 +46,7 @@ export const ProgressSection: React.FC = () => {
   }, []);
 
   return (
-    <Grid container md={4}>
+    <Grid container>
       <Grid item>
         <div className={styles.heading}>
           <Text textLvl="label" isBold={true}>
