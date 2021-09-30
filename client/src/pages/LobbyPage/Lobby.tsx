@@ -18,7 +18,7 @@ export const Lobby: React.FC = () => {
   const history = useHistory();
 
   const socketGoToGamePage = (msg: { event: string; payload: string }) => {
-    if (msg.payload === 'start-game') {
+    if (msg.payload === Message.startGame) {
       history.push('/game');
     }
   };

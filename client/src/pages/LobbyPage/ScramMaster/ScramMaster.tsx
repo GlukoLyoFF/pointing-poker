@@ -11,6 +11,7 @@ import { Roles } from 'core/types/roleType';
 import { postGameInfo, setGameLink } from 'store/actionCreators/gameInfo';
 import { socket } from 'core/api/socket.service';
 import styles from './ScramMaster.module.scss';
+import { Message } from 'core/types/socketMessageType';
 
 export const ScramMaster: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);
@@ -27,7 +28,7 @@ export const ScramMaster: React.FC = () => {
   };
   const handleStartGame = (): void => {
     dispatch(postGameInfo(gameInfo));
-    socket.emit('startRound', 'start-game');
+    socket.emit('startRound', Message.startGame);
   };
 
   return (
