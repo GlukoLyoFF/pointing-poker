@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { Roles } from 'core/types/roleType';
 import { CardField } from './CardField/CardField';
@@ -9,13 +9,22 @@ import styles from './GamePage.module.scss';
 
 export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const { gameSettings } = useTypeSelector(state => state.gameInfo.gameInfo);
+  const [timerValue, setTimerValue] = useState(Number(gameSettings.roundTime));
+
+  const handleTimerValue = (num: number) => {
+    setTimerValue(num);
+  };
 
   return (
     <main className={styles.container}>
       <div className={styles.gamePage}>
-        <ScramMasterGameSection />
-        <IssueGameSection />
-        {currentUser.role === Roles.user ? <CardField /> : null}
+        <ScramMasterGameSection timerValue={timerValue} />
+        <IssueGameSection handleTimerValue={handleTimerValue} />
+        {currentUser.role === Roles.user ||
+        (currentUser.role === Roles.creator && gameSettings.isAsPlayer === true) ? (
+          <CardField />
+        ) : null}
       </div>
       <ProgressSection />
     </main>

@@ -58,10 +58,9 @@ export const ProgressSection: React.FC = () => {
         </div>
         {users.map(elem => {
           return (
-            <div className={styles.cards}>
+            <div key={`${elem._id}`} className={styles.cards}>
               <ProgressCard />
               <UserCard
-                key={`${elem._id}`}
                 name={elem.firstName}
                 surname={elem.lastName}
                 job={elem.jobPosition}

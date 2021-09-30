@@ -26,3 +26,8 @@ export interface IIssueMsg {
   event: string;
   payload: IIssue;
 }
+
+export interface ITimerMsg {
+  event: string;
+  payload: string;
+}

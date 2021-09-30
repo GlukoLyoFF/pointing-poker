@@ -11,7 +11,11 @@ import { Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
 import styles from './ScramMasterGameSection.module.scss';
 
-export const ScramMasterGameSection: React.FC = () => {
+interface ScramMasterProps {
+  timerValue: number;
+}
+
+export const ScramMasterGameSection: React.FC<ScramMasterProps> = ({ timerValue }) => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
@@ -43,11 +47,8 @@ export const ScramMasterGameSection: React.FC = () => {
             onClickHandler={() => {}}
           />
         </Grid>
-        {gameSettings.isTimer && gameSettings.roundTime && currentUser.role !== Roles.creator ? (
-          <RoundTimer
-            time={gameSettings.roundTime}
-            editable={currentUser.role === Roles.creator ? true : false}
-          />
+        {gameSettings.isTimer && currentUser.role !== Roles.creator ? (
+          <RoundTimer time={timerValue} editable={false} />
         ) : null}
       </Grid>
     </Grid>
