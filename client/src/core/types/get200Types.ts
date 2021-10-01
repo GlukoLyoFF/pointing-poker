@@ -25,3 +25,14 @@ export interface IIssue {
   gameId: string;
   priority: string;
 }
+
+export interface IIssueVote {
+  vote: {
+    key: string;
+    value: string;
+  };
+  _id: string;
+  gameId: string;
+  playerId: string;
+  issueId: string;
+}

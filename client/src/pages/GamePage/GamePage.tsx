@@ -11,19 +11,27 @@ export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(state => state.gameInfo.gameInfo);
   const [timerValue, setTimerValue] = useState(Number(gameSettings.roundTime));
+  const [chooseIssueId, setChooseIssueId] = useState('');
 
   const handleTimerValue = (num: number) => {
     setTimerValue(num);
+  };
+
+  const handleChooseIssueId = (id: string) => {
+    setChooseIssueId(id);
   };
 
   return (
     <main className={styles.container}>
       <div className={styles.gamePage}>
         <ScramMasterGameSection timerValue={timerValue} />
-        <IssueGameSection handleTimerValue={handleTimerValue} />
+        <IssueGameSection
+          handleTimerValue={handleTimerValue}
+          handleChooseIssueId={handleChooseIssueId}
+        />
         {currentUser.role === Roles.user ||
         (currentUser.role === Roles.creator && gameSettings.isAsPlayer === true) ? (
-          <CardField />
+          <CardField chooseIssueId={chooseIssueId} />
         ) : null}
       </div>
       <ProgressSection />

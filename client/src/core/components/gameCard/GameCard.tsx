@@ -2,7 +2,7 @@ import LocalCafeIcon from '@material-ui/icons/LocalCafe';
 import EditIcon from '@material-ui/icons/Edit';
 import OfflinePinIcon from '@material-ui/icons/OfflinePin';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import React from 'react';
+import React, { useState } from 'react';
 import style from './GameCard.module.scss';
 import { TextField } from '@material-ui/core';
 import { Text } from '../Text';
@@ -12,11 +12,13 @@ export const GameCard: React.FC<GameCardProps> = ({
   value,
   editable,
   isSelected,
-  onClick,
+  keyCard,
+  onClickHandler,
   onChangeValue,
   onRemoveCard,
 }) => {
   const [isEdit, setIsEdit] = React.useState<boolean>(false);
+
   const cardContent = (
     <>
       <TextField
@@ -51,7 +53,16 @@ export const GameCard: React.FC<GameCardProps> = ({
     </div>
   );
   return (
-    <div className={style.gameCard} onClick={onClick}>
+    <div
+      className={style.gameCard}
+      onClick={() => {
+        if (onClickHandler) {
+          if (keyCard && value) {
+            onClickHandler(keyCard, value);
+          }
+        }
+      }}
+    >
       {cardContent}
       {isSelected ? overlay : ''}
     </div>
@@ -63,7 +74,8 @@ interface GameCardProps {
   value: string;
   editable?: boolean;
   isSelected?: boolean;
-  onClick?: React.MouseEventHandler;
+  keyCard?: string;
+  onClickHandler?: (key: string, value: string) => void;
   onChangeValue?: React.ChangeEventHandler;
   onRemoveCard?: React.MouseEventHandler;
 }

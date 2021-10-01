@@ -18,9 +18,13 @@ import { getIssueById } from 'core/api/issues.service';
 
 interface IssueGameProp {
   handleTimerValue: (num: number) => void;
+  handleChooseIssueId: (id: string) => void;
 }
 
-export const IssueGameSection: React.FC<IssueGameProp> = ({ handleTimerValue }) => {
+export const IssueGameSection: React.FC<IssueGameProp> = ({
+  handleTimerValue,
+  handleChooseIssueId,
+}) => {
   const { issues } = useTypeSelector(state => state.issues);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
@@ -118,7 +122,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({ handleTimerValue }) 
     socket.on(Message.restartRound, socketRunRound);
     socket.on(Message.endRound, socketRunRound);
     socket.on(Message.chooseIssue, data => {
-      console.log(data);
+      handleChooseIssueId(data.payload._id);
       setIssueId(data.payload._id);
     });
     socket.on(Message.createIssue, socketCreateIssue);

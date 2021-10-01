@@ -24,3 +24,13 @@ export interface IIssueBody {
   gameId: string;
   priority: string;
 }
+
+export interface IIssueVoteBody {
+  vote: {
+    key: string;
+    value: string;
+  };
+  gameId: string;
+  playerId: string;
+  issueId: string;
+}
