@@ -9,7 +9,7 @@ import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from 'store/actionCreators/creator';
 import { Roles } from 'core/types/roleType';
-import { postGameInfo, setGameLink } from 'store/actionCreators/gameInfo';
+import { getGameInfo, postGameInfo, setGameLink } from 'store/actionCreators/gameInfo';
 import { finishGame, sendStartGame } from 'core/api/socket.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import { deleteUserById } from 'core/api/users.service';

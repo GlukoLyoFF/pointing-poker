@@ -15,6 +15,8 @@ import { socket } from 'core/api/socket.service';
 import { IIssueMsg, ITimerMsg, Message } from 'core/types/socketMessageType';
 import styles from './IssueGameSection.module.scss';
 import { getIssueById } from 'core/api/issues.service';
+import { StatisticCard } from 'core/components/statisticCard/StatisticCard';
+import { clearIssueVoteResult } from 'store/actionCreators/issueVote';
 
 interface IssueGameProp {
   handleTimerValue: (num: number) => void;
@@ -34,6 +36,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   const [issueIndex, setIssueIndex] = useState(0);
   const [getIssueId, setIssueId] = useState('');
   const [count, setCount] = useState(Number(gameSettings.roundTime));
+  const [isRoundEndFlag, setRoundEndFlag] = useState(false);
   let timer = 0;
 
   const modalShowCreate = (flag: boolean) => {
@@ -60,6 +63,8 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
     if (issues[0]) {
       setRaundStartValue(flag);
       socket.emit('startRound', 'start');
+      setIssueId(issues[issueIndex]._id);
+    } else {
       setIssueId(issues[issueIndex]._id);
     }
   };
@@ -111,10 +116,15 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
     const socketRunRound = (msg: ITimerMsg) => {
       if (msg.payload === 'start') {
         startTimer();
+        setRoundEndFlag(false);
+        dispatch(clearIssueVoteResult());
       } else if (msg.payload === 'restart') {
         restartTimer();
+        setRoundEndFlag(false);
+        dispatch(clearIssueVoteResult());
       } else if (msg.payload === 'end') {
         stopTimer();
+        setRoundEndFlag(true);
       }
     };
     dispatch(getIssues(currentUser.gameId));
@@ -141,6 +151,10 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   }, [getIssueId]);
 
   useEffect(() => {
+    setCount(Number(gameSettings.roundTime));
+  }, [gameSettings]);
+
+  useEffect(() => {
     if (count === 0) {
       socket.emit('endRound', 'end');
       if (issues[issueIndex + 1]) {
@@ -148,6 +162,9 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
       } else {
         setIssueIndex(0);
       }
+    }
+    if (count === 888) {
+      setCount(Number(gameSettings.roundTime));
     }
     handleTimerValue(count);
   }, [count]);
@@ -205,6 +222,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
           </>
         ) : null}
       </Grid>
+      {isRoundEndFlag ? <StatisticCard /> : null}
       <CreateIssueForm
         id={getIssueId}
         flagCreate={isModalVisibleCreate}

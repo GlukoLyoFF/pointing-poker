@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { getGameInfo, setGameInfo } from 'store/actionCreators/gameInfo';
 import { IGame } from 'core/types/get200Types';
 import styles from './Lobby.module.scss';
+import { clearIssueVoteResult } from 'store/actionCreators/issueVote';
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -39,7 +40,7 @@ export const Lobby: React.FC = () => {
     socket.on(Message.startRound, socketGoToGamePage);
     socket.on(Message.finishGameMsg, socketClearUser);
     socket.on(Message.changeGameTitle, socketChangeTitle);
-
+    dispatch(clearIssueVoteResult());
     return () => {
       socket.off(Message.startRound, socketGoToGamePage);
       socket.off(Message.finishGameMsg, socketClearUser);

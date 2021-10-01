@@ -10,6 +10,7 @@ import { AppButton } from 'core/components/Button';
 import { Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
 import styles from './ScramMasterGameSection.module.scss';
+import { getGameInfo } from 'store/actionCreators/gameInfo';
 
 interface ScramMasterProps {
   timerValue: number;

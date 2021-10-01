@@ -1,6 +1,7 @@
 export enum IssueVoteActionTypes {
   SET_VOTE = 'SET_VOTE',
-  SET_VOTE_ERROR = 'SET_VOTE_ERROR',
+  SET_VOTE_RESULT = 'SET_VOTE_RESULT',
+  CLEAR_VOTE_RESULT = 'CLEAR_VOTE_RESULT',
 }
 
 export interface IssueVote {
@@ -12,19 +13,38 @@ export interface IssueVote {
   playerId: string;
   issueId: string;
 }
-export interface DefaultStateIssueVote {
-  issueVote: IssueVote;
-  error: null | string;
+
+export interface IssueVoteRes {
+  vote: {
+    key: string;
+    value: string;
+  };
+  _id: string;
+  gameId: string;
+  playerId: string;
+  issueId: string;
 }
 
-export interface SetIssueVoteAction {
+export interface DefaultStateIssueVote {
+  issueVote: IssueVote;
+  results: IssueVoteRes[];
+}
+
+interface SetIssueVoteAction {
   type: IssueVoteActionTypes.SET_VOTE;
   payload: IssueVote;
 }
 
-interface SetIssueActionError {
-  type: IssueVoteActionTypes.SET_VOTE_ERROR;
-  payload: string;
+interface SetIssueVoteResultAction {
+  type: IssueVoteActionTypes.SET_VOTE_RESULT;
+  payload: IssueVoteRes;
 }
 
-export type IssueVoteActions = SetIssueVoteAction | SetIssueActionError;
+interface ClearIssueVoteResultsAction {
+  type: IssueVoteActionTypes.CLEAR_VOTE_RESULT;
+}
+
+export type IssueVoteActions =
+  | SetIssueVoteAction
+  | SetIssueVoteResultAction
+  | ClearIssueVoteResultsAction;

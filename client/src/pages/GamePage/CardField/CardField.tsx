@@ -1,21 +1,24 @@
 import { Grid } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { GameCard } from 'core/components/gameCard/GameCard';
 import { useDispatch } from 'react-redux';
 import { IssueVote } from 'core/types/issueVotesType';
-import { setIssueVote } from 'store/actionCreators/issueVote';
+import { setIssueVote, setIssueVoteResult } from 'store/actionCreators/issueVote';
 import { socket } from 'core/api/socket.service';
 import { postNewIssueVote } from 'core/api/issueVote.service';
+import { ITimerMsg, Message } from 'core/types/socketMessageType';
 
 interface CardFieldProps {
   chooseIssueId: string;
+  timerValue: number;
 }
 
-export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId }) => {
+export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue }) => {
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { issueVote } = useTypeSelector(state => state.issueVote);
+  const [isClick, setIsClickValue] = useState(false);
   const dispatch = useDispatch();
   let issueVoteCard: IssueVote;
 
@@ -31,13 +34,33 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId }) => {
     };
     dispatch(setIssueVote(issueVoteCard));
     postNewIssueVote(issueVoteCard);
+    setIsClickValue(false);
   };
 
   useEffect(() => {
+    const handleClickCardValue = (msg: ITimerMsg) => {
+      if (msg.payload === 'start') {
+        setIsClickValue(true);
+      } else if (msg.payload === 'restart') {
+        setIsClickValue(true);
+      }
+    };
     socket.on('addVoteByIssueMsg', data => {
-      console.log(data);
+      dispatch(setIssueVoteResult(data.payload));
     });
+    socket.on(Message.startRound, handleClickCardValue);
+    socket.on(Message.restartRound, handleClickCardValue);
+    return () => {
+      socket.off(Message.startRound, handleClickCardValue);
+      socket.off(Message.restartRound, handleClickCardValue);
+    };
   }, []);
+
+  useEffect(() => {
+    if (timerValue === 0 && isClick) {
+      handleClickCard('unknown', 'cup');
+    }
+  }, [timerValue]);
 
   return (
     <Grid container>
@@ -48,6 +71,7 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId }) => {
               type={gameSettings.shortScoreType}
               value={elem.value}
               keyCard={elem.key}
+              isClick={isClick}
               onClickHandler={handleClickCard}
             />
           </Grid>

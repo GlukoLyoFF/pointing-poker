@@ -11,7 +11,11 @@ import { UserCard } from 'core/components/userCard/UserCard';
 import { ProgressCard } from 'core/components/progressCard/ProgressCard';
 import styles from './ProgressSection.module.scss';
 
-export const ProgressSection: React.FC = () => {
+interface ProgressSectionProp {
+  chooseIssueId: string;
+}
+
+export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }) => {
   const { users } = useTypeSelector(state => state.users);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const [getModalShowFlag, setModalShowFlag] = useState(false);
@@ -59,7 +63,7 @@ export const ProgressSection: React.FC = () => {
         {users.map(elem => {
           return (
             <div key={`${elem._id}`} className={styles.cards}>
-              <ProgressCard />
+              <ProgressCard chooseIssueId={chooseIssueId} />
               <UserCard
                 name={elem.firstName}
                 surname={elem.lastName}
