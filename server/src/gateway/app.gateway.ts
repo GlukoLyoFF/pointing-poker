@@ -1,3 +1,4 @@
+import { ChatDocument } from './../chat/schemas/chat.schema';
 import { GameService } from './../game/game.service';
 import { GameDocument } from './../game/schemas/game.schema';
 import { Socket, Server } from 'socket.io';
@@ -11,7 +12,7 @@ import {
 } from '@nestjs/websockets';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { IssueDocument } from 'src/issue/schemas/issue.schema';
-import { UserDocument } from 'src/user/schemas/user.schema';
+import { User, UserDocument } from 'src/user/schemas/user.schema';
 import { PlayerVoteDocument } from 'src/playerVote/schemas/playerVote.schema';
 import { IssueVoteDocument } from 'src/issueVote/schemas/issueVote.schema';
 import { UserService } from 'src/user/user.service';
@@ -29,6 +30,17 @@ interface IFinishGame {
   role: string;
   gameId: string;
   userId: string;
+}
+
+
+type ChatMessageType = {
+  userId: string;
+  message: string;
+};
+
+type ChatAnswerType = {
+  user: User;
+  message: string;
 }
 
 export enum Events {
@@ -83,6 +95,9 @@ export enum Events {
 
   FinishGame = 'finishGame',
   FinishGameMsg = 'finishGameMsg',
+
+  MsgToServer = 'msgToServer',
+  MsgToClient = 'msgToClient'
 }
 
 const WSPORT = 5000;
@@ -120,6 +135,21 @@ export class AppGateway
   }
   afterInit() {
     this.logger.log('Initialized');
+  }
+
+  @SubscribeMessage(Events.MsgToServer)
+  async handleSendMsg(client: Socket, message: ChatMessageType): Promise<void> {
+    console.log(message);
+    const user = await this.userService.getOne(message.userId);
+    console.log(user);
+    const answer: IPayload<ChatAnswerType> = {
+      event: Events.MsgToClient,
+      payload: {
+        user: user,
+        message: message.message
+      },
+    };
+    this.wss.emit(Events.MsgToClient, answer);
   }
 
   @SubscribeMessage(Events.FinishGame)
