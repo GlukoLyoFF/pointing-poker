@@ -11,7 +11,6 @@ import { IUserMsg, Message } from 'core/types/socketMessageType';
 import { socket, startPlayerVoting } from 'core/api/socket.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './Members.module.scss';
-import { KickVotingModal } from 'core/components/modals/KickVotingModal';
 
 export const Members: React.FC = () => {
   const { users } = useTypeSelector(state => state.users);
