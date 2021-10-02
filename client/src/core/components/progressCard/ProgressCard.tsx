@@ -3,7 +3,7 @@ import { Text } from 'core/components/Text';
 import styles from './ProgressCard.module.scss';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { socket } from 'core/api/socket.service';
-import { Message } from 'core/types/socketMessageType';
+import { ITimerMsg, Message } from 'core/types/socketMessageType';
 
 interface ProgressCardProp {
   chooseIssueId: string;
@@ -19,16 +19,20 @@ export const ProgressCard: React.FC<ProgressCardProp> = ({ chooseIssueId, userId
   );
 
   useEffect(() => {
-    socket.on(Message.endRound, data => {
-      if (data.payload === 'end' && gameSettings.isChangeCard) {
+    const renderProgressCards = (msg: ITimerMsg) => {
+      if (msg.payload === 'end' && gameSettings.isChangeCard) {
         setIsFlagRender(true);
-      }
-    });
-    socket.on(Message.startRound, data => {
-      if (data.payload === 'start') {
+      } else if (msg.payload === 'start') {
         setIsFlagRender(false);
       }
-    });
+    };
+
+    socket.on(Message.endRound, renderProgressCards);
+    socket.on(Message.startRound, renderProgressCards);
+    return () => {
+      socket.off(Message.endRound, renderProgressCards);
+      socket.off(Message.startRound, renderProgressCards);
+    };
   }, []);
 
   useEffect(() => {

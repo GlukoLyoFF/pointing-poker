@@ -9,6 +9,7 @@ import { socket } from 'core/api/socket.service';
 import { postNewIssueVote } from 'core/api/issueVote.service';
 import { ITimerMsg, Message } from 'core/types/socketMessageType';
 import { getIssueById } from 'core/api/issues.service';
+import { Roles } from 'core/types/roleType';
 
 interface CardFieldProps {
   chooseIssueId: string;
@@ -56,9 +57,18 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
         setIsClickValue(true);
       } else if (msg.payload === 'restart') {
         setIsClickValue(true);
-      } else if (msg.payload === 'end' && !gameSettings.isTimer && isClick) {
+      } else if (
+        msg.payload === 'end' &&
+        !gameSettings.isTimer &&
+        isClick &&
+        (gameSettings.isAsPlayer || currentUser.role === Roles.user)
+      ) {
         handleClickCard('unknown', 'cup');
-      } else if (msg.payload === 'end' && issueVote.vote.value === '') {
+      } else if (
+        msg.payload === 'end' &&
+        issueVote.vote.value === '' &&
+        (gameSettings.isAsPlayer || currentUser.role === Roles.user)
+      ) {
         handleClickCard('unknown', 'cup');
       }
     };
@@ -74,19 +84,22 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
 
   return (
     <Grid container>
-      {gameSettings.cardValues.map(elem => {
-        return (
-          <Grid item xs md key={elem.key}>
-            <GameCard
-              type={gameSettings.shortScoreType}
-              value={elem.value}
-              keyCard={elem.key}
-              isClick={isClick}
-              onClickHandler={handleClickCard}
-            />
-          </Grid>
-        );
-      })}
+      {(gameSettings.isAsPlayer && currentUser.role === Roles.creator) ||
+      currentUser.role === Roles.user
+        ? gameSettings.cardValues.map(elem => {
+            return (
+              <Grid item xs md key={elem.key}>
+                <GameCard
+                  type={gameSettings.shortScoreType}
+                  value={elem.value}
+                  keyCard={elem.key}
+                  isClick={isClick}
+                  onClickHandler={handleClickCard}
+                />
+              </Grid>
+            );
+          })
+        : null}
     </Grid>
   );
 };

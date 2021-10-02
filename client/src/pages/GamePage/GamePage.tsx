@@ -37,8 +37,7 @@ export const GamePage: React.FC = () => {
           handleTimerValue={handleTimerValue}
           handleChooseIssueId={handleChooseIssueId}
         />
-        {currentUser.role === Roles.user ||
-        (currentUser.role === Roles.creator && gameSettings.isAsPlayer === true) ? (
+        {currentUser.role === Roles.user || currentUser.role === Roles.creator ? (
           <CardField chooseIssueId={chooseIssueId} timerValue={timerValue} />
         ) : null}
       </div>
