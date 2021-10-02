@@ -1,4 +1,3 @@
-import { ChatDocument } from './../chat/schemas/chat.schema';
 import { GameService } from './../game/game.service';
 import { GameDocument } from './../game/schemas/game.schema';
 import { Socket, Server } from 'socket.io';
@@ -32,6 +31,11 @@ interface IFinishGame {
   userId: string;
 }
 
+type StartVotingByPlayer = {
+  gameId: string;
+  playerId: string;
+  targetId: string;
+};
 
 type ChatMessageType = {
   userId: string;
@@ -41,7 +45,12 @@ type ChatMessageType = {
 type ChatAnswerType = {
   user: User;
   message: string;
-}
+};
+
+type FinishVotingByPlayer = {
+  gameId: string;
+  targetId: string;
+};
 
 export enum Events {
   Connection = 'connection',
@@ -79,6 +88,12 @@ export enum Events {
   EndRound = 'endRound',
   EndRoundMsg = 'endRoundMsg',
 
+  StartVotingByPlayer = 'startVotingByPlayer',
+  StartVotingByPlayerMsg = 'startVotingByPlayerMsg',
+
+  FinishVotingByPlayer = 'finishVotingByPlayer',
+  FinishVotingByPlayerMsg = 'finishVotingByPlayerMsg',
+
   AddVoteByPlayer = 'addVoteByPlayer',
   AddVoteByPlayerMsg = 'addVoteByPlayerMsg',
   DeleteVoteByPlayer = 'deleteVoteByPlayer',
@@ -92,12 +107,14 @@ export enum Events {
   DeleteVoteByIssueMsg = 'deleteVoteByIssueMsg',
   ChangeVoteByIssue = 'changeVoteByIssue',
   ChangeVoteByIssueMsg = 'changeVoteByIssueMsg',
+  DeleteIssueVotesByIssueId = 'deleteIssueVotesByIssueId',
+  DeleteIssueVotesByIssueIdMsg = 'deleteIssueVotesByIssueIdMsg',
 
   FinishGame = 'finishGame',
   FinishGameMsg = 'finishGameMsg',
 
   MsgToServer = 'msgToServer',
-  MsgToClient = 'msgToClient'
+  MsgToClient = 'msgToClient',
 }
 
 const WSPORT = 5000;
@@ -137,16 +154,70 @@ export class AppGateway
     this.logger.log('Initialized');
   }
 
+  @SubscribeMessage(Events.DeleteIssueVotesByIssueId)
+  async handleDeleteIssueVotesByIssueId(
+    client: Socket,
+    message: string,
+  ): Promise<void> {
+    await this.issueVoteService.deleteIssueVotesByIssueId(message);
+    const answer: IPayload<string> = {
+      event: Events.DeleteIssueVotesByIssueId,
+      payload: message,
+    };
+    this.wss.emit(Events.DeleteIssueVotesByIssueIdMsg, answer);
+  }
+
+  @SubscribeMessage(Events.StartVotingByPlayer)
+  async handleStartVotingByPlayer(
+    client: Socket,
+    message: StartVotingByPlayer,
+  ): Promise<void> {
+    const player = await this.userService.getOne(message.playerId);
+    const target = await this.userService.getOne(message.playerId);
+    const answer: IPayload<{ player: User; target: User }> = {
+      event: Events.StartVotingByPlayer,
+      payload: {
+        player: player,
+        target: target,
+      },
+    };
+    this.wss.emit(Events.StartVotingByPlayerMsg, answer);
+  }
+
+  @SubscribeMessage(Events.FinishVotingByPlayer)
+  async handleFinishVotingByPlayer(
+    client: Socket,
+    message: FinishVotingByPlayer,
+  ): Promise<void> {
+    const player = await this.userService.getByGameId(message.gameId);
+    const target = await this.playerVoteService.getByTargetId(message.targetId);
+    const decision = target.reduce((acc, { vote }) => {
+      return vote === true ? ++acc : acc;
+    }, 0);
+    if (decision > Math.floor(player.length / 2)) {
+      console.log('delete');
+      await this.userService.delete(message.targetId);
+      await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+      await this.issueVoteService.deleteIssueVotesByUserId(message.targetId);
+      await this.playerVoteService.deletePlayerVotesByTargetId(
+        message.targetId,
+      );
+      const answer: IPayload<string> = {
+        event: Events.FinishVotingByPlayer,
+        payload: 'Voting was finished',
+      };
+      this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
+    }
+  }
+
   @SubscribeMessage(Events.MsgToServer)
   async handleSendMsg(client: Socket, message: ChatMessageType): Promise<void> {
-    console.log(message);
     const user = await this.userService.getOne(message.userId);
-    console.log(user);
     const answer: IPayload<ChatAnswerType> = {
       event: Events.MsgToClient,
       payload: {
         user: user,
-        message: message.message
+        message: message.message,
       },
     };
     this.wss.emit(Events.MsgToClient, answer);
