@@ -1,5 +1,7 @@
 import { applyMiddleware, combineReducers, createStore } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import { persistReducer } from 'redux-persist';
+import LocalStorage from 'redux-persist/lib/storage';
 import thunk from 'redux-thunk';
 import { creatorReducer } from './reducers/creatorReducer';
 import { currentUserReducer } from './reducers/currentUserReducer';
@@ -15,6 +17,13 @@ const rootReducer = combineReducers({
   currentUser: currentUserReducer,
 });
 
-export type RootState = ReturnType<typeof rootReducer>;
+const persistConfig = {
+  key: 'root',
+  storage: LocalStorage,
+};
 
-export const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
+export type RootState = ReturnType<typeof persistedReducer>;
+
+export const store = createStore(persistedReducer, composeWithDevTools(applyMiddleware(thunk)));

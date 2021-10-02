@@ -63,6 +63,12 @@ export const postGameSettings = (info: IGame) => {
   };
 };
 
+export const setGameInfo = (info: IGame) => {
+  return (dispatch: Dispatch<GameInfoAction>): void => {
+    dispatch({ type: GameInfoActionType.GET_GAME_INFO, payload: info });
+  };
+};
+
 export const setGameTitle = (title: string) => {
   return (dispatch: Dispatch<GameInfoAction>): void => {
     dispatch({ type: GameInfoActionType.SET_TITLE, payload: title });

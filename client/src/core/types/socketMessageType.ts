@@ -15,6 +15,14 @@ export enum Message {
   startRound = 'startRoundMsg',
   restartRound = 'reStartRoundMsg',
   endRound = 'endRoundMsg',
+  addVoteByPlayer = 'addVoteByPlayerMsg',
+  deleteVoteByPlayer = 'deleteVoteByPlayerMsg',
+  changeVoteByPlayer = 'changeVoteByPlayerMsg',
+  addVoteByIssue = 'addVoteByIssueMsg',
+  deleteVoteByIssue = 'deleteVoteByIssueMsg',
+  changeVoteByIssue = 'changeVoteByIssueMsg',
+  finishGame = 'finishGame',
+  finishGameMsg = 'finishGameMsg',
 }
 
 export interface IUserMsg {
