@@ -60,13 +60,9 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   };
 
   const handleRaundStart = (flag: boolean) => {
-    if (issues[0]) {
-      setRaundStartValue(flag);
-      socket.emit('startRound', 'start');
-      setIssueId(issues[issueIndex]._id);
-    } else {
-      setIssueId(issues[issueIndex]._id);
-    }
+    setRaundStartValue(flag);
+    socket.emit('startRound', 'start');
+    setIssueId(issues[issueIndex]._id);
   };
 
   const handleRestartRound = () => {
@@ -79,6 +75,10 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
       setIssueIndex(prev => prev + 1);
     } else {
       setIssueIndex(0);
+    }
+    if (!gameSettings.isTimer) {
+      setIssueId(issues[issueIndex]._id);
+      setRaundStartValue(false);
     }
   };
 
@@ -115,15 +115,21 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
     };
     const socketRunRound = (msg: ITimerMsg) => {
       if (msg.payload === 'start') {
-        startTimer();
+        if (gameSettings.isTimer) {
+          startTimer();
+        }
         setRoundEndFlag(false);
         dispatch(clearIssueVoteResult());
       } else if (msg.payload === 'restart') {
-        restartTimer();
+        if (gameSettings.isTimer) {
+          restartTimer();
+        }
         setRoundEndFlag(false);
         dispatch(clearIssueVoteResult());
       } else if (msg.payload === 'end') {
-        stopTimer();
+        if (gameSettings.isTimer) {
+          stopTimer();
+        }
         setRoundEndFlag(true);
       }
     };
@@ -155,7 +161,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   }, [gameSettings]);
 
   useEffect(() => {
-    if (count === 0) {
+    if (count === 0 && gameSettings.isTimer) {
       socket.emit('endRound', 'end');
       if (issues[issueIndex + 1]) {
         setIssueIndex(prev => prev + 1);
@@ -196,9 +202,11 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
         ) : null}
       </Grid>
       <Grid className={styles.timer}>
-        {gameSettings.isTimer && currentUser.role === Roles.creator ? (
+        {currentUser.role === Roles.creator ? (
           <>
-            <RoundTimer time={count} editable={false} onChange={changeRoundTime} />
+            {gameSettings.isTimer ? (
+              <RoundTimer time={count} editable={false} onChange={changeRoundTime} />
+            ) : null}
             {isRaundStart ? (
               <div>
                 <AppButton

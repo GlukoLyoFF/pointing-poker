@@ -6,15 +6,12 @@ import { IssueGameSection } from './IssueGameSection/IssueGameSection';
 import { ScramMasterGameSection } from './ScramMasterGameSection/ScramMasterGameSection';
 import { ProgressSection } from './ProgressSection/ProgressSection';
 import styles from './GamePage.module.scss';
-import { useDispatch } from 'react-redux';
-import { getGameInfo } from 'store/actionCreators/gameInfo';
 
 export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(state => state.gameInfo.gameInfo);
   const [timerValue, setTimerValue] = useState(gameSettings.roundTime ? gameSettings.roundTime : 0);
   const [chooseIssueId, setChooseIssueId] = useState('');
-  const dispatch = useDispatch();
 
   const handleTimerValue = (num: number) => {
     if (num === 888) {

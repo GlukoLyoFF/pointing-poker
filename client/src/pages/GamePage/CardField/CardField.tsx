@@ -8,6 +8,7 @@ import { setIssueVote, setIssueVoteResult } from 'store/actionCreators/issueVote
 import { socket } from 'core/api/socket.service';
 import { postNewIssueVote } from 'core/api/issueVote.service';
 import { ITimerMsg, Message } from 'core/types/socketMessageType';
+import { getIssueById } from 'core/api/issues.service';
 
 interface CardFieldProps {
   chooseIssueId: string;
@@ -17,7 +18,6 @@ interface CardFieldProps {
 export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue }) => {
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const { issueVote } = useTypeSelector(state => state.issueVote);
   const [isClick, setIsClickValue] = useState(false);
   const dispatch = useDispatch();
   let issueVoteCard: IssueVote;
@@ -50,9 +50,11 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
     });
     socket.on(Message.startRound, handleClickCardValue);
     socket.on(Message.restartRound, handleClickCardValue);
+    socket.on(Message.endRound, handleClickCardValue);
     return () => {
       socket.off(Message.startRound, handleClickCardValue);
       socket.off(Message.restartRound, handleClickCardValue);
+      socket.off(Message.endRound, handleClickCardValue);
     };
   }, []);
 
