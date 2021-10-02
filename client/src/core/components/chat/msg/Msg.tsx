@@ -46,7 +46,9 @@ export const Msg: React.FC<{ message: ChatMessageType }> = ({ message }) => {
     };
     const socketDeleteUser = (msg: IUserMsg) => {
       dispatch(deleteUser(msg.payload));
-      dispatch(clearCurrentUser(msg.payload));
+      if (msg.payload._id === currentUser.userId) {
+        dispatch(clearCurrentUser(currentUser));
+      }
     };
     dispatch(getUsers(currentUser.gameId));
     socket.on(Message.deleteUser, socketDeleteUser);
