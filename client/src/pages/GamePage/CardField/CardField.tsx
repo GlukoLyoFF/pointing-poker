@@ -18,6 +18,7 @@ interface CardFieldProps {
 export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue }) => {
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const { issueVote } = useTypeSelector(state => state.issueVote);
   const [isClick, setIsClickValue] = useState(false);
   const dispatch = useDispatch();
   let issueVoteCard: IssueVote;
@@ -38,16 +39,29 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
   };
 
   useEffect(() => {
+    socket.on('addVoteByIssueMsg', data => {
+      dispatch(setIssueVoteResult(data.payload));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (timerValue === 0 && isClick) {
+      handleClickCard('unknown', 'cup');
+    }
+  }, [timerValue]);
+
+  useEffect(() => {
     const handleClickCardValue = (msg: ITimerMsg) => {
       if (msg.payload === 'start') {
         setIsClickValue(true);
       } else if (msg.payload === 'restart') {
         setIsClickValue(true);
+      } else if (msg.payload === 'end' && !gameSettings.isTimer && isClick) {
+        handleClickCard('unknown', 'cup');
+      } else if (msg.payload === 'end' && issueVote.vote.value === '') {
+        handleClickCard('unknown', 'cup');
       }
     };
-    socket.on('addVoteByIssueMsg', data => {
-      dispatch(setIssueVoteResult(data.payload));
-    });
     socket.on(Message.startRound, handleClickCardValue);
     socket.on(Message.restartRound, handleClickCardValue);
     socket.on(Message.endRound, handleClickCardValue);
@@ -56,13 +70,7 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
       socket.off(Message.restartRound, handleClickCardValue);
       socket.off(Message.endRound, handleClickCardValue);
     };
-  }, []);
-
-  useEffect(() => {
-    if (timerValue === 0 && isClick) {
-      handleClickCard('unknown', 'cup');
-    }
-  }, [timerValue]);
+  }, [isClick && chooseIssueId]);
 
   return (
     <Grid container>

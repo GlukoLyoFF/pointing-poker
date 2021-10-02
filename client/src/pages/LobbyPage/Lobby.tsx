@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { getGameInfo, setGameInfo } from 'store/actionCreators/gameInfo';
 import { IGame } from 'core/types/get200Types';
 import styles from './Lobby.module.scss';
+import { clearIssueVoteResult } from 'store/actionCreators/issueVote';
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
