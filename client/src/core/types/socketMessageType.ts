@@ -23,6 +23,12 @@ export enum Message {
   changeVoteByIssue = 'changeVoteByIssueMsg',
   finishGame = 'finishGame',
   finishGameMsg = 'finishGameMsg',
+  DeleteIssueVotesByIssueId = 'deleteIssueVotesByIssueId',
+  DeleteIssueVotesByIssueIdMsg = 'deleteIssueVotesByIssueIdMsg',
+  StartVotingByPlayer = 'startVotingByPlayer',
+  StartVotingByPlayerMsg = 'startVotingByPlayerMsg',
+  FinishVotingByPlayer = 'finishVotingByPlayer',
+  FinishVotingByPlayerMsg = 'finishVotingByPlayerMsg',
 }
 
 export interface IUserMsg {

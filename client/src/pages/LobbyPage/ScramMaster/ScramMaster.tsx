@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { EditHeading } from 'core/components/editHeading/EditHeading';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { InputField } from 'core/components/InputField';
 import { AppButton } from 'core/components/Button';
 import { Text } from 'core/components/Text';
@@ -68,6 +68,7 @@ export const ScramMaster: React.FC = () => {
             value={`${gameInfo.url}`}
             labelText="Link to lobby:"
             onChange={handleChangeLink}
+            readOnly={true}
           />
           <div>
             <AppButton

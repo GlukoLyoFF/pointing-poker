@@ -5,7 +5,7 @@ import { deleteUserById } from 'core/api/users.service';
 import { Roles } from 'core/types/roleType';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { getUsers } from 'store/actionCreators/user';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { Text } from 'core/components/Text';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { ProgressCard } from 'core/components/progressCard/ProgressCard';
