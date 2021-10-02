@@ -15,7 +15,7 @@ import { ChatModule } from 'src/chat/chat.module';
     UserModule,
     PlayerVoteModule,
     IssueVoteModule,
-    ChatModule
+    ChatModule,
   ],
   providers: [AppGateway],
   exports: [AppGateway],

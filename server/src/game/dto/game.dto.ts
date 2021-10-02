@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class GameSettings {
   isAsPlayer: boolean;
@@ -11,10 +11,7 @@ export class GameSettings {
 }
 
 export class GameDto {
-  @IsNotEmpty()
   url: string;
-  @IsNotEmpty()
   title: string;
-  @IsNotEmpty()
   gameSettings: GameSettings;
 }

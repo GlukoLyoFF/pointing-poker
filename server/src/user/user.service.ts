@@ -53,7 +53,7 @@ export class UserService {
   async getOne(id: string): Promise<User> {
     try {
       const findOne = await this.userModel.findById(id);
-      //this.gateway.handleChooseUser(findOne);
+      this.gateway.handleChooseUser(findOne);
       return this.userModel.findById(id);
     } catch {
       throw new NotFoundException("User doesn't exist!");

@@ -1,5 +1,5 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { set } from "mongoose";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { set } from 'mongoose';
 
 set('useFindAndModify', false);
 
@@ -10,10 +10,10 @@ export class Chat {
   @Prop({ required: true })
   gameId: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   playerId: string;
 
-  @Prop({ required: true})
+  @Prop({ required: true })
   message: string;
 }
 
