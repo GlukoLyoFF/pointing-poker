@@ -47,3 +47,7 @@ export const finishGame = (user: CurrentUser): void => {
 export const startPlayerVoting = (vote: IPlayerVote): void => {
   socket.emit(Message.StartVotingByPlayer, vote);
 };
+
+export const sendUserMessage = (data: { userId: string; message: string }): void => {
+  socket.emit('msgToServer', { userId: data.userId, message: data.message });
+};

@@ -9,13 +9,26 @@ import { Text } from 'core/components/Text';
 import { AppButton } from 'core/components/Button';
 import { Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
+import { finishGame } from 'core/api/socket.service';
+import { deleteUserById } from 'core/api/users.service';
+import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './ScramMasterGameSection.module.scss';
 
 export const ScramMasterGameSection: React.FC = () => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
+  const { gameInfo } = useTypeSelector(state => state.gameInfo);
+  const { gameSettings } = gameInfo;
   const dispatch = useDispatch();
+
+  const handleFinishGame = (): void => {
+    if (currentUser.role === Roles.creator) {
+      finishGame(currentUser);
+    } else {
+      deleteUserById(currentUser.userId);
+      dispatch(clearCurrentUser(currentUser));
+    }
+  };
 
   useEffect(() => {
     dispatch(getCreator(currentUser.gameId));
@@ -40,7 +53,7 @@ export const ScramMasterGameSection: React.FC = () => {
           <AppButton
             name={currentUser.role === Roles.creator ? 'Stop game' : 'Exit'}
             color={'white'}
-            onClickHandler={() => {}}
+            onClickHandler={handleFinishGame}
           />
         </Grid>
         {gameSettings.isTimer && gameSettings.roundTime && currentUser.role !== Roles.creator ? (

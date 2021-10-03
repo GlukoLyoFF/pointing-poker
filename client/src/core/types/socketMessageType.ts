@@ -40,3 +40,11 @@ export interface IIssueMsg {
   event: string;
   payload: IIssue;
 }
+
+export interface IChatMsg {
+  event: string;
+  payload: {
+    user: IUser;
+    message: string;
+  };
+}

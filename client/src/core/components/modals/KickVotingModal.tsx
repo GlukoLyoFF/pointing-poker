@@ -84,7 +84,9 @@ export const KickVotingModal: React.FC = (): JSX.Element => {
     <>
       {currentUser.userId === localState.target?._id ? (
         <Dialog open={localState.isOpen}>
-          <DialogTitle>Kick</DialogTitle>
+          <DialogTitle>
+            <Text textLvl="subtitle">Kick</Text>
+          </DialogTitle>
           <Text textLvl="base">
             <Text textLvl="base" isHighlight={true}>
               {whoName}

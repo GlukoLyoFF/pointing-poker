@@ -37,7 +37,7 @@ export const Members: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    if (currentUser.role === Roles.creator) {
+    if (currentUser.role === Roles.creator || currentUser.gameId === getDeleteUserId) {
       deleteUserById(getDeleteUserId);
     } else {
       const target = {

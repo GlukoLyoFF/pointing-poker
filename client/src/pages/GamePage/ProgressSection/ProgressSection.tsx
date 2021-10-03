@@ -10,6 +10,7 @@ import { Text } from 'core/components/Text';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { ProgressCard } from 'core/components/progressCard/ProgressCard';
 import styles from './ProgressSection.module.scss';
+import { startPlayerVoting } from 'core/api/socket.service';
 
 export const ProgressSection: React.FC = () => {
   const { users } = useTypeSelector(state => state.users);
@@ -32,9 +33,17 @@ export const ProgressSection: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await deleteUserById(getDeleteUserId);
+    if (currentUser.role === Roles.creator) {
+      deleteUserById(getDeleteUserId);
+    } else {
+      const target = {
+        gameId: currentUser.gameId,
+        playerId: currentUser.userId,
+        targetId: getDeleteUserId,
+      };
+      startPlayerVoting(target);
+    }
     setModalShowFlag(false);
-    dispatch(getUsers(currentUser.gameId));
   };
 
   const handleCancel = () => {
@@ -77,7 +86,7 @@ export const ProgressSection: React.FC = () => {
         })}
       </Grid>
       <AppModal
-        title={`Kick player?`}
+        title={`Kick player`}
         isShow={getModalShowFlag}
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}
