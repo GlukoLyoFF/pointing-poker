@@ -44,6 +44,7 @@ export const ProgressSection: React.FC = () => {
       startPlayerVoting(target);
     }
     setModalShowFlag(false);
+    dispatch(getUsers(currentUser.gameId));
   };
 
   const handleCancel = () => {

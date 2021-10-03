@@ -48,6 +48,7 @@ export const Members: React.FC = () => {
       startPlayerVoting(target);
     }
     setModalShowFlag(false);
+    dispatch(getUsers(currentUser.gameId));
   };
 
   useEffect(() => {
