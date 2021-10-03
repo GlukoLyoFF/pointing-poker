@@ -14,7 +14,7 @@ export const GamePage: React.FC = () => {
   const [chooseIssueId, setChooseIssueId] = useState('');
 
   const handleTimerValue = (num: number) => {
-    if (num === 888) {
+    if (num === 150000) {
       setTimerValue(Number(gameSettings.roundTime));
     } else {
       setTimerValue(num);

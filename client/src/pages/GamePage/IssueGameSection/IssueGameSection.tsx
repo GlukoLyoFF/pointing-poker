@@ -12,7 +12,7 @@ import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
 import { socket } from 'core/api/socket.service';
-import { IIssueMsg, ITimerMsg, Message } from 'core/types/socketMessageType';
+import { IDeleteIssueVoteMsg, IIssueMsg, ITimerMsg, Message } from 'core/types/socketMessageType';
 import styles from './IssueGameSection.module.scss';
 import { getIssueById } from 'core/api/issues.service';
 import { StatisticCard } from 'core/components/statisticCard/StatisticCard';
@@ -38,6 +38,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   const [getIssueId, setIssueId] = useState('');
   const [count, setCount] = useState(Number(gameSettings.roundTime));
   const [isRoundEndFlag, setRoundEndFlag] = useState(false);
+  const [gameCycleNum, setGameCycleNum] = useState(0);
   let timer = 0;
 
   const modalShowCreate = (flag: boolean) => {
@@ -69,6 +70,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   };
 
   const handleRestartRound = () => {
+    socket.emit('deleteIssueVotesByIssueId', `${getIssueId}`);
     socket.emit('reStartRound', 'restart');
   };
 
@@ -78,6 +80,7 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
       setIssueIndex(prev => prev + 1);
     } else {
       setIssueIndex(0);
+      setGameCycleNum(prev => prev + 1);
     }
     if (!gameSettings.isTimer) {
       setRaundStartValue(false);
@@ -139,6 +142,9 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
       handleChooseIssueId(msg.payload._id);
       setIssueId(msg.payload._id);
     };
+    const socketDataDelete = (msg: IDeleteIssueVoteMsg) => {
+      console.log(msg);
+    };
     dispatch(getIssues(currentUser.gameId));
     socket.on(Message.startRound, socketRunRound);
     socket.on(Message.restartRound, socketRunRound);
@@ -146,10 +152,12 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
     socket.on(Message.chooseIssue, socketChooseIssue);
     socket.on(Message.createIssue, socketCreateIssue);
     socket.on(Message.deleteIssue, socketDeleteIssue);
+    socket.on('deleteIssueVotesByIssueIdMsg', socketDataDelete);
     return () => {
       socket.off(Message.createIssue, socketCreateIssue);
       socket.off(Message.deleteIssue, socketDeleteIssue);
       socket.off(Message.chooseIssue, socketChooseIssue);
+      socket.off('deleteIssueVotesByIssueIdMsg', socketDataDelete);
       socket.off(Message.startRound, socketRunRound);
       socket.off(Message.restartRound, socketRunRound);
       socket.off(Message.endRound, socketRunRound);
@@ -158,6 +166,9 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
 
   useEffect(() => {
     getIssueById(getIssueId);
+    if (gameCycleNum > 0 && currentUser.role === Roles.creator) {
+      socket.emit('deleteIssueVotesByIssueId', `${getIssueId}`);
+    }
   }, [getIssueId]);
 
   useEffect(() => {
@@ -171,9 +182,10 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
         setIssueIndex(prev => prev + 1);
       } else {
         setIssueIndex(0);
+        setGameCycleNum(prev => prev + 1);
       }
     }
-    if (count === 888) {
+    if (count === 150000) {
       setCount(Number(gameSettings.roundTime));
     }
     handleTimerValue(count);

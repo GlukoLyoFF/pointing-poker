@@ -41,6 +41,11 @@ export interface ITimerMsg {
   payload: string;
 }
 
+export interface IDeleteIssueVoteMsg {
+  event: string;
+  payload: string;
+}
+
 export interface IVoteIssueMsg {
   event: string;
   payload: IssueVoteRes;

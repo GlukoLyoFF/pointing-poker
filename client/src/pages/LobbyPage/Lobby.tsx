@@ -13,11 +13,8 @@ import { useDispatch } from 'react-redux';
 import { getGameInfo, setGameInfo } from 'store/actionCreators/gameInfo';
 import { IGame } from 'core/types/get200Types';
 import styles from './Lobby.module.scss';
-<<<<<<< HEAD
 import { clearIssueVoteResult } from 'store/actionCreators/issueVote';
-=======
 import { Chat } from 'core/components/chat/Chat';
->>>>>>> a55dcd27c3015e3b11ad48c8ea10779c830cf6ec
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
