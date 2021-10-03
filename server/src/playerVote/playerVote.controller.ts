@@ -39,7 +39,7 @@ export class PlayerVoteController {
     return voteList;
   }
 
-  @Get('gameidandtargetid/:gameId&:targetId')
+  @Get('gameid/:gameId/targetid/:targetId')
   @HttpCode(HttpStatus.OK)
   async getByGameIdAndRole(
     @Param('gameId') gameId: string,
