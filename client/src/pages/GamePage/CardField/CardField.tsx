@@ -51,7 +51,11 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
 
   useEffect(() => {
     if (timerValue === 0 && isClick && currentUser.role !== Roles.observer) {
-      handleClickCard('unknown', 'cup');
+      if (
+        (currentUser.role === Roles.creator && gameSettings.isAsPlayer) ||
+        currentUser.role === Roles.user
+      )
+        handleClickCard('unknown', 'cup');
     }
   }, [timerValue]);
 
