@@ -1,3 +1,5 @@
+import { IsNotEmpty, IsString } from 'class-validator';
+
 export class GameSettings {
   isAsPlayer: boolean;
   isChangeCard: boolean;
@@ -11,5 +13,5 @@ export class GameSettings {
 export class GameDto {
   url: string;
   title: string;
-  gameSettings?: GameSettings;
+  gameSettings: GameSettings;
 }

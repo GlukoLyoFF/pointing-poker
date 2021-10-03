@@ -38,13 +38,13 @@ export class IssueVoteController {
     return voteList;
   }
 
-  @Get('gameidandissueid/:gameId&:issueId')
+  @Get('gameid/:gameId/issueid/:issueId')
   @HttpCode(HttpStatus.OK)
   async getByGameIdAndRole(
     @Param('gameId') gameId: string,
     @Param('issueId') issueId: string,
   ): Promise<IssueVote[]> {
-    const issueVoteList = this.voteService.getByGameIdAndPlayerId(
+    const issueVoteList = this.voteService.getByGameIdAndIssueId(
       gameId,
       issueId,
     );

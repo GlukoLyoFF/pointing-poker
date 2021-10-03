@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { IssueModule } from './issue/issue.module';
 import { PlayerVoteModule } from './playerVote/playerVote.module';
 import { IssueVoteModule } from './issueVote/issueVote.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { IssueVoteModule } from './issueVote/issueVote.module';
     IssueModule,
     PlayerVoteModule,
     IssueVoteModule,
+    ChatModule,
   ],
 })
 export class AppModule {}

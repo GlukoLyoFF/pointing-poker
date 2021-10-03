@@ -11,13 +11,14 @@ import {
 } from '@nestjs/websockets';
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { IssueDocument } from 'src/issue/schemas/issue.schema';
-import { UserDocument } from 'src/user/schemas/user.schema';
+import { User, UserDocument } from 'src/user/schemas/user.schema';
 import { PlayerVoteDocument } from 'src/playerVote/schemas/playerVote.schema';
 import { IssueVoteDocument } from 'src/issueVote/schemas/issueVote.schema';
 import { UserService } from 'src/user/user.service';
 import { IssueService } from 'src/issue/issue.service';
 import { PlayerVoteService } from 'src/playerVote/playerVote.service';
 import { IssueVoteService } from 'src/issueVote/issueVote.service';
+import { ChatService } from 'src/chat/chat.service';
 
 interface IPayload<T> {
   event: string;
@@ -29,6 +30,27 @@ interface IFinishGame {
   gameId: string;
   userId: string;
 }
+
+type StartVotingByPlayer = {
+  gameId: string;
+  playerId: string;
+  targetId: string;
+};
+
+type ChatMessageType = {
+  userId: string;
+  message: string;
+};
+
+type ChatAnswerType = {
+  user: User;
+  message: string;
+};
+
+type FinishVotingByPlayer = {
+  gameId: string;
+  targetId: string;
+};
 
 export enum Events {
   Connection = 'connection',
@@ -66,6 +88,12 @@ export enum Events {
   EndRound = 'endRound',
   EndRoundMsg = 'endRoundMsg',
 
+  StartVotingByPlayer = 'startVotingByPlayer',
+  StartVotingByPlayerMsg = 'startVotingByPlayerMsg',
+
+  FinishVotingByPlayer = 'finishVotingByPlayer',
+  FinishVotingByPlayerMsg = 'finishVotingByPlayerMsg',
+
   AddVoteByPlayer = 'addVoteByPlayer',
   AddVoteByPlayerMsg = 'addVoteByPlayerMsg',
   DeleteVoteByPlayer = 'deleteVoteByPlayer',
@@ -79,9 +107,14 @@ export enum Events {
   DeleteVoteByIssueMsg = 'deleteVoteByIssueMsg',
   ChangeVoteByIssue = 'changeVoteByIssue',
   ChangeVoteByIssueMsg = 'changeVoteByIssueMsg',
+  DeleteIssueVotesByIssueId = 'deleteIssueVotesByIssueId',
+  DeleteIssueVotesByIssueIdMsg = 'deleteIssueVotesByIssueIdMsg',
 
   FinishGame = 'finishGame',
   FinishGameMsg = 'finishGameMsg',
+
+  MsgToServer = 'msgToServer',
+  MsgToClient = 'msgToClient',
 }
 
 const WSPORT = 5000;
@@ -103,6 +136,8 @@ export class AppGateway
     private playerVoteService: PlayerVoteService,
     @Inject(forwardRef(() => IssueVoteService))
     private issueVoteService: IssueVoteService,
+    @Inject(forwardRef(() => ChatService))
+    private chatService: ChatService,
   ) {}
 
   private logger: Logger = new Logger('AppGateway');
@@ -117,6 +152,75 @@ export class AppGateway
   }
   afterInit() {
     this.logger.log('Initialized');
+  }
+
+  @SubscribeMessage(Events.DeleteIssueVotesByIssueId)
+  async handleDeleteIssueVotesByIssueId(
+    client: Socket,
+    message: string,
+  ): Promise<void> {
+    await this.issueVoteService.deleteIssueVotesByIssueId(message);
+    const answer: IPayload<string> = {
+      event: Events.DeleteIssueVotesByIssueId,
+      payload: message,
+    };
+    this.wss.emit(Events.DeleteIssueVotesByIssueIdMsg, answer);
+  }
+
+  @SubscribeMessage(Events.StartVotingByPlayer)
+  async handleStartVotingByPlayer(
+    client: Socket,
+    message: StartVotingByPlayer,
+  ): Promise<void> {
+    const player = await this.userService.getOne(message.playerId);
+    const target = await this.userService.getOne(message.playerId);
+    const answer: IPayload<{ player: User; target: User }> = {
+      event: Events.StartVotingByPlayer,
+      payload: {
+        player: player,
+        target: target,
+      },
+    };
+    this.wss.emit(Events.StartVotingByPlayerMsg, answer);
+  }
+
+  @SubscribeMessage(Events.FinishVotingByPlayer)
+  async handleFinishVotingByPlayer(
+    client: Socket,
+    message: FinishVotingByPlayer,
+  ): Promise<void> {
+    const player = await this.userService.getByGameId(message.gameId);
+    const target = await this.playerVoteService.getByTargetId(message.targetId);
+    const decision = target.reduce((acc, { vote }) => {
+      return vote === true ? ++acc : acc;
+    }, 0);
+    if (decision > Math.floor(player.length / 2)) {
+      console.log('delete');
+      await this.userService.delete(message.targetId);
+      await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+      await this.issueVoteService.deleteIssueVotesByUserId(message.targetId);
+      await this.playerVoteService.deletePlayerVotesByTargetId(
+        message.targetId,
+      );
+      const answer: IPayload<string> = {
+        event: Events.FinishVotingByPlayer,
+        payload: 'Voting was finished',
+      };
+      this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
+    }
+  }
+
+  @SubscribeMessage(Events.MsgToServer)
+  async handleSendMsg(client: Socket, message: ChatMessageType): Promise<void> {
+    const user = await this.userService.getOne(message.userId);
+    const answer: IPayload<ChatAnswerType> = {
+      event: Events.MsgToClient,
+      payload: {
+        user: user,
+        message: message.message,
+      },
+    };
+    this.wss.emit(Events.MsgToClient, answer);
   }
 
   @SubscribeMessage(Events.FinishGame)
