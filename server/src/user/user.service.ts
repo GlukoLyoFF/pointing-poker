@@ -42,9 +42,7 @@ export class UserService {
 
   async create(userDto: UserDto): Promise<User> {
     try {
-      const { image } = userDto;
-      const fileName = await this.fileService.createFile(image);
-      const newUser = new this.userModel({ ...userDto, image: fileName });
+      const newUser = new this.userModel(userDto);
       this.gateway.handleCreateUser(newUser);
       return await newUser.save();
     } catch {

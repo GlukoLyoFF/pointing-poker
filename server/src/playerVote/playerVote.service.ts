@@ -31,6 +31,9 @@ export class PlayerVoteService {
   async getByGameId(gameId: string): Promise<PlayerVote[]> {
     return this.voteModel.find({ gameId: gameId }).exec();
   }
+  async getByTargetId(targetId: string): Promise<PlayerVote[]> {
+    return this.voteModel.find({ targetId: targetId }).exec();
+  }
   async getByGameIdAndPlayerId(
     gameId: string,
     targetId: string,
@@ -73,6 +76,25 @@ export class PlayerVoteService {
       throw new NotFoundException("Vote doesn't exist!");
     }
   }
+
+  async deletePlayerVotesByTargetId(targetId: string): Promise<
+    {
+      ok?: number;
+      n?: number;
+    } & {
+      deletedCount?: number;
+    }
+  > {
+    try {
+      const deletedPlayersVotesByTargetId = await this.voteModel.deleteMany({
+        targetId: targetId,
+      });
+      return deletedPlayersVotesByTargetId;
+    } catch {
+      throw new NotFoundException("Votes doesn't exist!");
+    }
+  }
+
   async deletePlayerVotesByUserId(userId: string): Promise<
     {
       ok?: number;

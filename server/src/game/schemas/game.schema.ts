@@ -11,18 +11,18 @@ export class Game {
   @Prop({ required: true })
   url: string;
 
-  @Prop({ required: true })
+  @Prop({ default: 'Spring' })
   title: string;
 
   @Prop({
     default: {
-      isAsPlayer: true,
+      isAsPlayer: false,
       isChangeCard: false,
-      isTimer: true,
-      scoreType: 'string',
-      shortScoreType: 'str',
-      roundTime: 888,
-      cardValues: [{ key: 'unknown', value: 'cup' }],
+      isTimer: false,
+      scoreType: 'story point',
+      shortScoreType: 'SP',
+      roundTime: 150000,
+      cardValues: [],
     },
   })
   gameSettings: GameSettings;

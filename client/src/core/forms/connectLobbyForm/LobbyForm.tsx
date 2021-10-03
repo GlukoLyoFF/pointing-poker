@@ -35,7 +35,6 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
       axios
         .post('http://localhost:8888/api/games', {
           url: 'http://localhost:8888/api/games/',
-          title: 'default_title',
         })
         .then(res =>
           axios.post('http://localhost:8888/api/users', {

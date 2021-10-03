@@ -14,6 +14,7 @@ import { getGameInfo, setGameInfo } from 'store/actionCreators/gameInfo';
 import { IGame } from 'core/types/get200Types';
 import styles from './Lobby.module.scss';
 import { KickVotingModal } from 'core/components/modals/KickVotingModal';
+import { Chat } from 'core/components/chat/Chat';
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -59,6 +60,7 @@ export const Lobby: React.FC = () => {
           <LobbySettings />
         </>
       ) : null}
+      <Chat />
     </main>
   );
 };
