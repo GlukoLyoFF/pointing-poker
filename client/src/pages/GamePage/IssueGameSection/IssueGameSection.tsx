@@ -61,9 +61,11 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   };
 
   const handleRaundStart = (flag: boolean) => {
-    setRaundStartValue(flag);
-    socket.emit('startRound', 'start');
-    setIssueId(issues[issueIndex]._id);
+    if (issues[0]) {
+      setRaundStartValue(flag);
+      socket.emit('startRound', 'start');
+      setIssueId(issues[issueIndex]._id);
+    }
   };
 
   const handleRestartRound = () => {
@@ -133,19 +135,21 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
         setRoundEndFlag(true);
       }
     };
+    const socketChooseIssue = (msg: IIssueMsg) => {
+      handleChooseIssueId(msg.payload._id);
+      setIssueId(msg.payload._id);
+    };
     dispatch(getIssues(currentUser.gameId));
     socket.on(Message.startRound, socketRunRound);
     socket.on(Message.restartRound, socketRunRound);
     socket.on(Message.endRound, socketRunRound);
-    socket.on(Message.chooseIssue, data => {
-      handleChooseIssueId(data.payload._id);
-      setIssueId(data.payload._id);
-    });
+    socket.on(Message.chooseIssue, socketChooseIssue);
     socket.on(Message.createIssue, socketCreateIssue);
     socket.on(Message.deleteIssue, socketDeleteIssue);
     return () => {
       socket.off(Message.createIssue, socketCreateIssue);
       socket.off(Message.deleteIssue, socketDeleteIssue);
+      socket.off(Message.chooseIssue, socketChooseIssue);
       socket.off(Message.startRound, socketRunRound);
       socket.off(Message.restartRound, socketRunRound);
       socket.off(Message.endRound, socketRunRound);

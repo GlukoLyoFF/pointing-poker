@@ -37,9 +37,7 @@ export const GamePage: React.FC = () => {
           handleTimerValue={handleTimerValue}
           handleChooseIssueId={handleChooseIssueId}
         />
-        {currentUser.role === Roles.user || currentUser.role === Roles.creator ? (
-          <CardField chooseIssueId={chooseIssueId} timerValue={timerValue} />
-        ) : null}
+        <CardField chooseIssueId={chooseIssueId} timerValue={timerValue} />
       </div>
       <ProgressSection chooseIssueId={chooseIssueId} />
     </main>

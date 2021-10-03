@@ -7,7 +7,7 @@ import { IssueVote } from 'core/types/issueVotesType';
 import { setIssueVote, setIssueVoteResult } from 'store/actionCreators/issueVote';
 import { socket } from 'core/api/socket.service';
 import { postNewIssueVote } from 'core/api/issueVote.service';
-import { ITimerMsg, Message } from 'core/types/socketMessageType';
+import { ITimerMsg, IVoteIssueMsg, Message } from 'core/types/socketMessageType';
 import { getIssueById } from 'core/api/issues.service';
 import { Roles } from 'core/types/roleType';
 
@@ -40,13 +40,17 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
   };
 
   useEffect(() => {
-    socket.on('addVoteByIssueMsg', data => {
-      dispatch(setIssueVoteResult(data.payload));
-    });
+    const socketAddVoteByIssueMsg = (msg: IVoteIssueMsg) => {
+      dispatch(setIssueVoteResult(msg.payload));
+    };
+    socket.on('addVoteByIssueMsg', socketAddVoteByIssueMsg);
+    return () => {
+      socket.off('addVoteByIssueMsg', socketAddVoteByIssueMsg);
+    };
   }, []);
 
   useEffect(() => {
-    if (timerValue === 0 && isClick) {
+    if (timerValue === 0 && isClick && currentUser.role !== Roles.observer) {
       handleClickCard('unknown', 'cup');
     }
   }, [timerValue]);
@@ -61,13 +65,15 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
         msg.payload === 'end' &&
         !gameSettings.isTimer &&
         isClick &&
-        (gameSettings.isAsPlayer || currentUser.role === Roles.user)
+        (gameSettings.isAsPlayer || currentUser.role === Roles.user) &&
+        currentUser.role !== Roles.observer
       ) {
         handleClickCard('unknown', 'cup');
       } else if (
         msg.payload === 'end' &&
         issueVote.vote.value === '' &&
-        (gameSettings.isAsPlayer || currentUser.role === Roles.user)
+        (gameSettings.isAsPlayer || currentUser.role === Roles.user) &&
+        currentUser.role !== Roles.observer
       ) {
         handleClickCard('unknown', 'cup');
       }
