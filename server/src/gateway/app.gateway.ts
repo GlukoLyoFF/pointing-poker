@@ -238,10 +238,7 @@ export class AppGateway
     }
     const answer: IPayload<string> = {
       event: Events.FinishGame,
-      payload:
-        message.role === 'creator'
-          ? 'Game was deleted successfully'
-          : 'User was deleted successfully',
+      payload: message.gameId
     };
     this.wss.emit(Events.FinishGameMsg, answer);
   }
