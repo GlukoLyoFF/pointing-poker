@@ -20,6 +20,7 @@ export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const history = useHistory();
+  dispatch(getGameInfo(currentUser.gameId));
 
   const socketGoToGamePage = (msg: { event: string; payload: string }) => {
     if (msg.payload === Message.startGame) {
