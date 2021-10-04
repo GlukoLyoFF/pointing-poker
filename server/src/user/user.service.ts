@@ -72,7 +72,7 @@ export class UserService {
     }
   }
 
-  async getByGameId(gameId: string): Promise<User[]> {
+  async getByGameId(gameId: string): Promise<UserDocument[]> {
     try {
       return await this.userModel.find({ gameId: gameId }).exec();
     } catch {

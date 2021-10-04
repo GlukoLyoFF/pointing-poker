@@ -90,6 +90,7 @@ export enum Events {
 
   StartVotingByPlayer = 'startVotingByPlayer',
   StartVotingByPlayerMsg = 'startVotingByPlayerMsg',
+  VotingCannotStart = 'VotingCannotStart',
 
   FinishVotingByPlayer = 'finishVotingByPlayer',
   FinishVotingByPlayerMsg = 'finishVotingByPlayerMsg',
@@ -116,8 +117,7 @@ export enum Events {
   MsgToServer = 'msgToServer',
   MsgToClient = 'msgToClient',
 }
-
-const WSPORT = 5000;
+const WSPORT = 5005;
 @Injectable()
 @WebSocketGateway(WSPORT, { cors: true })
 export class AppGateway
@@ -173,7 +173,7 @@ export class AppGateway
     message: StartVotingByPlayer,
   ): Promise<void> {
     const player = await this.userService.getOne(message.playerId);
-    const target = await this.userService.getOne(message.playerId);
+    const target = await this.userService.getOne(message.targetId);
     const answer: IPayload<{ player: User; target: User }> = {
       event: Events.StartVotingByPlayer,
       payload: {
@@ -181,7 +181,15 @@ export class AppGateway
         target: target,
       },
     };
-    this.wss.emit(Events.StartVotingByPlayerMsg, answer);
+    const start = await this.userService.getByGameId(message.gameId);
+    const users = start.filter(it => it.role === 'user').length;
+    if (users > 2) {
+      console.log('Voiting started' + users);
+      this.wss.emit(Events.StartVotingByPlayerMsg, answer);
+    } else {
+      console.log('Voiting failed' + users);
+      this.wss.emit(Events.VotingCannotStart, 'Voting cannot start');
+    }
   }
 
   @SubscribeMessage(Events.FinishVotingByPlayer)
@@ -189,24 +197,58 @@ export class AppGateway
     client: Socket,
     message: FinishVotingByPlayer,
   ): Promise<void> {
-    const player = await this.userService.getByGameId(message.gameId);
-    const target = await this.playerVoteService.getByTargetId(message.targetId);
-    const decision = target.reduce((acc, { vote }) => {
-      return vote === true ? ++acc : acc;
-    }, 0);
-    if (decision > Math.floor(player.length / 2)) {
-      console.log('delete');
+
+    const votings = (await this.userService.getByGameId(message.gameId)).filter(it => it.role !== 'observer');
+    const votes = await this.playerVoteService.getByTargetId(message.targetId);
+
+    const answer: IPayload<string> = {
+      event: Events.FinishVotingByPlayer,
+      payload: 'Voting was finished',
+    };
+
+    let isDelete = false;
+
+    votings.forEach(voting => {
+      votes.forEach(vote => {
+        if ((voting.role === 'creator') && (vote.vote === true) && (voting._id == vote.playerId)) {
+          isDelete = true;
+        }
+      });
+    });
+
+    if (isDelete) {
       await this.userService.delete(message.targetId);
       await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
       await this.issueVoteService.deleteIssueVotesByUserId(message.targetId);
       await this.playerVoteService.deletePlayerVotesByTargetId(
         message.targetId,
       );
-      const answer: IPayload<string> = {
-        event: Events.FinishVotingByPlayer,
-        payload: 'Voting was finished',
-      };
-      this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
+    } else {
+
+      const decisionRight = votes.reduce((acc, { vote }) => {
+        return vote === true ? ++acc : acc;
+      }, 0);
+
+      const decisionWrong = votes.reduce((acc, { vote }) => {
+        return vote === false ? ++acc : acc;
+      }, 0);
+
+      if ( decisionRight > Math.floor(votings.length / 2)) {
+        await this.userService.delete(message.targetId);
+        await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+        await this.issueVoteService.deleteIssueVotesByUserId(message.targetId);
+        await this.playerVoteService.deletePlayerVotesByTargetId(
+          message.targetId,
+        );
+        this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
+      }
+      if ( decisionWrong >= Math.floor(votings.length / 2)) {
+        await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+        await this.playerVoteService.deletePlayerVotesByTargetId(
+          message.targetId,
+        );
+        this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
+      }
     }
   }
 
