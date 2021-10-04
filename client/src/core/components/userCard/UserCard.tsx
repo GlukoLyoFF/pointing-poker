@@ -48,12 +48,10 @@ export const UserCard: React.FC<UserCardProp> = ({
       {status === Roles.user && currentUser.role != Roles.observer ? (
         <NotInterestedIcon
           onClick={() => {
-            if (currentUser.role === Roles.creator) {
-              if (handleFlag && handleUserName && handleUserId) {
-                handleFlag(true);
-                handleUserName(name);
-                handleUserId(id);
-              }
+            if (handleFlag && handleUserName && handleUserId) {
+              handleFlag(true);
+              handleUserName(name);
+              handleUserId(id);
             }
           }}
         />

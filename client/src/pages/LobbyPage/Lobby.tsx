@@ -7,13 +7,14 @@ import { Members } from './Members/Members';
 import { Issues } from './Issues/Issues';
 import { ScramMaster } from './ScramMaster/ScramMaster';
 import { LobbySettings } from './Settings';
+import { KickVotingModal } from 'core/components/modals/KickVotingModal';
+import { Chat } from 'core/components/chat/Chat';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { Roles } from 'core/types/roleType';
 import { useDispatch } from 'react-redux';
 import { getGameInfo, setGameInfo } from 'store/actionCreators/gameInfo';
 import { IGame } from 'core/types/get200Types';
 import styles from './Lobby.module.scss';
-import { Chat } from 'core/components/chat/Chat';
 
 export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -54,6 +55,7 @@ export const Lobby: React.FC = () => {
     <main className={styles.container}>
       <ScramMaster />
       <Members />
+      <KickVotingModal />
       {currentUser.role === Roles.creator ? (
         <>
           <Issues />

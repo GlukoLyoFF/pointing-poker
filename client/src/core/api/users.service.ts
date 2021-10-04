@@ -1,5 +1,5 @@
 import { IUser } from '../types/get200Types';
-import { IUserBody } from '../types/postToServerTypes';
+import { IPlayerVote, IUserBody } from '../types/postToServerTypes';
 import { UserRole } from '../types/userType';
 import axios from '.';
 
@@ -38,4 +38,8 @@ export const updateUserById = async (userId: string, body: IUserBody): Promise<I
 export const deleteUserById = async (userId: string): Promise<IUser> => {
   const response = await axios.delete(`${path}/${userId}`);
   return response.data;
+};
+
+export const sendVoteForPlayer = async (body: IPlayerVote): Promise<void> => {
+  const response = await axios.post('playervotes', body);
 };
