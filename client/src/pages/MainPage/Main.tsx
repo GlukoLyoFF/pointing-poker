@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { AppButton } from 'core/components/Button';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { Text } from 'core/components/Text';
 import { InputField } from 'core/components/InputField';
 import { LobbyForm } from 'core/forms/connectLobbyForm/LobbyForm';

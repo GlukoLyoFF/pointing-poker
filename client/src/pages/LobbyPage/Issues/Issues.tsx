@@ -5,7 +5,7 @@ import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { deleteIssue, getIssues, setIssue } from 'store/actionCreators/issue';
 import { IssueCard } from 'core/components/issueCard/IssueCard';
 import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { Text } from 'core/components/Text';
 import { CreateIssueForm } from 'core/forms/createIssueForm/CreateIssueForm';
 import { socket } from 'core/api/socket.service';

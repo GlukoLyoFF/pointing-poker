@@ -1,5 +1,5 @@
 import { TextField } from '@material-ui/core';
-import { socket } from 'core/api/socket.service';
+import { sendUserMessage } from 'core/api/socket.service';
 import { AppButton } from 'core/components/Button';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { useState } from 'react';
@@ -9,9 +9,10 @@ export const AddMessageForm: React.FC = () => {
   const [message, setMessage] = useState('');
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const sendMessage = () => {
-    socket.emit('msgToServer', { userId: currentUser.userId, message: message });
+    sendUserMessage({ userId: currentUser.userId, message: message });
     setMessage('');
   };
+
   return (
     <div>
       <TextField

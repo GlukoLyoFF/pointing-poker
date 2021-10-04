@@ -24,3 +24,10 @@ export interface IIssueBody {
   gameId: string;
   priority: string;
 }
+
+export interface IPlayerVote {
+  gameId: string;
+  playerId: string;
+  targetId: string;
+  vote?: boolean;
+}
