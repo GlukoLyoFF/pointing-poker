@@ -27,8 +27,10 @@ export const Lobby: React.FC = () => {
     }
   };
 
-  const socketClearUser = () => {
-    dispatch(clearCurrentUser(currentUser));
+  const socketClearUser = ({ payload }: { event: string; payload: string }) => {
+    if (payload === currentUser.gameId) {
+      dispatch(clearCurrentUser(currentUser));
+    }
   };
 
   const socketChangeTitle = (msg: { event: string; payload: IGame }) => {
