@@ -1,6 +1,6 @@
-import { socket } from 'core/api/socket.service';
+import { socket, startPlayerVoting } from 'core/api/socket.service';
 import { deleteUserById } from 'core/api/users.service';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { IUserMsg, Message } from 'core/types/socketMessageType';
@@ -8,8 +8,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import { deleteUser, getUsers, setUser } from 'store/actionCreators/user';
-import { Text } from '../../Text';
+import { Text } from 'core/components/Text';
 import { ChatMessageType } from '../Chat';
+import { Roles } from 'core/types/roleType';
 import styles from './Msg.module.scss';
 
 export const Msg: React.FC<{ message: ChatMessageType }> = ({ message }) => {
@@ -36,7 +37,16 @@ export const Msg: React.FC<{ message: ChatMessageType }> = ({ message }) => {
   };
 
   const handleSubmit = () => {
-    deleteUserById(getDeleteUserId);
+    if (currentUser.role === Roles.creator) {
+      deleteUserById(getDeleteUserId);
+    } else {
+      const target = {
+        gameId: currentUser.gameId,
+        playerId: currentUser.userId,
+        targetId: getDeleteUserId,
+      };
+      startPlayerVoting(target);
+    }
     setModalShowFlag(false);
   };
 
@@ -76,7 +86,7 @@ export const Msg: React.FC<{ message: ChatMessageType }> = ({ message }) => {
         />
       </div>
       <AppModal
-        title={`Kick player?`}
+        title={`Kick player`}
         isShow={getModalShowFlag}
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}

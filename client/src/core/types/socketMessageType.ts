@@ -24,6 +24,12 @@ export enum Message {
   changeVoteByIssue = 'changeVoteByIssueMsg',
   finishGame = 'finishGame',
   finishGameMsg = 'finishGameMsg',
+  DeleteIssueVotesByIssueId = 'deleteIssueVotesByIssueId',
+  DeleteIssueVotesByIssueIdMsg = 'deleteIssueVotesByIssueIdMsg',
+  StartVotingByPlayer = 'startVotingByPlayer',
+  StartVotingByPlayerMsg = 'startVotingByPlayerMsg',
+  FinishVotingByPlayer = 'finishVotingByPlayer',
+  FinishVotingByPlayerMsg = 'finishVotingByPlayerMsg',
 }
 
 export interface IUserMsg {
@@ -36,6 +42,7 @@ export interface IIssueMsg {
   payload: IIssue;
 }
 
+<<<<<<< HEAD
 export interface ITimerMsg {
   event: string;
   payload: string;
@@ -49,4 +56,12 @@ export interface IDeleteIssueVoteMsg {
 export interface IVoteIssueMsg {
   event: string;
   payload: IssueVoteRes;
+=======
+export interface IChatMsg {
+  event: string;
+  payload: {
+    user: IUser;
+    message: string;
+  };
+>>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
 }

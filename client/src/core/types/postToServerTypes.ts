@@ -25,6 +25,7 @@ export interface IIssueBody {
   priority: string;
 }
 
+<<<<<<< HEAD
 export interface IIssueVoteBody {
   vote: {
     key: string;
@@ -33,4 +34,11 @@ export interface IIssueVoteBody {
   gameId: string;
   playerId: string;
   issueId: string;
+=======
+export interface IPlayerVote {
+  gameId: string;
+  playerId: string;
+  targetId: string;
+  vote?: boolean;
+>>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
 }

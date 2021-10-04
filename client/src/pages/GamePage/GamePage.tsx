@@ -6,6 +6,7 @@ import { IssueGameSection } from './IssueGameSection/IssueGameSection';
 import { ScramMasterGameSection } from './ScramMasterGameSection/ScramMasterGameSection';
 import { ProgressSection } from './ProgressSection/ProgressSection';
 import styles from './GamePage.module.scss';
+import { KickVotingModal } from 'core/components/modals/KickVotingModal';
 
 export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -39,7 +40,12 @@ export const GamePage: React.FC = () => {
         />
         <CardField chooseIssueId={chooseIssueId} timerValue={timerValue} />
       </div>
+<<<<<<< HEAD
       <ProgressSection chooseIssueId={chooseIssueId} />
+=======
+      <ProgressSection />
+      <KickVotingModal />
+>>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
     </main>
   );
 };

@@ -4,11 +4,11 @@ import { Text } from 'core/components/Text';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { deleteUser, getUsers, setUser } from 'store/actionCreators/user';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { Roles } from 'core/types/roleType';
 import { IUserMsg, Message } from 'core/types/socketMessageType';
-import { socket } from 'core/api/socket.service';
+import { socket, startPlayerVoting } from 'core/api/socket.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './Members.module.scss';
 
@@ -37,8 +37,18 @@ export const Members: React.FC = () => {
   };
 
   const handleSubmit = () => {
-    deleteUserById(getDeleteUserId);
+    if (currentUser.role === Roles.creator || currentUser.gameId === getDeleteUserId) {
+      deleteUserById(getDeleteUserId);
+    } else {
+      const target = {
+        gameId: currentUser.gameId,
+        playerId: currentUser.userId,
+        targetId: getDeleteUserId,
+      };
+      startPlayerVoting(target);
+    }
     setModalShowFlag(false);
+    dispatch(getUsers(currentUser.gameId));
   };
 
   useEffect(() => {
@@ -83,7 +93,7 @@ export const Members: React.FC = () => {
           );
         })}
         <AppModal
-          title={`Kick player?`}
+          title={`Kick player`}
           isShow={getModalShowFlag}
           handleSubmit={handleSubmit}
           handleCancel={handleCancel}

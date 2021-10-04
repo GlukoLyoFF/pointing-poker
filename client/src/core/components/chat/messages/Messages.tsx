@@ -1,25 +1,34 @@
 import { socket } from 'core/api/socket.service';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { Message } from 'core/types/socketMessageType';
 import { useEffect, useState } from 'react';
 import { ChatMessageType } from '../Chat';
 import { Msg } from '../msg/Msg';
+import { IUserMsg, IChatMsg, Message } from 'core/types/socketMessageType';
 import styles from './Messages.module.scss';
 
-export const Messages: React.FC = () => {
+export const Messages: React.FC = (): JSX.Element => {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const socketDeleteUser = (data: IUserMsg) => {
+    if (data.payload.gameId === currentUser.gameId) {
+      setMessages(prevMsg =>
+        [...prevMsg].filter((msg: ChatMessageType) => msg.user._id !== data.payload._id),
+      );
+    }
+  };
+  const socketCatchChatMsg = (data: IChatMsg) => {
+    if (data.payload.user.gameId === currentUser.gameId) {
+      setMessages(prevMsg => [...prevMsg, data.payload]);
+    }
+  };
+
   useEffect(() => {
-    socket.on(Message.deleteUser, data => {
-      if (data.payload.gameId === currentUser.gameId)
-        setMessages(prevMsg =>
-          [...prevMsg].filter((msg: ChatMessageType) => msg.user._id !== data.payload._id),
-        );
-    });
-    socket.on('msgToClient', data => {
-      if (data.payload.user.gameId === currentUser.gameId)
-        setMessages(prevMsg => [...prevMsg, data.payload]);
-    });
+    socket.on(Message.deleteUser, socketDeleteUser);
+    socket.on('msgToClient', socketCatchChatMsg);
+    return () => {
+      socket.off(Message.deleteUser, socketDeleteUser);
+      socket.off('msgToClient', socketCatchChatMsg);
+    };
   }, []);
 
   return (

@@ -9,6 +9,13 @@ import { Text } from 'core/components/Text';
 import { AppButton } from 'core/components/Button';
 import { Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
+<<<<<<< HEAD
+=======
+import { finishGame } from 'core/api/socket.service';
+import { deleteUserById } from 'core/api/users.service';
+import { clearCurrentUser } from 'store/actionCreators/currentUser';
+import styles from './ScramMasterGameSection.module.scss';
+>>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
 
 interface ScramMasterProps {
   timerValue: number;
@@ -17,8 +24,18 @@ interface ScramMasterProps {
 export const ScramMasterGameSection: React.FC<ScramMasterProps> = ({ timerValue }) => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
+  const { gameInfo } = useTypeSelector(state => state.gameInfo);
+  const { gameSettings } = gameInfo;
   const dispatch = useDispatch();
+
+  const handleFinishGame = (): void => {
+    if (currentUser.role === Roles.creator) {
+      finishGame(currentUser);
+    } else {
+      deleteUserById(currentUser.userId);
+      dispatch(clearCurrentUser(currentUser));
+    }
+  };
 
   useEffect(() => {
     dispatch(getCreator(currentUser.gameId));
@@ -43,7 +60,7 @@ export const ScramMasterGameSection: React.FC<ScramMasterProps> = ({ timerValue 
           <AppButton
             name={currentUser.role === Roles.creator ? 'Stop game' : 'Exit'}
             color={'white'}
-            onClickHandler={() => {}}
+            onClickHandler={handleFinishGame}
           />
         </Grid>
         {gameSettings.isTimer && currentUser.role !== Roles.creator ? (

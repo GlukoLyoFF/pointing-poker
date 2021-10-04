@@ -5,11 +5,12 @@ import { deleteUserById } from 'core/api/users.service';
 import { Roles } from 'core/types/roleType';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { getUsers } from 'store/actionCreators/user';
-import { AppModal } from 'core/components/modal/Modal';
+import { AppModal } from 'core/components/modals/Modal';
 import { Text } from 'core/components/Text';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { ProgressCard } from 'core/components/progressCard/ProgressCard';
 import styles from './ProgressSection.module.scss';
+import { startPlayerVoting } from 'core/api/socket.service';
 
 interface ProgressSectionProp {
   chooseIssueId: string;
@@ -36,7 +37,16 @@ export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }
   };
 
   const handleSubmit = async () => {
-    await deleteUserById(getDeleteUserId);
+    if (currentUser.role === Roles.creator) {
+      deleteUserById(getDeleteUserId);
+    } else {
+      const target = {
+        gameId: currentUser.gameId,
+        playerId: currentUser.userId,
+        targetId: getDeleteUserId,
+      };
+      startPlayerVoting(target);
+    }
     setModalShowFlag(false);
     dispatch(getUsers(currentUser.gameId));
   };
@@ -80,7 +90,7 @@ export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }
         })}
       </Grid>
       <AppModal
-        title={`Kick player?`}
+        title={`Kick player`}
         isShow={getModalShowFlag}
         handleSubmit={handleSubmit}
         handleCancel={handleCancel}
