@@ -17,6 +17,7 @@ interface IssueCardProp {
   modalShowEdit?: (flag: boolean) => void;
   handleIssueId: (id: string) => void;
   gameMode?: boolean;
+  resultMode?: boolean;
   currentIssueId?: string;
 }
 
@@ -28,6 +29,7 @@ export const IssueCard: React.FC<IssueCardProp> = ({
   modalShowEdit,
   handleIssueId,
   gameMode,
+  resultMode,
   currentIssueId,
 }) => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -42,33 +44,35 @@ export const IssueCard: React.FC<IssueCardProp> = ({
           <Text textLvl={'comment'}>{priority} priority</Text>
         </div>
       </div>
-      <div>
-        {gameMode && currentUser.role === Roles.creator ? (
-          <CloseIcon className={styles.btn} onClick={() => deleteIssueById(id)} />
-        ) : null}
-        {!gameMode ? (
-          <>
-            <EditIcon
-              className={styles.btn}
-              onClick={() => {
-                if (modalShowEdit) {
-                  modalShowEdit(true);
-                }
-                handleIssueId(id);
-              }}
-            />
-            <DeleteOutlineIcon
-              className={styles.btn}
-              onClick={() => {
-                if (modalShowDelete) {
-                  modalShowDelete(true);
-                }
-                handleIssueId(id);
-              }}
-            />
-          </>
-        ) : null}
-      </div>
+      {!resultMode ? (
+        <div>
+          {gameMode && currentUser.role === Roles.creator ? (
+            <CloseIcon className={styles.btn} onClick={() => deleteIssueById(id)} />
+          ) : null}
+          {!gameMode ? (
+            <>
+              <EditIcon
+                className={styles.btn}
+                onClick={() => {
+                  if (modalShowEdit) {
+                    modalShowEdit(true);
+                  }
+                  handleIssueId(id);
+                }}
+              />
+              <DeleteOutlineIcon
+                className={styles.btn}
+                onClick={() => {
+                  if (modalShowDelete) {
+                    modalShowDelete(true);
+                  }
+                  handleIssueId(id);
+                }}
+              />
+            </>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

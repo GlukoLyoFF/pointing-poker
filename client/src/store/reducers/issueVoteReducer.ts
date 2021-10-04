@@ -15,6 +15,7 @@ const defaultState: DefaultStateIssueVote = {
     issueId: '',
   },
   results: [],
+  error: null,
 };
 
 export const issueVoteReducer = (
@@ -28,6 +29,12 @@ export const issueVoteReducer = (
       return { ...state, results: [...state.results.concat(action.payload)] };
     case IssueVoteActionTypes.CLEAR_VOTE_RESULT:
       return defaultState;
+    case IssueVoteActionTypes.GET_VOTES:
+      return { issueVote: defaultState.issueVote, error: null, results: [] };
+    case IssueVoteActionTypes.GET_VOTES_SUCCESS:
+      return { issueVote: defaultState.issueVote, error: null, results: action.payload };
+    case IssueVoteActionTypes.GET_VOTES_ERROR:
+      return { issueVote: defaultState.issueVote, error: action.payload, results: [] };
     default:
       return state;
   }

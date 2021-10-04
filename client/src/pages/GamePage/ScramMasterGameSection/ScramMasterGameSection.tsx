@@ -26,7 +26,7 @@ export const ScramMasterGameSection: React.FC<ScramMasterProps> = ({ timerValue 
 
   return (
     <Grid container direction="column">
-      <EditHeading />
+      <EditHeading gameMode={true} />
       <Grid container justifyContent="space-between" alignItems="flex-end">
         <Grid item>
           <Text textLvl="comment">Scram master:</Text>
