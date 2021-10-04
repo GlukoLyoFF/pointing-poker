@@ -9,13 +9,10 @@ import { Text } from 'core/components/Text';
 import { AppButton } from 'core/components/Button';
 import { Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
-<<<<<<< HEAD
-=======
 import { finishGame } from 'core/api/socket.service';
 import { deleteUserById } from 'core/api/users.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './ScramMasterGameSection.module.scss';
->>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
 
 interface ScramMasterProps {
   timerValue: number;

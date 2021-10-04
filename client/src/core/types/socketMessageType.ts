@@ -42,7 +42,6 @@ export interface IIssueMsg {
   payload: IIssue;
 }
 
-<<<<<<< HEAD
 export interface ITimerMsg {
   event: string;
   payload: string;
@@ -56,12 +55,12 @@ export interface IDeleteIssueVoteMsg {
 export interface IVoteIssueMsg {
   event: string;
   payload: IssueVoteRes;
-=======
+}
+
 export interface IChatMsg {
   event: string;
   payload: {
     user: IUser;
     message: string;
   };
->>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
 }

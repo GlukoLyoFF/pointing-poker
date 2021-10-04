@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { Roles } from 'core/types/roleType';
 import { CardField } from './CardField/CardField';
 import { IssueGameSection } from './IssueGameSection/IssueGameSection';
 import { ScramMasterGameSection } from './ScramMasterGameSection/ScramMasterGameSection';
@@ -9,7 +8,6 @@ import styles from './GamePage.module.scss';
 import { KickVotingModal } from 'core/components/modals/KickVotingModal';
 
 export const GamePage: React.FC = () => {
-  const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(state => state.gameInfo.gameInfo);
   const [timerValue, setTimerValue] = useState(gameSettings.roundTime ? gameSettings.roundTime : 0);
   const [chooseIssueId, setChooseIssueId] = useState('');
@@ -40,12 +38,8 @@ export const GamePage: React.FC = () => {
         />
         <CardField chooseIssueId={chooseIssueId} timerValue={timerValue} />
       </div>
-<<<<<<< HEAD
       <ProgressSection chooseIssueId={chooseIssueId} />
-=======
-      <ProgressSection />
       <KickVotingModal />
->>>>>>> c8977508b2d7109eea22c930f157e6a538fadc50
     </main>
   );
 };
