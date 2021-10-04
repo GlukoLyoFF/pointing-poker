@@ -11,7 +11,6 @@ import { ScramMasterGameSection } from './ScramMasterGameSection/ScramMasterGame
 import { ProgressSection } from './ProgressSection/ProgressSection';
 import { KickVotingModal } from 'core/components/modals/KickVotingModal';
 import styles from './GamePage.module.scss';
-import { KickVotingModal } from 'core/components/modals/KickVotingModal';
 
 export const GamePage: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
