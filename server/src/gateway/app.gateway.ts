@@ -117,7 +117,7 @@ export enum Events {
   MsgToServer = 'msgToServer',
   MsgToClient = 'msgToClient',
 }
-const WSPORT = 5005;
+const WSPORT = 5000;
 @Injectable()
 @WebSocketGateway(WSPORT, { cors: true })
 export class AppGateway
@@ -182,12 +182,10 @@ export class AppGateway
       },
     };
     const start = await this.userService.getByGameId(message.gameId);
-    const users = start.filter(it => it.role === 'user').length;
+    const users = start.filter((it) => it.role === 'user').length;
     if (users > 2) {
-      console.log('Voiting started' + users);
       this.wss.emit(Events.StartVotingByPlayerMsg, answer);
     } else {
-      console.log('Voiting failed' + users);
       this.wss.emit(Events.VotingCannotStart, 'Voting cannot start');
     }
   }
@@ -197,8 +195,9 @@ export class AppGateway
     client: Socket,
     message: FinishVotingByPlayer,
   ): Promise<void> {
-
-    const votings = (await this.userService.getByGameId(message.gameId)).filter(it => it.role !== 'observer');
+    const votings = (await this.userService.getByGameId(message.gameId)).filter(
+      (it) => it.role !== 'observer',
+    );
     const votes = await this.playerVoteService.getByTargetId(message.targetId);
 
     const answer: IPayload<string> = {
@@ -208,9 +207,13 @@ export class AppGateway
 
     let isDelete = false;
 
-    votings.forEach(voting => {
-      votes.forEach(vote => {
-        if ((voting.role === 'creator') && (vote.vote === true) && (voting._id == vote.playerId)) {
+    votings.forEach((voting) => {
+      votes.forEach((vote) => {
+        if (
+          voting.role === 'creator' &&
+          vote.vote === true &&
+          voting._id == vote.playerId
+        ) {
           isDelete = true;
         }
       });
@@ -223,8 +226,8 @@ export class AppGateway
       await this.playerVoteService.deletePlayerVotesByTargetId(
         message.targetId,
       );
+      this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
     } else {
-
       const decisionRight = votes.reduce((acc, { vote }) => {
         return vote === true ? ++acc : acc;
       }, 0);
@@ -233,17 +236,21 @@ export class AppGateway
         return vote === false ? ++acc : acc;
       }, 0);
 
-      if ( decisionRight > Math.floor(votings.length / 2)) {
+      if (decisionRight > Math.floor(votings.length / 2)) {
         await this.userService.delete(message.targetId);
-        await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+        await this.playerVoteService.deletePlayerVotesByUserId(
+          message.targetId,
+        );
         await this.issueVoteService.deleteIssueVotesByUserId(message.targetId);
         await this.playerVoteService.deletePlayerVotesByTargetId(
           message.targetId,
         );
         this.wss.emit(Events.FinishVotingByPlayerMsg, answer);
       }
-      if ( decisionWrong >= Math.floor(votings.length / 2)) {
-        await this.playerVoteService.deletePlayerVotesByUserId(message.targetId);
+      if (decisionWrong >= Math.floor(votings.length / 2)) {
+        await this.playerVoteService.deletePlayerVotesByUserId(
+          message.targetId,
+        );
         await this.playerVoteService.deletePlayerVotesByTargetId(
           message.targetId,
         );

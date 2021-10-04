@@ -18,11 +18,11 @@ export class Game {
     default: {
       isAsPlayer: false,
       isChangeCard: false,
-      isTimer: false,
+      isTimer: true,
       scoreType: 'story point',
       shortScoreType: 'SP',
       roundTime: 150000,
-      cardValues: [],
+      cardValues: [{ key: 'unknown', value: 'cup' }],
     },
   })
   gameSettings: GameSettings;

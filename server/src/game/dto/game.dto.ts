@@ -1,5 +1,3 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-
 export class GameSettings {
   isAsPlayer: boolean;
   isChangeCard: boolean;
