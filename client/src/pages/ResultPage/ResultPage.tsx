@@ -9,16 +9,10 @@ import { getIssues } from 'store/actionCreators/issue';
 import { getIssuesVotesResult } from 'store/actionCreators/issueVote';
 import { CSVLink } from 'react-csv';
 import { Text } from 'core/components/Text';
-import FileSaver from 'file-saver';
-import XLSX from 'xlsx';
-import styles from './ResultPage.module.scss';
 import { AppButton } from 'core/components/Button';
-
-interface IResultCSV {
-  issue: string;
-  cardValue: string;
-  percent: string;
-}
+import { IResultCSV } from 'core/types/exportResultType';
+import { exportToXLSX } from 'core/utils/export-to-xlsx';
+import styles from './ResultPage.module.scss';
 
 const resultCSV: IResultCSV[] = [];
 
@@ -49,18 +43,6 @@ export const ResultPage: React.FC = () => {
       resultCSV.push(csv);
     }
     return percent;
-  };
-
-  const fileType =
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-  const fileExtension = '.xlsx';
-
-  const exportToXLSX = (Data: IResultCSV[], fileName: string) => {
-    const ws = XLSX.utils.json_to_sheet(Data);
-    const wb = { Sheets: { data: ws }, SheetNames: ['data'] };
-    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
-    const data = new Blob([excelBuffer], { type: fileType });
-    FileSaver.saveAs(data, fileName + fileExtension);
   };
 
   return (
