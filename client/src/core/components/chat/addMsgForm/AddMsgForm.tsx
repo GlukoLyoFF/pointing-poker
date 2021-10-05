@@ -19,8 +19,8 @@ export const AddMessageForm: React.FC = () => {
         className={styles.textField}
         color="primary"
         multiline
-        rows={2}
-        rowsMax={4}
+        minRows={2}
+        maxRows={4}
         onChange={e => setMessage(e.currentTarget.value)}
         value={message}
       />

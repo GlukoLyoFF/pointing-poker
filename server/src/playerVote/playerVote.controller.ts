@@ -45,7 +45,7 @@ export class PlayerVoteController {
     @Param('gameId') gameId: string,
     @Param('targetId') targetId: string,
   ): Promise<PlayerVote[]> {
-    const playerVoteList = this.voteService.getByGameIdAndPlayerId(
+    const playerVoteList = this.voteService.getByGameIdAndTargetId(
       gameId,
       targetId,
     );
