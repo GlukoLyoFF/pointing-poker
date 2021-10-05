@@ -6,8 +6,6 @@ import { Text } from 'core/components/Text';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { Roles } from 'core/types/roleType';
 import { deleteIssueById } from 'core/api/issues.service';
-import { useDispatch } from 'react-redux';
-import { getIssues } from 'store/actionCreators/issue';
 import styles from './IssueCard.module.scss';
 interface IssueCardProp {
   title: string;
@@ -33,8 +31,35 @@ export const IssueCard: React.FC<IssueCardProp> = ({
   currentIssueId,
 }) => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
-  const dispatch = useDispatch();
   const className = currentIssueId !== id ? `${styles.issue}` : `${styles.issue} ${styles.green}`;
+
+  const handleEditIssue = () => {
+    if (modalShowEdit) {
+      modalShowEdit(true);
+    }
+    handleIssueId(id);
+  };
+
+  const handleDeleteIssue = () => {
+    if (modalShowDelete) {
+      modalShowDelete(true);
+    }
+    handleIssueId(id);
+  };
+
+  const issueBtns = (): JSX.Element => {
+    if (!resultMode && gameMode && currentUser.role === Roles.creator) {
+      return <CloseIcon className={styles.btn} onClick={() => deleteIssueById(id)} />;
+    } else if (!resultMode && !gameMode) {
+      return (
+        <>
+          <EditIcon className={styles.btn} onClick={handleEditIssue} />
+          <DeleteOutlineIcon className={styles.btn} onClick={handleDeleteIssue} />
+        </>
+      );
+    }
+    return <></>;
+  };
 
   return (
     <div className={className}>
@@ -44,35 +69,7 @@ export const IssueCard: React.FC<IssueCardProp> = ({
           <Text textLvl={'comment'}>{priority} priority</Text>
         </div>
       </div>
-      {!resultMode ? (
-        <div>
-          {gameMode && currentUser.role === Roles.creator ? (
-            <CloseIcon className={styles.btn} onClick={() => deleteIssueById(id)} />
-          ) : null}
-          {!gameMode ? (
-            <>
-              <EditIcon
-                className={styles.btn}
-                onClick={() => {
-                  if (modalShowEdit) {
-                    modalShowEdit(true);
-                  }
-                  handleIssueId(id);
-                }}
-              />
-              <DeleteOutlineIcon
-                className={styles.btn}
-                onClick={() => {
-                  if (modalShowDelete) {
-                    modalShowDelete(true);
-                  }
-                  handleIssueId(id);
-                }}
-              />
-            </>
-          ) : null}
-        </div>
-      ) : null}
+      <div>{issueBtns()}</div>
     </div>
   );
 };

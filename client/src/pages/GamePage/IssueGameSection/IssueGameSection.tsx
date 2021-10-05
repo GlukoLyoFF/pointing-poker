@@ -30,7 +30,6 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
   const { issues } = useTypeSelector(state => state.issues);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
-  const { issueVote } = useTypeSelector(store => store.issueVote);
   const dispatch = useDispatch();
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
   const [isRaundStart, setRaundStartValue] = useState(false);
