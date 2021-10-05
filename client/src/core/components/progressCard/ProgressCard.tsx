@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Text } from 'core/components/Text';
-import styles from './ProgressCard.module.scss';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { socket } from 'core/api/socket.service';
 import { ITimerMsg, Message } from 'core/types/socketMessageType';
+import styles from './ProgressCard.module.scss';
+import { IssueVoteRes } from 'core/types/issueVotesType';
 
 interface ProgressCardProp {
   chooseIssueId: string;
@@ -14,13 +15,17 @@ export const ProgressCard: React.FC<ProgressCardProp> = ({ chooseIssueId, userId
   const { results } = useTypeSelector(state => state.issueVote);
   const { gameSettings } = useTypeSelector(state => state.gameInfo.gameInfo);
   const [isFlagRender, setIsFlagRender] = useState(false);
-  const [scoreValue, setScoreValue] = useState(
-    results.find(item => item.playerId === userId && item.issueId === chooseIssueId),
-  );
+  const getScoreValue = () => {
+    return results.find(
+      ({ playerId, issueId }) => playerId === userId && issueId === chooseIssueId,
+    );
+  };
+
+  const [scoreValue, setScoreValue] = useState<IssueVoteRes | undefined>(getScoreValue());
 
   useEffect(() => {
     const renderProgressCards = (msg: ITimerMsg) => {
-      if (msg.payload === 'end' && gameSettings.isChangeCard) {
+      if (msg.payload === 'end') {
         setIsFlagRender(true);
       } else if (msg.payload === 'start') {
         setIsFlagRender(false);
@@ -36,7 +41,10 @@ export const ProgressCard: React.FC<ProgressCardProp> = ({ chooseIssueId, userId
   }, []);
 
   useEffect(() => {
-    setScoreValue(results.find(item => item.playerId === userId && item.issueId === chooseIssueId));
+    setScoreValue(getScoreValue());
+    if (gameSettings.isChangeCard && scoreValue) {
+      setIsFlagRender(true);
+    }
   }, [results]);
 
   return (
