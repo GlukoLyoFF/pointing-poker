@@ -1,7 +1,7 @@
 import { Grid } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
-import { GameCard } from 'core/components/gameCard/GameCard';
+import { PlayingGameCard } from 'core/components/gameCard/PlayingGameCard';
 import { useDispatch } from 'react-redux';
 import { IssueVote } from 'core/types/issueVotesType';
 import { setIssueVote, setIssueVoteResult } from 'store/actionCreators/issueVote';
@@ -99,12 +99,12 @@ export const CardField: React.FC<CardFieldProps> = ({ chooseIssueId, timerValue 
         ? gameSettings.cardValues.map(elem => {
             return (
               <Grid item xs md key={elem.key}>
-                <GameCard
+                <PlayingGameCard
                   type={gameSettings.shortScoreType}
                   value={elem.value}
                   keyCard={elem.key}
                   isClick={isClick}
-                  onClickHandler={handleClickCard}
+                  onClick={handleClickCard}
                 />
               </Grid>
             );
