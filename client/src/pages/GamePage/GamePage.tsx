@@ -2,7 +2,6 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { socket } from 'core/api/socket.service';
-import { Roles } from 'core/types/roleType';
 import { Message } from 'core/types/socketMessageType';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import { CardField } from './CardField/CardField';
