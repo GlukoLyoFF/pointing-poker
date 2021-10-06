@@ -42,16 +42,30 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
     setPriority(event.target.value as string);
   };
 
+  const cleanFields = () => {
+    setPriority('Low');
+    setValue('title', '');
+    setValue('link', '');
+    setValue('priority', getPriority);
+  };
+
+  const closeForm = () => {
+    handleCancel();
+    cleanFields();
+  };
+
   const handleSubmitCreateIssue = handleSubmit(data => {
     postNewIssue(data).then(() => {
       handleSubmitFrom();
     });
+    cleanFields();
   });
 
   const handleSubmitEditIssue = handleSubmit(data => {
     updateIssueById(id, data).then(() => {
       handleSubmitFrom();
     });
+    cleanFields();
   });
 
   return (
@@ -60,7 +74,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
         fullWidth
         maxWidth="md"
         open={isShow}
-        onClose={handleCancel}
+        onClose={closeForm}
         aria-labelledby={dialogLabel}
         style={{ paddingTop: '20px' }}
       >
@@ -108,7 +122,7 @@ export const CreateIssueForm: React.FC<ModalProps> = ({
                 setValue('gameId', `${currentUser.gameId}`);
               }}
             />
-            <AppButton name="No" color="white" onClickHandler={handleCancel} />
+            <AppButton name="No" color="white" onClickHandler={closeForm} />
           </div>
         </form>
       </Dialog>
