@@ -1,0 +1,7 @@
+@import '../Lobby.module.scss';
+
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($minCardWidth + px, 1fr));
+  gap: 10px;
+}
