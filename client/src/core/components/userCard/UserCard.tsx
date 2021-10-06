@@ -31,6 +31,10 @@ export const UserCard: React.FC<UserCardProp> = ({
 }) => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
 
+  const isDeleteIcon = () => {
+    return status === Roles.user && currentUser.role != Roles.observer && id !== currentUser.userId;
+  };
+
   return (
     <div className={styles.user}>
       <Avatar img={image} name={name} lastName={surname} />
@@ -45,7 +49,7 @@ export const UserCard: React.FC<UserCardProp> = ({
           <Text textLvl={'comment'}>{`${job}`}</Text>
         </div>
       </div>
-      {status === Roles.user && currentUser.role != Roles.observer ? (
+      {isDeleteIcon() ? (
         <NotInterestedIcon
           onClick={() => {
             if (handleFlag && handleUserName && handleUserId) {
