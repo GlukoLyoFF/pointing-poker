@@ -112,10 +112,14 @@ export const IssueGameSection: React.FC<IssueGameProp> = ({
 
   useEffect(() => {
     const socketCreateIssue = (msg: IIssueMsg) => {
-      dispatch(setIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(setIssue(msg.payload));
+      }
     };
     const socketDeleteIssue = (msg: IIssueMsg) => {
-      dispatch(deleteIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(deleteIssue(msg.payload));
+      }
     };
     const socketRunRound = (msg: ITimerMsg) => {
       if (msg.payload === 'start') {

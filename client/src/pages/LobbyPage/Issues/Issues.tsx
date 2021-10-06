@@ -60,10 +60,14 @@ export const Issues: React.FC = () => {
   useEffect(() => {
     dispatch(getIssues(currentUser.gameId));
     const socketCreateIssue = (msg: IIssueMsg) => {
-      dispatch(setIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(setIssue(msg.payload));
+      }
     };
     const socketDeleteIssue = (msg: IIssueMsg) => {
-      dispatch(deleteIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(deleteIssue(msg.payload));
+      }
     };
     socket.on(Message.createIssue, socketCreateIssue);
     socket.on(Message.deleteIssue, socketDeleteIssue);
