@@ -12,9 +12,15 @@ import { ProgressCard } from 'core/components/progressCard/ProgressCard';
 import styles from './ProgressSection.module.scss';
 import { startPlayerVoting } from 'core/api/socket.service';
 
-export const ProgressSection: React.FC = () => {
+interface ProgressSectionProp {
+  chooseIssueId: string;
+}
+
+export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }) => {
   const { users } = useTypeSelector(state => state.users);
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const { creator } = useTypeSelector(state => state.creator);
+  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const [getModalShowFlag, setModalShowFlag] = useState(false);
   const [getDeleteUserName, setDeleteUserName] = useState('');
   const [getDeleteUserId, setDeleteUserId] = useState('');
@@ -66,12 +72,24 @@ export const ProgressSection: React.FC = () => {
             Players:
           </Text>
         </div>
+        {gameSettings.isAsPlayer ? (
+          <div key={creator._id} className={styles.cards}>
+            <ProgressCard chooseIssueId={chooseIssueId} userId={creator._id} />
+            <UserCard
+              image={creator.image}
+              name={creator.firstName}
+              surname={creator.lastName}
+              id={creator._id}
+              status={Roles.creator}
+              job={creator.jobPosition}
+            />
+          </div>
+        ) : null}
         {users.map(elem => {
           return (
-            <div className={styles.cards}>
-              <ProgressCard />
+            <div key={`${elem._id}`} className={styles.cards}>
+              <ProgressCard chooseIssueId={chooseIssueId} userId={elem._id} />
               <UserCard
-                key={`${elem._id}`}
                 name={elem.firstName}
                 surname={elem.lastName}
                 job={elem.jobPosition}

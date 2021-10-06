@@ -7,17 +7,23 @@ import { EditHeading } from 'core/components/editHeading/EditHeading';
 import { UserCard } from 'core/components/userCard/UserCard';
 import { Text } from 'core/components/Text';
 import { AppButton } from 'core/components/Button';
-import { Grid } from '@material-ui/core';
+import { Dialog, Grid } from '@material-ui/core';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { finishGame } from 'core/api/socket.service';
 import { deleteUserById } from 'core/api/users.service';
 import { clearCurrentUser } from 'store/actionCreators/currentUser';
 import styles from './ScramMasterGameSection.module.scss';
+import { ResultPage } from 'pages/ResultPage/ResultPage';
 
-export const ScramMasterGameSection: React.FC = () => {
+interface ScramMasterProps {
+  timerValue: number;
+}
+
+export const ScramMasterGameSection: React.FC<ScramMasterProps> = ({ timerValue }) => {
   const { creator } = useTypeSelector(state => state.creator);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameInfo } = useTypeSelector(state => state.gameInfo);
+  const [isDisplayResults, setIsDisplayResults] = React.useState<boolean>(false);
   const { gameSettings } = gameInfo;
   const dispatch = useDispatch();
 
@@ -30,13 +36,17 @@ export const ScramMasterGameSection: React.FC = () => {
     }
   };
 
+  const handleResults = (): void => {
+    setIsDisplayResults(!isDisplayResults);
+  };
+
   useEffect(() => {
     dispatch(getCreator(currentUser.gameId));
   }, []);
 
   return (
     <Grid container direction="column">
-      <EditHeading />
+      <EditHeading gameMode={true} />
       <Grid container justifyContent="space-between" alignItems="flex-end">
         <Grid item>
           <Text textLvl="comment">Scram master:</Text>
@@ -50,19 +60,22 @@ export const ScramMasterGameSection: React.FC = () => {
           />
         </Grid>
         <Grid item>
+          <AppButton name={'Results'} color={'blue'} onClickHandler={handleResults} />
+        </Grid>
+        <Grid item>
           <AppButton
             name={currentUser.role === Roles.creator ? 'Stop game' : 'Exit'}
             color={'white'}
             onClickHandler={handleFinishGame}
           />
         </Grid>
-        {gameSettings.isTimer && gameSettings.roundTime && currentUser.role !== Roles.creator ? (
-          <RoundTimer
-            time={gameSettings.roundTime}
-            editable={currentUser.role === Roles.creator ? true : false}
-          />
+        {gameSettings.isTimer && currentUser.role !== Roles.creator ? (
+          <RoundTimer time={timerValue} editable={false} />
         ) : null}
       </Grid>
+      <Dialog open={isDisplayResults} onClose={handleResults}>
+        <ResultPage />
+      </Dialog>
     </Grid>
   );
 };

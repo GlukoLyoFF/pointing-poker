@@ -25,6 +25,16 @@ export interface IIssueBody {
   priority: string;
 }
 
+export interface IIssueVoteBody {
+  vote: {
+    key: string;
+    value: string;
+  };
+  gameId: string;
+  playerId: string;
+  issueId: string;
+}
+
 export interface IPlayerVote {
   gameId: string;
   playerId: string;

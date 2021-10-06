@@ -3,16 +3,16 @@ import EditIcon from '@material-ui/icons/Edit';
 import OfflinePinIcon from '@material-ui/icons/OfflinePin';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import React from 'react';
-import style from './GameCard.module.scss';
 import { TextField } from '@material-ui/core';
 import { Text } from '../Text';
+import style from './GameCard.module.scss';
 
 export const GameCard: React.FC<GameCardProps> = ({
   type,
   value,
   editable,
   isSelected,
-  onClick,
+  onClickHandler,
   onChangeValue,
   onRemoveCard,
 }) => {
@@ -50,8 +50,9 @@ export const GameCard: React.FC<GameCardProps> = ({
       <OfflinePinIcon className={style.cardIcon} />
     </div>
   );
+
   return (
-    <div className={style.gameCard} onClick={onClick}>
+    <div className={style.gameCard} onClick={onClickHandler}>
       {cardContent}
       {isSelected ? overlay : ''}
     </div>
@@ -62,8 +63,10 @@ interface GameCardProps {
   type: string;
   value: string;
   editable?: boolean;
+  keyCard?: string;
+  isClick?: boolean;
   isSelected?: boolean;
-  onClick?: React.MouseEventHandler;
+  onClickHandler?: React.MouseEventHandler;
   onChangeValue?: React.ChangeEventHandler;
   onRemoveCard?: React.MouseEventHandler;
 }

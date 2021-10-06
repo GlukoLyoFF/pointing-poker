@@ -1,4 +1,5 @@
 import { IIssue, IUser } from './get200Types';
+import { IssueVoteRes } from './issueVotesType';
 
 export enum Message {
   chooseIssue = 'chooseIssueMsg',
@@ -39,6 +40,21 @@ export interface IUserMsg {
 export interface IIssueMsg {
   event: string;
   payload: IIssue;
+}
+
+export interface ITimerMsg {
+  event: string;
+  payload: string;
+}
+
+export interface IDeleteIssueVoteMsg {
+  event: string;
+  payload: string;
+}
+
+export interface IVoteIssueMsg {
+  event: string;
+  payload: IssueVoteRes;
 }
 
 export interface IChatMsg {

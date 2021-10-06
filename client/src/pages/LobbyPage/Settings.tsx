@@ -40,7 +40,7 @@ export const LobbySettings: React.FC = (): JSX.Element => {
   };
 
   const changeShortScoreType = (value: string): void => {
-    dispatch(setSettingShortScoreType(value));
+    dispatch(setSettingShortScoreType(value.slice(0, 3)));
   };
 
   const changeRoundTime = (value: number): void => {

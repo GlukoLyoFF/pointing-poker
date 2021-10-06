@@ -12,17 +12,33 @@ import { IssueCardAdd } from 'core/components/issueCardAdd/IssueCardAdd';
 import { RoundTimer } from 'core/components/RoundTimer';
 import { Text } from 'core/components/Text';
 import { socket } from 'core/api/socket.service';
-import { IIssueMsg, Message } from 'core/types/socketMessageType';
+import { IDeleteIssueVoteMsg, IIssueMsg, ITimerMsg, Message } from 'core/types/socketMessageType';
 import styles from './IssueGameSection.module.scss';
+import { getIssueById } from 'core/api/issues.service';
+import { StatisticCard } from 'core/components/statisticCard/StatisticCard';
+import { clearIssueVoteResult } from 'store/actionCreators/issueVote';
 
-export const IssueGameSection: React.FC = () => {
+interface IssueGameProp {
+  handleTimerValue: (num: number) => void;
+  handleChooseIssueId: (id: string) => void;
+}
+
+export const IssueGameSection: React.FC<IssueGameProp> = ({
+  handleTimerValue,
+  handleChooseIssueId,
+}) => {
   const { issues } = useTypeSelector(state => state.issues);
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const dispatch = useDispatch();
   const [isModalVisibleCreate, setModalVisibleCreate] = useState(false);
   const [isRaundStart, setRaundStartValue] = useState(false);
+  const [issueIndex, setIssueIndex] = useState(0);
   const [getIssueId, setIssueId] = useState('');
+  const [count, setCount] = useState(Number(gameSettings.roundTime));
+  const [isRoundEndFlag, setRoundEndFlag] = useState(false);
+  const [gameCycleNum, setGameCycleNum] = useState(0);
+  let timer = 0;
 
   const modalShowCreate = (flag: boolean) => {
     setModalVisibleCreate(flag);
@@ -45,24 +61,138 @@ export const IssueGameSection: React.FC = () => {
   };
 
   const handleRaundStart = (flag: boolean) => {
-    setRaundStartValue(flag);
+    if (issues[0]) {
+      setRaundStartValue(flag);
+      socket.emit('startRound', 'start');
+      setIssueId(issues[issueIndex]._id);
+    }
+  };
+
+  const handleRestartRound = () => {
+    socket.emit('deleteIssueVotesByIssueId', `${getIssueId}`);
+    socket.emit('reStartRound', 'restart');
+  };
+
+  const handleStopRound = () => {
+    socket.emit('endRound', 'end');
+    if (issues[issueIndex + 1]) {
+      setIssueIndex(prev => prev + 1);
+    } else {
+      setIssueIndex(0);
+      setGameCycleNum(prev => prev + 1);
+    }
+    if (!gameSettings.isTimer) {
+      setRaundStartValue(false);
+    }
+  };
+
+  const stopTimer = () => {
+    if (timer) {
+      window.clearInterval(timer);
+    }
+    setRaundStartValue(false);
+    setCount(Number(gameSettings.roundTime));
+  };
+
+  const startTimer = () => {
+    timer = window.setInterval(() => {
+      setCount(prevCount => prevCount - 1000);
+    }, 1000);
+  };
+
+  const restartTimer = () => {
+    setCount(Number(gameSettings.roundTime));
+    if (timer) {
+      clearInterval(timer);
+    }
+    timer = window.setInterval(() => {
+      setCount(prevCount => prevCount - 1000);
+    }, 1000);
   };
 
   useEffect(() => {
     const socketCreateIssue = (msg: IIssueMsg) => {
-      dispatch(setIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(setIssue(msg.payload));
+      }
     };
     const socketDeleteIssue = (msg: IIssueMsg) => {
-      dispatch(deleteIssue(msg.payload));
+      if (msg.payload.gameId === currentUser.gameId) {
+        dispatch(deleteIssue(msg.payload));
+      }
+    };
+    const socketRunRound = (msg: ITimerMsg) => {
+      if (msg.payload === 'start') {
+        if (gameSettings.isTimer) {
+          startTimer();
+        }
+        setRoundEndFlag(false);
+        dispatch(clearIssueVoteResult());
+      } else if (msg.payload === 'restart') {
+        if (gameSettings.isTimer) {
+          restartTimer();
+        }
+        setRoundEndFlag(false);
+        dispatch(clearIssueVoteResult());
+      } else if (msg.payload === 'end') {
+        if (gameSettings.isTimer) {
+          stopTimer();
+        }
+        setRoundEndFlag(true);
+      }
+    };
+    const socketChooseIssue = (msg: IIssueMsg) => {
+      handleChooseIssueId(msg.payload._id);
+      setIssueId(msg.payload._id);
+    };
+    const socketDataDelete = (msg: IDeleteIssueVoteMsg) => {
+      console.log(msg);
     };
     dispatch(getIssues(currentUser.gameId));
+    socket.on(Message.startRound, socketRunRound);
+    socket.on(Message.restartRound, socketRunRound);
+    socket.on(Message.endRound, socketRunRound);
+    socket.on(Message.chooseIssue, socketChooseIssue);
     socket.on(Message.createIssue, socketCreateIssue);
     socket.on(Message.deleteIssue, socketDeleteIssue);
+    socket.on('deleteIssueVotesByIssueIdMsg', socketDataDelete);
     return () => {
       socket.off(Message.createIssue, socketCreateIssue);
       socket.off(Message.deleteIssue, socketDeleteIssue);
+      socket.off(Message.chooseIssue, socketChooseIssue);
+      socket.off('deleteIssueVotesByIssueIdMsg', socketDataDelete);
+      socket.off(Message.startRound, socketRunRound);
+      socket.off(Message.restartRound, socketRunRound);
+      socket.off(Message.endRound, socketRunRound);
     };
   }, []);
+
+  useEffect(() => {
+    getIssueById(getIssueId);
+    if (gameCycleNum > 0 && currentUser.role === Roles.creator) {
+      socket.emit('deleteIssueVotesByIssueId', `${getIssueId}`);
+    }
+  }, [getIssueId]);
+
+  useEffect(() => {
+    setCount(Number(gameSettings.roundTime));
+  }, [gameSettings]);
+
+  useEffect(() => {
+    if (count === 0 && gameSettings.isTimer) {
+      socket.emit('endRound', 'end');
+      if (issues[issueIndex + 1]) {
+        setIssueIndex(prev => prev + 1);
+      } else {
+        setIssueIndex(0);
+        setGameCycleNum(prev => prev + 1);
+      }
+    }
+    if (count === 150000) {
+      setCount(Number(gameSettings.roundTime));
+    }
+    handleTimerValue(count);
+  }, [count]);
 
   return (
     <Grid container direction="column" className={styles.container}>
@@ -91,17 +221,23 @@ export const IssueGameSection: React.FC = () => {
         ) : null}
       </Grid>
       <Grid className={styles.timer}>
-        {gameSettings.isTimer && currentUser.role === Roles.creator ? (
+        {currentUser.role === Roles.creator ? (
           <>
-            <RoundTimer
-              time={Number(gameSettings.roundTime)}
-              editable={currentUser.role === Roles.creator ? true : false}
-              onChange={changeRoundTime}
-            />
+            {gameSettings.isTimer ? (
+              <RoundTimer time={count} editable={false} onChange={changeRoundTime} />
+            ) : null}
             {isRaundStart ? (
               <div>
-                <AppButton name={'Restart round'} color={'blue'} onClickHandler={() => {}} />
-                <AppButton name={'Next issue'} color={'blue'} onClickHandler={() => {}} />
+                <AppButton
+                  name={'Restart round'}
+                  color={'blue'}
+                  onClickHandler={() => handleRestartRound()}
+                />
+                <AppButton
+                  name={'Next issue'}
+                  color={'blue'}
+                  onClickHandler={() => handleStopRound()}
+                />
               </div>
             ) : (
               <AppButton
@@ -113,6 +249,7 @@ export const IssueGameSection: React.FC = () => {
           </>
         ) : null}
       </Grid>
+      {isRoundEndFlag ? <StatisticCard /> : null}
       <CreateIssueForm
         id={getIssueId}
         flagCreate={isModalVisibleCreate}

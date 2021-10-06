@@ -6,7 +6,11 @@ import { Roles } from 'core/types/roleType';
 import { postGameHeader, setGameTitle } from 'store/actionCreators/gameInfo';
 import styles from './EditHeading.module.scss';
 
-export const EditHeading: React.FC = () => {
+interface EditHeadingProps {
+  gameMode?: boolean;
+}
+
+export const EditHeading: React.FC<EditHeadingProps> = ({ gameMode }) => {
   const { gameInfo } = useTypeSelector(state => state.gameInfo);
   const dispatch = useDispatch();
   const { currentUser } = useTypeSelector(state => state.currentUser);
@@ -45,7 +49,7 @@ export const EditHeading: React.FC = () => {
           );
         }}
       />
-      {currentUser.role === Roles.creator ? (
+      {currentUser.role === Roles.creator && !gameMode ? (
         <EditIcon
           className={styles.editBtn}
           onClick={() => {

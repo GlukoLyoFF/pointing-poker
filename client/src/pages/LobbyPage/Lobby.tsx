@@ -20,6 +20,7 @@ export const Lobby: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const dispatch = useDispatch();
   const history = useHistory();
+  dispatch(getGameInfo(currentUser.gameId));
 
   const socketGoToGamePage = (msg: { event: string; payload: string }) => {
     if (msg.payload === Message.startGame) {
@@ -43,7 +44,6 @@ export const Lobby: React.FC = () => {
     socket.on(Message.startRound, socketGoToGamePage);
     socket.on(Message.finishGameMsg, socketClearUser);
     socket.on(Message.changeGameTitle, socketChangeTitle);
-
     return () => {
       socket.off(Message.startRound, socketGoToGamePage);
       socket.off(Message.finishGameMsg, socketClearUser);

@@ -7,6 +7,7 @@ import { creatorReducer } from './reducers/creatorReducer';
 import { currentUserReducer } from './reducers/currentUserReducer';
 import { gameInfoReducer } from './reducers/gameInfoReducer';
 import { issuesReducer } from './reducers/issuesReducer';
+import { issueVoteReducer } from './reducers/issueVoteReducer';
 import { usersReducer } from './reducers/usersReducer';
 
 const rootReducer = combineReducers({
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   issues: issuesReducer,
   creator: creatorReducer,
   currentUser: currentUserReducer,
+  issueVote: issueVoteReducer,
 });
 
 const persistConfig = {
