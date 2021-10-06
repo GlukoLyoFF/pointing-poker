@@ -5,6 +5,7 @@ import { InputField } from 'core/components/InputField';
 import { AppButton } from 'core/components/Button';
 import { Text } from 'core/components/Text';
 import { UserCard } from 'core/components/userCard/UserCard';
+import { GameStartPopup } from 'core/components/modals/GameStartPopup';
 import { useTypeSelector } from 'core/hooks/useTypeSelector';
 import { useDispatch } from 'react-redux';
 import { getCreator } from 'store/actionCreators/creator';
@@ -20,14 +21,28 @@ export const ScramMaster: React.FC = () => {
   const { currentUser } = useTypeSelector(state => state.currentUser);
   const { gameInfo } = useTypeSelector(state => state.gameInfo);
   const dispatch = useDispatch();
-  const [showModals, setShowModals] = React.useState<{ cancel: boolean; exit: boolean }>({
+  // const [isStartOpen, setIsStartOpen] = React.useState<boolean>(false);
+  const [showModals, setShowModals] = React.useState<{
+    cancel: boolean;
+    exit: boolean;
+    start: boolean;
+  }>({
     cancel: false,
     exit: false,
+    start: false,
   });
 
   useEffect(() => {
     dispatch(getCreator(currentUser.gameId));
   }, []);
+
+  const checkStartErrors = (): string => {
+    const { cardValues } = gameInfo.gameSettings;
+    if (cardValues.length === 0) {
+      return `Can't start without playing cards.`;
+    }
+    return '';
+  };
 
   const handleChangeLink = (value: string): void => {
     dispatch(setGameLink(value));
@@ -83,11 +98,21 @@ export const ScramMaster: React.FC = () => {
       ) : null}
       {currentUser.role === Roles.creator ? (
         <div className={styles.btnBox}>
-          <AppButton name={'Start game'} color={'blue'} onClickHandler={handleStartGame} />
+          <AppButton
+            name={'Start game'}
+            color={'blue'}
+            onClickHandler={() => setShowModals({ ...showModals, start: true })}
+          />
           <AppButton
             name={'Cancel game'}
             color={'white'}
             onClickHandler={() => setShowModals({ ...showModals, cancel: true })}
+          />
+          <GameStartPopup
+            error={checkStartErrors()}
+            isOpen={showModals.start}
+            handleCancel={() => setShowModals({ ...showModals, start: false })}
+            handleStart={handleStartGame}
           />
         </div>
       ) : (
