@@ -19,6 +19,8 @@ interface ProgressSectionProp {
 export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }) => {
   const { users } = useTypeSelector(state => state.users);
   const { currentUser } = useTypeSelector(state => state.currentUser);
+  const { creator } = useTypeSelector(state => state.creator);
+  const { gameSettings } = useTypeSelector(store => store.gameInfo.gameInfo);
   const [getModalShowFlag, setModalShowFlag] = useState(false);
   const [getDeleteUserName, setDeleteUserName] = useState('');
   const [getDeleteUserId, setDeleteUserId] = useState('');
@@ -70,6 +72,19 @@ export const ProgressSection: React.FC<ProgressSectionProp> = ({ chooseIssueId }
             Players:
           </Text>
         </div>
+        {gameSettings.isAsPlayer ? (
+          <div key={creator._id} className={styles.cards}>
+            <ProgressCard chooseIssueId={chooseIssueId} userId={creator._id} />
+            <UserCard
+              image={creator.image}
+              name={creator.firstName}
+              surname={creator.lastName}
+              id={creator._id}
+              status={Roles.creator}
+              job={creator.jobPosition}
+            />
+          </div>
+        ) : null}
         {users.map(elem => {
           return (
             <div key={`${elem._id}`} className={styles.cards}>
