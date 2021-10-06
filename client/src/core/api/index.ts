@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8888/api/',
+  baseURL: 'http://carabaz.herokuapp.com/api',
   timeout: 5000,
 });
 

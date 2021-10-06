@@ -3,8 +3,10 @@ import { Message } from 'core/types/socketMessageType';
 import { CurrentUser } from 'core/types/currentUserType';
 import { IPlayerVote } from 'core/types/postToServerTypes';
 
-const SERVER_URL = 'http://localhost:5000';
+const SERVER_URL = 'http://carabaz.herokuapp.com/';
 export const socket = io(SERVER_URL, {
+  transports: ['websocket', 'polling'],
+  withCredentials: true,
   reconnectionDelayMax: 10000,
 });
 

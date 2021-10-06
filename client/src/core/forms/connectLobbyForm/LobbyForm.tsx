@@ -9,6 +9,8 @@ import { Text } from 'core/components/Text';
 import styleForm from './LobbyForm.module.scss';
 import style from '../../../app.module.scss';
 import { setCurrentUser } from 'store/actionCreators/currentUser';
+import { createNewGame } from 'core/api/game.service';
+import { postNewUser } from 'core/api/users.service';
 
 type IUser = {
   firstName: string;
@@ -32,25 +34,25 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
 
   const formSubmitHandler: SubmitHandler<IUser> = () => {
     if (isCreator) {
-      axios
-        .post('http://localhost:8888/api/games', {
-          url: 'http://localhost:8888/api/games/',
-        })
+      createNewGame({
+        url: 'https://carabaz.herokuapp.com/api/games/',
+        title: 'Spring',
+      })
         .then(res =>
-          axios.post('http://localhost:8888/api/users', {
+          postNewUser({
             firstName: watch('firstName'),
             lastName: watch('lastName'),
             jobPosition: watch('jobPosition'),
             image: image,
-            gameId: res.data._id,
+            gameId: res._id,
             role: Roles.creator,
           }),
         )
-        .then(res => dispatch(setCurrentUser(res.data)))
+        .then(res => dispatch(setCurrentUser(res)))
         .then(() => history.push('/lobby'));
     } else {
-      axios
-        .post('http://localhost:8888/api/users', {
+      if (gameId) {
+        postNewUser({
           firstName: watch('firstName'),
           lastName: watch('lastName'),
           jobPosition: watch('jobPosition'),
@@ -58,8 +60,9 @@ export const LobbyForm: FC<LobbyFormProps> = ({ id, isCreator = true, gameId }) 
           gameId: gameId,
           role: isObserver ? Roles.observer : Roles.user,
         })
-        .then(res => dispatch(setCurrentUser(res.data)))
-        .then(() => history.push('/lobby'));
+          .then(res => dispatch(setCurrentUser(res)))
+          .then(() => history.push('/lobby'));
+      }
     }
   };
 
